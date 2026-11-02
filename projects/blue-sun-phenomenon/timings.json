@@ -1,0 +1,61 @@
+{
+  "total_duration": 72.76,
+  "timings": [
+    {
+      "id": "cue_0",
+      "text": "At 12:00 PM tomorrow, the sun will turn neon blue for ten minutes. If you look at it, you will lose your vision forever.",
+      "start": 0.5,
+      "end": 9.62,
+      "duration": 9.12
+    },
+    {
+      "id": "cue_1",
+      "text": "Scientists call it an extreme ultraviolet flare. It instantly strips the ozone layer, blasting the ground with lethal blue radiation.",
+      "start": 9.97,
+      "end": 20.21,
+      "duration": 10.24
+    },
+    {
+      "id": "cue_2",
+      "text": "Glass cannot block this wavelength. If you are near a window, you have exactly sixty seconds to cover every opening with foil and heavy blankets.",
+      "start": 20.56,
+      "end": 31.28,
+      "duration": 10.72
+    },
+    {
+      "id": "cue_3",
+      "text": "Step into the most central, windowless room of your home, and shut off all mirrors. Reflection amplifies the ultraviolet intensity tenfold.",
+      "start": 31.63,
+      "end": 42.08,
+      "duration": 10.45
+    },
+    {
+      "id": "cue_4",
+      "text": "At minute seven, every street light will shatter, and the sky will hum with a deafening frequency. Do not open the door.",
+      "start": 42.43,
+      "end": 52.32,
+      "duration": 9.89
+    },
+    {
+      "id": "cue_5",
+      "text": "Then, your phone buzzes with an unreleased NASA satellite alert: The sun never changed.",
+      "start": 52.67,
+      "end": 58.8,
+      "duration": 6.13
+    },
+    {
+      "id": "cue_6",
+      "text": "A colossal anomaly entered orbit and eclipsed the light. Which is why you must stay silent.",
+      "start": 59.15,
+      "end": 66.52,
+      "duration": 7.37
+    },
+    {
+      "id": "cue_7",
+      "text": "Timeline secured. Share this to warn someone before twelve o'clock tomorrow.",
+      "start": 66.87,
+      "end": 71.96,
+      "duration": 5.09
+    }
+  ]
+}

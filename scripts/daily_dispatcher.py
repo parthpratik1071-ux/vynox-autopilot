@@ -38,8 +38,20 @@ def dispatch_next(force=False):
         log(f"✅ Already published a Reel today ({today_str}). Quota fulfilled. Next post scheduled for tomorrow at 7:00 PM.")
         return True
 
-    # If triggered via startup/catch-up before 19:00, wait until scheduled time
-    if now.hour < 19 and not force:
+    # Detect if any previous day was completely missed
+    archive_dates = sorted([f.name[:10] for f in ARCHIVE_DIR.glob("*.json") if len(f.name) >= 10])
+    missed_previous_day = False
+    if archive_dates:
+        try:
+            last_dt = datetime.date.fromisoformat(archive_dates[-1])
+            if (datetime.date.today() - last_dt).days > 1:
+                missed_previous_day = True
+                log(f"⚡ Detected missed upload from previous day (last post: {last_dt}). Catching up immediately!")
+        except Exception:
+            pass
+
+    # If it's today's scheduled post and before 19:00, wait until 19:00
+    if now.hour < 19 and not force and not missed_previous_day:
         log(f"⏳ Current time ({now.strftime('%H:%M')}) is before 7:00 PM IST. Queued post will release at 19:00.")
         return False
 

@@ -7,6 +7,7 @@ export PATH="/home/pratik/.local/bin:/home/pratik/.gemini/antigravity-ide/bin:/u
 
 PROJECT_DIR="/home/pratik/stickman-video-director"
 cd "$PROJECT_DIR"
+[ -f "$PROJECT_DIR/.env" ] && source "$PROJECT_DIR/.env"
 
 echo "=========================================================="
 echo "⏰ Running Daily Instagram Dispatcher at $(date)"

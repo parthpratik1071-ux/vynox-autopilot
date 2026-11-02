@@ -1,0 +1,46 @@
+{
+  "cues": [
+    {
+      "id": "cue_0",
+      "text": "At 12:00 PM tomorrow, the sun will turn neon blue for ten minutes. If you look at it, you will lose your vision forever."
+    },
+    {
+      "id": "cue_1",
+      "text": "Scientists call it an extreme ultraviolet flare. It instantly strips the ozone layer, blasting the ground with lethal blue radiation."
+    },
+    {
+      "id": "cue_2",
+      "text": "Glass cannot block this wavelength. If you are near a window, you have exactly sixty seconds to cover every opening with foil and heavy blankets."
+    },
+    {
+      "id": "cue_3",
+      "text": "Step into the most central, windowless room of your home, and shut off all mirrors. Reflection amplifies the ultraviolet intensity tenfold."
+    },
+    {
+      "id": "cue_4",
+      "text": "At minute seven, every street light will shatter, and the sky will hum with a deafening frequency. Do not open the door."
+    },
+    {
+      "id": "cue_5",
+      "text": "Then, your phone buzzes with an unreleased NASA satellite alert: The sun never changed."
+    },
+    {
+      "id": "cue_6",
+      "text": "A colossal anomaly entered orbit and eclipsed the light. Which is why you must stay silent."
+    },
+    {
+      "id": "cue_7",
+      "text": "Timeline secured. Share this to warn someone before twelve o'clock tomorrow."
+    }
+  ],
+  "durations": [
+    9.12,
+    10.24,
+    10.72,
+    10.450975,
+    9.890975,
+    6.130975,
+    7.370975,
+    5.090975
+  ]
+}

@@ -1,0 +1,38 @@
+[Script Info]
+Title: Blue Sun Phenomenon
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 720
+PlayResY: 1280
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,DejaVu Sans,44,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,4,2,2,40,40,240,1
+Style: Highlight,DejaVu Sans,46,&H0000FFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,5,3,2,40,40,240,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.50,0:00:02.78,Default,,0,0,0,,At {\c&H0000FFFF&}\1{\c&H00FFFFFF&} tomorrow,
+Dialogue: 0,0:00:02.78,0:00:05.06,Default,,0,0,0,,the sun will turn {\c&H0000FFFF&}\1{\c&H00FFFFFF&} for ten minutes.
+Dialogue: 0,0:00:05.06,0:00:07.34,Default,,0,0,0,,If you look at it,
+Dialogue: 0,0:00:07.34,0:00:09.62,Default,,0,0,0,,you will lose your vision forever.
+Dialogue: 0,0:00:09.97,0:00:13.38,Default,,0,0,0,,Scientists call it an extreme ultraviolet flare.
+Dialogue: 0,0:00:13.38,0:00:16.80,Default,,0,0,0,,It instantly strips the ozone layer,
+Dialogue: 0,0:00:16.80,0:00:20.21,Default,,0,0,0,,blasting the ground with lethal blue {\c&H0000FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:20.56,0:00:24.13,Default,,0,0,0,,Glass cannot block this wavelength.
+Dialogue: 0,0:00:24.13,0:00:27.71,Default,,0,0,0,,If you are near a window,
+Dialogue: 0,0:00:27.71,0:00:31.28,Default,,0,0,0,,you have exactly {\c&H0000FFFF&}\1{\c&H00FFFFFF&} to cover every opening with foil and heavy blankets.
+Dialogue: 0,0:00:31.63,0:00:34.24,Default,,0,0,0,,Step into the most central,
+Dialogue: 0,0:00:34.24,0:00:36.85,Default,,0,0,0,,windowless room of your home,
+Dialogue: 0,0:00:36.85,0:00:39.47,Default,,0,0,0,,and shut off all {\c&H0000FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:39.47,0:00:42.08,Default,,0,0,0,,Reflection amplifies the ultraviolet intensity tenfold.
+Dialogue: 0,0:00:42.43,0:00:44.90,Default,,0,0,0,,At minute seven,
+Dialogue: 0,0:00:44.90,0:00:47.38,Default,,0,0,0,,every street light will {\c&H0000FFFF&}\1{\c&H00FFFFFF&},
+Dialogue: 0,0:00:47.38,0:00:49.85,Default,,0,0,0,,and the sky will hum with a deafening frequency.
+Dialogue: 0,0:00:49.85,0:00:52.32,Default,,0,0,0,,Do not open the door.
+Dialogue: 0,0:00:52.67,0:00:55.73,Default,,0,0,0,,Then,
+Dialogue: 0,0:00:55.73,0:00:58.80,Default,,0,0,0,,your phone buzzes with an unreleased {\c&H0000FFFF&}\1{\c&H00FFFFFF&} satellite alert: The sun never changed.
+Dialogue: 0,0:00:59.15,0:01:02.83,Default,,0,0,0,,A colossal {\c&H0000FFFF&}\1{\c&H00FFFFFF&} entered orbit and {\c&H0000FFFF&}\1{\c&H00FFFFFF&} the light.
+Dialogue: 0,0:01:02.83,0:01:06.52,Default,,0,0,0,,Which is why you must stay silent.
+Dialogue: 0,0:01:06.87,0:01:09.41,Default,,0,0,0,,{\c&H0000FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:01:09.41,0:01:11.96,Default,,0,0,0,,Share this to warn someone before twelve o'clock tomorrow.
