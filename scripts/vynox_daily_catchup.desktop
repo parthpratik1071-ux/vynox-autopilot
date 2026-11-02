@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Vynox Reel Daily Catchup
+Exec=/home/pratik/stickman-video-director/scripts/run_daily_job.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Comment=Checks and uploads scheduled Reel if computer was off during scheduled time

@@ -6,3 +6,15 @@ node_modules/
 __pycache__/
 *.pyc
 autopilot-work/
+
+# Render cache & temp media
+projects/**/cache/
+projects/**/tmp_*/
+projects/**/audio_*/
+*.wav
+*.pcm
+*.log
+
+# Sensitive local sessions
+insta_session.json
+*session*.json

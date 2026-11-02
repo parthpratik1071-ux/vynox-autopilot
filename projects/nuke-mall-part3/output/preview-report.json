@@ -1,0 +1,50 @@
+{
+  "fingerprint": "d68520fc5fb436ce28a36c4bb639be4ea35e4d9e498759e15675ce8110684c14",
+  "preview_seconds": 20,
+  "output": "/home/pratik/stickman-video-director/projects/nuke-mall-part3/output/preview.mp4",
+  "output_sha256": "52a60d80d334f2dad35d53963de7d59a0dcbe660f9f386d17ce40ae8d613df7e",
+  "original_voice_sha256": "e74cff47c8bea7bf4ddbb487029f23fe11a2b97a14853d5f672e8ef67393327d",
+  "original_voice_duration": 52.031917,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 600,
+  "duration": 20,
+  "cache_hits": 0,
+  "shot_count": 7,
+  "full_decode": "pass",
+  "caption_count": 6,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part3/assets/bgm.mp3",
+      "sha256": "90a5f1288616e9cfc2eac99265fb862753dc6e0c0804bea1dab596554ca62697"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part3/assets/scene-1-alarm.jpg",
+      "sha256": "0bb8a21cc91098ae6f14c7e16f4bb262d27e7aa92e5cb58498a0d825ec1865e7"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part3/assets/scene-2-future-self.jpg",
+      "sha256": "582985e5ea0a2fdabc6880425d18728639d29270d0841a1b90d7737d9ed7f71b"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part3/assets/scene-3-rift-core.jpg",
+      "sha256": "901e9a78061a4c255965fb9a4fd51275152153bc6abc9e2622436cb5e21a251d"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part3/assets/scene-4-tendril-collapse.jpg",
+      "sha256": "0bbef725340be54312961101785c68bcace88655267f0146a2b98396c3ac0273"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part3/narration.wav",
+      "sha256": "e74cff47c8bea7bf4ddbb487029f23fe11a2b97a14853d5f672e8ef67393327d"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/Caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    }
+  ]
+}

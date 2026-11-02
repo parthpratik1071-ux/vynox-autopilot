@@ -1,0 +1,58 @@
+{
+  "fingerprint": "c3bc2897b962ce75e47f3a5e3b86325c696f4fc2f3507230494e79d692e72bb1",
+  "preview_seconds": null,
+  "output": "/home/pratik/stickman-video-director/projects/future-message-reel/output/film.mp4",
+  "output_sha256": "2a411d1e073880ec064e271206e50c52733819097af769d9f00929fc7254abf4",
+  "original_voice_sha256": "702d42ef0ed51c4b2244ec1af1922a102af0502c9d47e588ce64f628ce610a1c",
+  "original_voice_duration": 47.710958,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 1432,
+  "duration": 47.733333,
+  "cache_hits": 6,
+  "shot_count": 14,
+  "full_decode": "pass",
+  "caption_count": 15,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/bgm.mp3",
+      "sha256": "90a5f1288616e9cfc2eac99265fb862753dc6e0c0804bea1dab596554ca62697"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-1-notification.jpg",
+      "sha256": "c6c503bb491dccc96295d9ad043ef335a53f93780d9e4cd124066b203922c521"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-2-warning.jpg",
+      "sha256": "0d8fd7c9dbfdd24b87f7dcd89fc2e31142508e39ed72d919c66b136bff0869e0"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-3-window.jpg",
+      "sha256": "a2b210daa46f337c8a7ce5bc34cf07e6166c7a597ca8f6f870e1934a7217b68f"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-4-empty.jpg",
+      "sha256": "7b6d973c50315b08e139688f51cae5fc25e083229800f03ab619db2fc9e48c4f"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-5-future.jpg",
+      "sha256": "2c5573765476bb1c21bf41a68b2ec7f9930fa137a6150905274efb4b427f22fc"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-6-glitch.jpg",
+      "sha256": "d5bd7b803ebe14a9ee2abc4e58fcff11dc45761f862953f2c4d59ef4c0ad0265"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/narration.wav",
+      "sha256": "702d42ef0ed51c4b2244ec1af1922a102af0502c9d47e588ce64f628ce610a1c"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/Caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    }
+  ]
+}

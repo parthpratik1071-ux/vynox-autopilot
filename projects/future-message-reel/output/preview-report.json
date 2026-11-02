@@ -1,0 +1,46 @@
+{
+  "fingerprint": "4cdae3e602c82a972b8fca42dc903caf0fd8afa5ac31f202e92b1a2877e7631a",
+  "preview_seconds": 20,
+  "output": "/home/pratik/stickman-video-director/projects/future-message-reel/output/preview.mp4",
+  "output_sha256": "c1808e0f8b77cd40dfc37847f356fc0fe22cd605d532bfef88c885d830c99fd9",
+  "original_voice_sha256": "702d42ef0ed51c4b2244ec1af1922a102af0502c9d47e588ce64f628ce610a1c",
+  "original_voice_duration": 47.710958,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 600,
+  "duration": 20,
+  "cache_hits": 0,
+  "shot_count": 7,
+  "full_decode": "pass",
+  "caption_count": 7,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/bgm.mp3",
+      "sha256": "90a5f1288616e9cfc2eac99265fb862753dc6e0c0804bea1dab596554ca62697"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-1-notification.jpg",
+      "sha256": "c6c503bb491dccc96295d9ad043ef335a53f93780d9e4cd124066b203922c521"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-2-warning.jpg",
+      "sha256": "0d8fd7c9dbfdd24b87f7dcd89fc2e31142508e39ed72d919c66b136bff0869e0"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/assets/scene-3-window.jpg",
+      "sha256": "a2b210daa46f337c8a7ce5bc34cf07e6166c7a597ca8f6f870e1934a7217b68f"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/future-message-reel/narration.wav",
+      "sha256": "702d42ef0ed51c4b2244ec1af1922a102af0502c9d47e588ce64f628ce610a1c"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/Caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    }
+  ]
+}

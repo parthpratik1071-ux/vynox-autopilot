@@ -1,0 +1,46 @@
+{
+  "fingerprint": "e48db8418d3adfeeafd0d5315628fa1f112460819c8f54cc02e2737c3a1661b7",
+  "preview_seconds": 20,
+  "output": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/output/preview.mp4",
+  "output_sha256": "95bfff22a535d6cc84339ed9c058cab2f579cd8ae7c298629e2adb858afa1e56",
+  "original_voice_sha256": "ae03df53614d9387ea98042871a5ba2e25d4af8facc7658219860a2461fb6dba",
+  "original_voice_duration": 39.05,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 600,
+  "duration": 20,
+  "cache_hits": 0,
+  "shot_count": 6,
+  "full_decode": "pass",
+  "caption_count": 6,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/bgm.mp3",
+      "sha256": "90a5f1288616e9cfc2eac99265fb862753dc6e0c0804bea1dab596554ca62697"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-1-dust.jpg",
+      "sha256": "859d067bc32999f4fdbebb98b91e2053f63de990ad14bdef13db4ad648deef59"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-2-pipes.jpg",
+      "sha256": "75a1eda7fdf785a9ea434ed6ffa4a4d40eab281eeb5601e8a02c7cbf3e070a11"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-3-spores.jpg",
+      "sha256": "2b1ee1d46bb3137ba0c695da7f46241925ed29e862c79c368b2c59b90bdccfe7"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/narration.wav",
+      "sha256": "ae03df53614d9387ea98042871a5ba2e25d4af8facc7658219860a2461fb6dba"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/Caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+name: Daily Instagram Reel Publisher
+
+on:
+  schedule:
+    # 13:30 UTC = 7:00 PM IST (Indian Standard Time) every day
+    - cron: '30 13 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install instagrapi
+
+      - name: Restore Instagram Session
+        run: |
+          mkdir -p ~/.config/stickman_video_director
+          echo "${{ secrets.INSTA_SESSION_JSON }}" > ~/.config/stickman_video_director/insta_session.json
+          chmod 600 ~/.config/stickman_video_director/insta_session.json
+
+      - name: Dispatch Queued Reel
+        run: |
+          python3 scripts/daily_dispatcher.py
+
+      - name: Commit Queue Updates & Logs
+        run: |
+          git config --global user.name "Vynox Bot"
+          git config --global user.email "bot@vynox.ai"
+          git add projects/queue/ projects/archive/ projects/daily_dispatcher.log
+          git commit -m "Automated daily Reel dispatched [skip ci]" || echo "No changes to commit"
+          git push

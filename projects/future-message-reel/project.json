@@ -1,0 +1,575 @@
+{
+  "version": 1,
+  "style": "B1",
+  "width": 720,
+  "height": 1280,
+  "fps": 30,
+  "grid": false,
+  "captionSize": 36,
+  "voice": {
+    "path": "narration.wav",
+    "lead": 0,
+    "tail": 0
+  },
+  "music": {
+    "path": "assets/bgm.mp3",
+    "gain": 0.08
+  },
+  "captions": [
+    {
+      "start": 0.25,
+      "end": 2.458,
+      "text": "That is when I realized,"
+    },
+    {
+      "start": 2.458,
+      "end": 5.77,
+      "text": "my phone was sending messages from the future."
+    },
+    {
+      "start": 5.92,
+      "end": 8.6,
+      "text": "Do not leave the house at 7:30."
+    },
+    {
+      "start": 8.6,
+      "end": 11.28,
+      "text": "The clock said 7:27."
+    },
+    {
+      "start": 11.43,
+      "end": 14.15,
+      "text": "Then: you have two minutes."
+    },
+    {
+      "start": 14.3,
+      "end": 17.666,
+      "text": "Outside, everything looked normal."
+    },
+    {
+      "start": 17.666,
+      "end": 21.78,
+      "text": "Then the phone vibrated: Look behind you."
+    },
+    {
+      "start": 21.93,
+      "end": 26.635,
+      "text": "Silence. Nobody was there. I typed: Who are you?"
+    },
+    {
+      "start": 26.635,
+      "end": 31.341,
+      "text": "Before I could send it, a reply appeared: You."
+    },
+    {
+      "start": 31.491,
+      "end": 34.119,
+      "text": "A video file popped up in the chat,"
+    },
+    {
+      "start": 34.119,
+      "end": 37.331,
+      "text": "timestamped tomorrow at 7:30 PM."
+    },
+    {
+      "start": 37.481,
+      "end": 39.713,
+      "text": "I watched myself enter the room,"
+    },
+    {
+      "start": 39.713,
+      "end": 42.441,
+      "text": "and stare straight into the camera."
+    },
+    {
+      "start": 42.591,
+      "end": 44.479,
+      "text": "If you are watching this,"
+    },
+    {
+      "start": 44.479,
+      "end": 47.311,
+      "text": "you have already made the wrong choice."
+    }
+  ],
+  "shots": [
+    {
+      "start": 0.0,
+      "end": 3.2,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-1-notification.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -20.0,
+              "y": -35.8,
+              "w": 1320
+            },
+            {
+              "t": 3.199,
+              "x": 0.0,
+              "y": -8.9,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 3.2,
+      "end": 6.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-1-notification.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -100.0,
+              "y": -319.7,
+              "w": 1480
+            },
+            {
+              "t": 2.799,
+              "x": -170.0,
+              "y": -564.2,
+              "w": 1620
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 6.0,
+      "end": 9.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-warning.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -18.0,
+              "y": -31.3,
+              "w": 1340
+            },
+            {
+              "t": 2.999,
+              "x": 0.0,
+              "y": -8.0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 9.0,
+      "end": 11.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-warning.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -59.5,
+              "y": -225.6,
+              "w": 1450
+            },
+            {
+              "t": 2.499,
+              "x": -90.0,
+              "y": -416.5,
+              "w": 1580
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 11.5,
+      "end": 14.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-warning.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -52.0,
+              "y": -64.4,
+              "w": 1360
+            },
+            {
+              "t": 2.999,
+              "x": -130.0,
+              "y": -158.0,
+              "w": 1480
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 14.5,
+      "end": 18.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-3-window.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -16.0,
+              "y": -26.8,
+              "w": 1320
+            },
+            {
+              "t": 3.499,
+              "x": 0.0,
+              "y": -8.0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 18.0,
+      "end": 22.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-3-window.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -63.0,
+              "y": -174.6,
+              "w": 1420
+            },
+            {
+              "t": 3.999,
+              "x": -154.0,
+              "y": -259.7,
+              "w": 1560
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 22.0,
+      "end": 26.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-empty.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -35.0,
+              "y": -43.0,
+              "w": 1350
+            },
+            {
+              "t": 4.499,
+              "x": 0.0,
+              "y": -8.9,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 26.5,
+      "end": 31.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-empty.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -93.5,
+              "y": -241.8,
+              "w": 1450
+            },
+            {
+              "t": 4.999,
+              "x": -176.0,
+              "y": -484.7,
+              "w": 1600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 31.5,
+      "end": 34.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-5-future.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -20.0,
+              "y": -26.8,
+              "w": 1320
+            },
+            {
+              "t": 2.999,
+              "x": -70.0,
+              "y": -107.4,
+              "w": 1420
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 34.5,
+      "end": 38.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-5-future.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -80.0,
+              "y": -152.2,
+              "w": 1440
+            },
+            {
+              "t": 3.499,
+              "x": -150.0,
+              "y": -288.7,
+              "w": 1580
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 38.0,
+      "end": 42.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-5-future.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -135.0,
+              "y": -260.8,
+              "w": 1550
+            },
+            {
+              "t": 3.999,
+              "x": -210.0,
+              "y": -400.5,
+              "w": 1700
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 42.0,
+      "end": 45.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-6-glitch.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -10.0,
+              "y": -24.1,
+              "w": 1300
+            },
+            {
+              "t": 0.6,
+              "x": -45.0,
+              "y": -98.5,
+              "w": 1380
+            },
+            {
+              "t": 1.4,
+              "x": -22.0,
+              "y": -37.6,
+              "w": 1320
+            },
+            {
+              "t": 2.2,
+              "x": -67.2,
+              "y": -128.9,
+              "w": 1420
+            },
+            {
+              "t": 2.999,
+              "x": -10.0,
+              "y": -24.1,
+              "w": 1300
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 45.0,
+      "end": 47.710958,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-6-glitch.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -30.0,
+              "y": -87.7,
+              "w": 1340
+            },
+            {
+              "t": 2.71,
+              "x": -100.0,
+              "y": -282.1,
+              "w": 1480
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sfx": [
+    {
+      "time": 0.4,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 3.4,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 6.2,
+      "kind": "tap",
+      "gain": 0.03
+    },
+    {
+      "time": 9.2,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 11.8,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 14.8,
+      "kind": "tap",
+      "gain": 0.03
+    },
+    {
+      "time": 18.2,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 22.2,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 26.8,
+      "kind": "tap",
+      "gain": 0.04
+    },
+    {
+      "time": 29.5,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 31.8,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 35.0,
+      "kind": "chime",
+      "gain": 0.03
+    },
+    {
+      "time": 38.5,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 42.2,
+      "kind": "pop",
+      "gain": 0.05
+    },
+    {
+      "time": 44.5,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 46.5,
+      "kind": "pop",
+      "gain": 0.05
+    }
+  ]
+}

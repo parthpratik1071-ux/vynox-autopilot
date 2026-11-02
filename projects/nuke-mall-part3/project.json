@@ -1,0 +1,640 @@
+{
+  "version": 1,
+  "style": "B1",
+  "width": 720,
+  "height": 1280,
+  "fps": 30,
+  "grid": false,
+  "captionSize": 36,
+  "voice": {
+    "path": "narration.wav",
+    "lead": 0,
+    "tail": 0
+  },
+  "music": {
+    "path": "assets/bgm.mp3",
+    "gain": 0.08
+  },
+  "captions": [
+    {
+      "start": 0.25,
+      "end": 2.752,
+      "text": "I turned around in the dark."
+    },
+    {
+      "start": 2.752,
+      "end": 5.81,
+      "text": "But standing behind me was not a monster."
+    },
+    {
+      "start": 5.96,
+      "end": 10.92,
+      "text": "It was ME from tomorrow, clutching an iron crowbar."
+    },
+    {
+      "start": 11.07,
+      "end": 15.31,
+      "text": "He whispered: The government never dropped a bomb."
+    },
+    {
+      "start": 15.31,
+      "end": 19.55,
+      "text": "They tried to burn the rift beneath this mall."
+    },
+    {
+      "start": 19.7,
+      "end": 22.388,
+      "text": "Suddenly, the floor shattered!"
+    },
+    {
+      "start": 22.388,
+      "end": 27.38,
+      "text": "Massive purple rift tendrils erupted from below!"
+    },
+    {
+      "start": 27.53,
+      "end": 29.87,
+      "text": "The bunker was collapsing."
+    },
+    {
+      "start": 29.87,
+      "end": 33.381,
+      "text": "He shouted: Head for the maintenance shaft! Close the loop!"
+    },
+    {
+      "start": 33.531,
+      "end": 37.611,
+      "text": "I leaped toward the ladder into the blinding daylight,"
+    },
+    {
+      "start": 37.761,
+      "end": 42.401,
+      "text": "just as he slammed the heavy blast door shut forever."
+    },
+    {
+      "start": 42.551,
+      "end": 45.543,
+      "text": "I stumbled onto the quiet street above."
+    },
+    {
+      "start": 45.543,
+      "end": 47.991,
+      "text": "My phone buzzed one last time:"
+    },
+    {
+      "start": 48.141,
+      "end": 51.632,
+      "text": "Timeline secured. You survived."
+    }
+  ],
+  "shots": [
+    {
+      "start": 0.0,
+      "end": 3.2,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-1-alarm.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -20.0,
+              "y": -35.8,
+              "w": 1320
+            },
+            {
+              "t": 3.199,
+              "x": 0.0,
+              "y": -8.9,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 3.2,
+      "end": 6.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-1-alarm.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -70.0,
+              "y": -244.5,
+              "w": 1480
+            },
+            {
+              "t": 2.799,
+              "x": -102.0,
+              "y": -438.9,
+              "w": 1620
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 6.0,
+      "end": 8.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-future-self.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -30.0,
+              "y": -43.8,
+              "w": 1340
+            },
+            {
+              "t": 2.499,
+              "x": 0.0,
+              "y": -8.0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 8.5,
+      "end": 11.2,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-future-self.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -84.0,
+              "y": -104.7,
+              "w": 1400
+            },
+            {
+              "t": 2.699,
+              "x": -202.5,
+              "y": -240.7,
+              "w": 1550
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 11.2,
+      "end": 15.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-future-self.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -48.0,
+              "y": -64.4,
+              "w": 1360
+            },
+            {
+              "t": 4.299,
+              "x": -93.5,
+              "y": -135.4,
+              "w": 1450
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 15.5,
+      "end": 19.8,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-3-rift-core.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -35.0,
+              "y": -28.6,
+              "w": 1350
+            },
+            {
+              "t": 4.299,
+              "x": 0.0,
+              "y": -12.4,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 19.8,
+      "end": 22.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-tendril-collapse.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": 0.0,
+              "y": -8.9,
+              "w": 1280
+            },
+            {
+              "t": 0.7,
+              "x": -31.5,
+              "y": -78.8,
+              "w": 1350
+            },
+            {
+              "t": 1.4,
+              "x": -22.0,
+              "y": -40.2,
+              "w": 1320
+            },
+            {
+              "t": 2.699,
+              "x": -60.0,
+              "y": -139.7,
+              "w": 1400
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 22.5,
+      "end": 25.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-tendril-collapse.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -45.0,
+              "y": -118.2,
+              "w": 1380
+            },
+            {
+              "t": 2.499,
+              "x": -100.0,
+              "y": -263.3,
+              "w": 1480
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 25.0,
+      "end": 27.6,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-tendril-collapse.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -85.0,
+              "y": -96.7,
+              "w": 1450
+            },
+            {
+              "t": 2.599,
+              "x": -10.0,
+              "y": -26.8,
+              "w": 1300
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 27.6,
+      "end": 30.0,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-5-escape-hatch.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -20.0,
+              "y": -17.9,
+              "w": 1320
+            },
+            {
+              "t": 2.399,
+              "x": 0.0,
+              "y": -7.1,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 30.0,
+      "end": 33.6,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-5-escape-hatch.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -54.0,
+              "y": -174.6,
+              "w": 1400
+            },
+            {
+              "t": 3.599,
+              "x": -96.0,
+              "y": -367.2,
+              "w": 1520
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 33.6,
+      "end": 37.8,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-5-escape-hatch.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -93.5,
+              "y": -96.7,
+              "w": 1450
+            },
+            {
+              "t": 4.199,
+              "x": -165.0,
+              "y": -111.1,
+              "w": 1580
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 37.8,
+      "end": 42.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-5-escape-hatch.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -70.0,
+              "y": -128.0,
+              "w": 1380
+            },
+            {
+              "t": 0.5,
+              "x": -110.5,
+              "y": -225.6,
+              "w": 1450
+            },
+            {
+              "t": 1.0,
+              "x": -52.5,
+              "y": -85.9,
+              "w": 1350
+            },
+            {
+              "t": 4.699,
+              "x": 0.0,
+              "y": -8.9,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 42.5,
+      "end": 45.6,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-6-surface-finale.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -40.0,
+              "y": -96.7,
+              "w": 1360
+            },
+            {
+              "t": 3.099,
+              "x": 0.0,
+              "y": -8.9,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 45.6,
+      "end": 48.2,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-6-surface-finale.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -127.5,
+              "y": -177.3,
+              "w": 1450
+            },
+            {
+              "t": 2.599,
+              "x": -256.0,
+              "y": -307.4,
+              "w": 1600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 48.2,
+      "end": 52.031917,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-6-surface-finale.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "keys": [
+            {
+              "t": 0.0,
+              "x": -50.0,
+              "y": -78.8,
+              "w": 1380
+            },
+            {
+              "t": 3.831,
+              "x": 0.0,
+              "y": -8.5,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sfx": [
+    {
+      "time": 0.5,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 3.3,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 6.2,
+      "kind": "tap",
+      "gain": 0.03
+    },
+    {
+      "time": 8.8,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 11.5,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 15.8,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 20.0,
+      "kind": "pop",
+      "gain": 0.05
+    },
+    {
+      "time": 22.6,
+      "kind": "pop",
+      "gain": 0.05
+    },
+    {
+      "time": 25.2,
+      "kind": "tap",
+      "gain": 0.04
+    },
+    {
+      "time": 27.8,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 30.2,
+      "kind": "tap",
+      "gain": 0.04
+    },
+    {
+      "time": 33.8,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 38.0,
+      "kind": "pop",
+      "gain": 0.06
+    },
+    {
+      "time": 40.5,
+      "kind": "tap",
+      "gain": 0.04
+    },
+    {
+      "time": 42.8,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 46.0,
+      "kind": "chime",
+      "gain": 0.05
+    },
+    {
+      "time": 48.5,
+      "kind": "pop",
+      "gain": 0.03
+    },
+    {
+      "time": 51.0,
+      "kind": "chime",
+      "gain": 0.04
+    }
+  ]
+}

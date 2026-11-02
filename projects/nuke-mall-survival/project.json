@@ -1,0 +1,345 @@
+{
+  "version": 1,
+  "style": "B1",
+  "width": 720,
+  "height": 1280,
+  "fps": 30,
+  "grid": false,
+  "captionSize": 38,
+  "voice": {
+    "path": "narration.wav",
+    "lead": 0,
+    "tail": 0
+  },
+  "music": {
+    "path": "assets/bgm.mp3",
+    "gain": 0.08
+  },
+  "captions": [
+    {
+      "start": 0.25,
+      "end": 4.81,
+      "text": "You are in the middle of a shopping mall when emergency sirens scream."
+    },
+    {
+      "start": 4.96,
+      "end": 8.44,
+      "text": "A nuclear detonation in under sixty seconds."
+    },
+    {
+      "start": 8.59,
+      "end": 12.51,
+      "text": "Most people run to the parking lot and get incinerated in traffic."
+    },
+    {
+      "start": 12.66,
+      "end": 16.9,
+      "text": "Your actual survival ticket? Run downward."
+    },
+    {
+      "start": 17.05,
+      "end": 22.81,
+      "text": "A modern mall basement is reinforced with thousands of tons of concrete and earth,"
+    },
+    {
+      "start": 22.96,
+      "end": 26.24,
+      "text": "creating an impromptu radiation fortress."
+    },
+    {
+      "start": 26.39,
+      "end": 31.47,
+      "text": "The instant the flash hits: drop flat against an interior support pillar,"
+    },
+    {
+      "start": 31.62,
+      "end": 35.38,
+      "text": "face down, hands over your head, and open your mouth."
+    },
+    {
+      "start": 35.53,
+      "end": 41.29,
+      "text": "Keeping your mouth open equalizes blast overpressure, saving your lungs and eardrums."
+    },
+    {
+      "start": 41.44,
+      "end": 46.28,
+      "text": "You survived the shockwave. But the real countdown has just begun."
+    }
+  ],
+  "shots": [
+    {
+      "start": 0,
+      "end": 4.9,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-1-mall.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 2276,
+          "keys": [
+            {
+              "t": 0,
+              "x": -30,
+              "y": -30,
+              "w": 1340
+            },
+            {
+              "t": 4.899,
+              "x": 0,
+              "y": 0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 4.9,
+      "end": 8.5,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-parking.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 2276,
+          "keys": [
+            {
+              "t": 0,
+              "x": 0,
+              "y": 0,
+              "w": 1280
+            },
+            {
+              "t": 3.599,
+              "x": -25,
+              "y": -25,
+              "w": 1330
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 8.5,
+      "end": 16.95,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-3-stairs.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 2276,
+          "keys": [
+            {
+              "t": 0,
+              "x": 0,
+              "y": -120,
+              "w": 1280
+            },
+            {
+              "t": 8.449,
+              "x": 0,
+              "y": 0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 16.95,
+      "end": 26.3,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-bunker.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 2276,
+          "keys": [
+            {
+              "t": 0,
+              "x": -20,
+              "y": -20,
+              "w": 1320
+            },
+            {
+              "t": 9.349,
+              "x": 0,
+              "y": 0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 26.3,
+      "end": 35.45,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-bunker.jpg",
+          "x": -100,
+          "y": -200,
+          "w": 1480,
+          "h": 2476,
+          "keys": [
+            {
+              "t": 0,
+              "x": -50,
+              "y": -100,
+              "w": 1380
+            },
+            {
+              "t": 9.149,
+              "x": -120,
+              "y": -260,
+              "w": 1520
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 35.45,
+      "end": 41.35,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-4-bunker.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 2276,
+          "keys": [
+            {
+              "t": 0,
+              "x": -10,
+              "y": -10,
+              "w": 1300
+            },
+            {
+              "t": 5.899,
+              "x": 0,
+              "y": 0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "start": 41.35,
+      "end": 46.63,
+      "layers": [
+        {
+          "type": "image",
+          "path": "assets/scene-2-parking.jpg",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 2276,
+          "keys": [
+            {
+              "t": 0,
+              "x": -20,
+              "y": -20,
+              "w": 1320
+            },
+            {
+              "t": 5.279,
+              "x": 0,
+              "y": 0,
+              "w": 1280
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sfx": [
+    {
+      "time": 0.3,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 2.2,
+      "kind": "chime",
+      "gain": 0.03
+    },
+    {
+      "time": 5.2,
+      "kind": "pop",
+      "gain": 0.03
+    },
+    {
+      "time": 7.0,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 9.0,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 13.0,
+      "kind": "tap",
+      "gain": 0.03
+    },
+    {
+      "time": 17.5,
+      "kind": "pop",
+      "gain": 0.03
+    },
+    {
+      "time": 20.0,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 23.5,
+      "kind": "chime",
+      "gain": 0.03
+    },
+    {
+      "time": 26.8,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 30.0,
+      "kind": "tap",
+      "gain": 0.03
+    },
+    {
+      "time": 36.0,
+      "kind": "chime",
+      "gain": 0.04
+    },
+    {
+      "time": 38.5,
+      "kind": "paper",
+      "gain": 0.03
+    },
+    {
+      "time": 42.0,
+      "kind": "pop",
+      "gain": 0.04
+    },
+    {
+      "time": 44.5,
+      "kind": "chime",
+      "gain": 0.03
+    }
+  ]
+}

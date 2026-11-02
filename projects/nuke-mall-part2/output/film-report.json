@@ -1,0 +1,62 @@
+{
+  "fingerprint": "ad586c411c4ecbe3421dc3bf5a6ffa64322b613ab8b601a8d7c9e86e36e8528c",
+  "preview_seconds": null,
+  "output": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/output/film.mp4",
+  "output_sha256": "4d502ad1fb2db1e634e142abb6144625b81f5c00c2c1cc8692dd4f6527e3291a",
+  "original_voice_sha256": "ae03df53614d9387ea98042871a5ba2e25d4af8facc7658219860a2461fb6dba",
+  "original_voice_duration": 39.05,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 1172,
+  "duration": 39.066667,
+  "cache_hits": 5,
+  "shot_count": 13,
+  "full_decode": "pass",
+  "caption_count": 12,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/bgm.mp3",
+      "sha256": "90a5f1288616e9cfc2eac99265fb862753dc6e0c0804bea1dab596554ca62697"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-1-dust.jpg",
+      "sha256": "859d067bc32999f4fdbebb98b91e2053f63de990ad14bdef13db4ad648deef59"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-2-pipes.jpg",
+      "sha256": "75a1eda7fdf785a9ea434ed6ffa4a4d40eab281eeb5601e8a02c7cbf3e070a11"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-3-spores.jpg",
+      "sha256": "2b1ee1d46bb3137ba0c695da7f46241925ed29e862c79c368b2c59b90bdccfe7"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-4-stairs.jpg",
+      "sha256": "ad7786071c4b11037433d80271fc86bbde7b2443610b8f427df200169e6e9c1c"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-5-bunker.jpg",
+      "sha256": "77f91835b141344ee5579e984b6f1c0b4c387f97fcdc44dd80170f5966b639bb"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-6-future-video.jpg",
+      "sha256": "ea46f0741e2c064b30de114084ed292037e29d992c05e537d7ae6902e8c9b1e6"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/assets/scene-7-glitch.jpg",
+      "sha256": "8b680027af466c8947e1005cd403bca2089305cbfbdf544bc5788856baf40483"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-part2/narration.wav",
+      "sha256": "ae03df53614d9387ea98042871a5ba2e25d4af8facc7658219860a2461fb6dba"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/Caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    }
+  ]
+}

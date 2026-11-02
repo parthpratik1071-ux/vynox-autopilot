@@ -1,0 +1,50 @@
+{
+  "fingerprint": "5c6e91cf69b0d761e82f5d6cabf8a5a0dc76008463b39db429a2feb6bad0a55c",
+  "preview_seconds": 20,
+  "output": "/home/pratik/stickman-video-director/projects/nuke-mall-survival/output/preview.mp4",
+  "output_sha256": "8f7f95c48a24c461e7c39fa17a20083a9aeb2769955ad82ad58031a79242d98a",
+  "original_voice_sha256": "cd94d8aa0c4f81ae662ca150b9843d8f673cd9ea31780233438fc8d40562133a",
+  "original_voice_duration": 46.63,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 600,
+  "duration": 20,
+  "cache_hits": 0,
+  "shot_count": 4,
+  "full_decode": "pass",
+  "caption_count": 5,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-survival/assets/bgm.mp3",
+      "sha256": "90a5f1288616e9cfc2eac99265fb862753dc6e0c0804bea1dab596554ca62697"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-survival/assets/scene-1-mall.jpg",
+      "sha256": "fb1763952e373b01514bbe6ce884cf760adaeb8b97d3ba3eacb6064817bec691"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-survival/assets/scene-2-parking.jpg",
+      "sha256": "fa9556cbd9d8425d20728afaed480e99f9a946eb25f7a126844aa262b1b3e20a"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-survival/assets/scene-3-stairs.jpg",
+      "sha256": "ad7786071c4b11037433d80271fc86bbde7b2443610b8f427df200169e6e9c1c"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-survival/assets/scene-4-bunker.jpg",
+      "sha256": "77f91835b141344ee5579e984b6f1c0b4c387f97fcdc44dd80170f5966b639bb"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/projects/nuke-mall-survival/narration.wav",
+      "sha256": "cd94d8aa0c4f81ae662ca150b9843d8f673cd9ea31780233438fc8d40562133a"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/Caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+    },
+    {
+      "path": "/home/pratik/stickman-video-director/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    }
+  ]
+}
