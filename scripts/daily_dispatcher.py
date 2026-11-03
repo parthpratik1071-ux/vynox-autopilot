@@ -13,7 +13,7 @@ import datetime
 import argparse
 from pathlib import Path
 
-BASE_DIR = Path("/home/pratik/stickman-video-director")
+BASE_DIR = Path(__file__).resolve().parent.parent
 QUEUE_DIR = BASE_DIR / "projects" / "queue"
 ARCHIVE_DIR = BASE_DIR / "projects" / "archive"
 LOG_FILE = BASE_DIR / "projects" / "daily_dispatcher.log"
@@ -66,11 +66,24 @@ def dispatch_next(force=False):
     with open(next_file, "r") as f:
         data = json.load(f)
 
-    video_path = data.get("video_path")
-    cover_path = data.get("cover_path")
+    def resolve_path(p):
+        if not p:
+            return None
+        po = Path(p)
+        if po.is_absolute() and po.exists():
+            return po
+        # Check relative to BASE_DIR or strip local prefix
+        p_str = str(p).split("stickman-video-director/")[-1]
+        cand = BASE_DIR / p_str
+        if cand.exists():
+            return cand
+        return po
+
+    video_path = resolve_path(data.get("video_path"))
+    cover_path = resolve_path(data.get("cover_path"))
     caption = data.get("caption", "")
 
-    if not video_path or not os.path.exists(video_path):
+    if not video_path or not video_path.exists():
         log(f"❌ Video file does not exist: {video_path}")
         return False
 
