@@ -32,10 +32,10 @@ def dispatch_next(force=False):
     today_str = datetime.date.today().isoformat()
     now = datetime.datetime.now()
 
-    # Check if a post was already made today
-    already_published = any(f.name.startswith(today_str) for f in ARCHIVE_DIR.glob("*.json"))
-    if already_published and not force:
-        log(f"✅ Already published a Reel today ({today_str}). Quota fulfilled. Next post scheduled for tomorrow at 7:00 PM.")
+    # Daily 2-post quota check (1:00 PM and 7:00 PM IST)
+    today_posts = [f for f in ARCHIVE_DIR.glob(f"{today_str}*.json")]
+    if len(today_posts) >= 2 and not force:
+        log(f"✅ Already published 2 Reels today ({today_str}). Daily 2-post quota fulfilled!")
         return True
 
     # Detect if any previous day was completely missed
@@ -50,9 +50,10 @@ def dispatch_next(force=False):
         except Exception:
             pass
 
-    # If it's today's scheduled post and before 19:00, wait until 19:00
-    if now.hour < 19 and not force and not missed_previous_day:
-        log(f"⏳ Current time ({now.strftime('%H:%M')}) is before 7:00 PM IST. Queued post will release at 19:00.")
+    # Slot 1: 1:00 PM (13:00) | Slot 2: 7:00 PM (19:00)
+    target_hour = 13 if len(today_posts) == 0 else 19
+    if now.hour < target_hour and not force and not missed_previous_day:
+        log(f"⏳ Current time ({now.strftime('%H:%M')}) is before scheduled slot ({target_hour}:00 IST). Waiting.")
         return False
 
     queue_files = sorted(list(QUEUE_DIR.glob("*.json")))

@@ -1,0 +1,26 @@
+{
+  "cues": [
+    {
+      "id": "cue_0",
+      "text": "In 1615 Edo Japan, a masterless samurai was ambushed by fifty shadow assassins in a misty bamboo forest."
+    },
+    {
+      "id": "cue_1",
+      "text": "He didn't draw his katana. He closed his eyes and whispered: The blade is drawn only when death is accepted."
+    },
+    {
+      "id": "cue_2",
+      "text": "In three seconds of blinding steel, every lantern shattered. When the mist cleared, only one sword remained standing."
+    },
+    {
+      "id": "cue_3",
+      "text": "Honor is eternal. Would you survive this duel? Drop your answer below."
+    }
+  ],
+  "durations": [
+    9.570975,
+    8.130975,
+    9.250975,
+    4.970975
+  ]
+}

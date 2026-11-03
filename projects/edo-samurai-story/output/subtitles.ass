@@ -1,0 +1,24 @@
+[Script Info]
+Title: Edo Samurai Story
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 720
+PlayResY: 1280
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,DejaVu Sans,44,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,4,2,2,40,40,240,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:04.46,Default,,0,0,0,,In {\c&H0033FFFF&}\1{\c&H00FFFFFF&},
+Dialogue: 0,0:00:04.46,0:00:08.62,Default,,0,0,0,,a {\c&H0033FFFF&}\1{\c&H00FFFFFF&} was ambushed by {\c&H0033FFFF&}\1{\c&H00FFFFFF&} in a misty bamboo forest.
+Dialogue: 0,0:00:08.77,0:00:12.30,Default,,0,0,0,,He didn't draw his {\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:12.30,0:00:15.84,Default,,0,0,0,,He closed his eyes and whispered: The blade is drawn only when {\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:15.99,0:00:18.00,Default,,0,0,0,,In {\c&H0033FFFF&}\1{\c&H00FFFFFF&} of {\c&H0033FFFF&}\1{\c&H00FFFFFF&},
+Dialogue: 0,0:00:18.00,0:00:20.01,Default,,0,0,0,,every lantern shattered.
+Dialogue: 0,0:00:20.01,0:00:22.02,Default,,0,0,0,,When the mist cleared,
+Dialogue: 0,0:00:22.02,0:00:24.03,Default,,0,0,0,,only one sword remained standing.
+Dialogue: 0,0:00:24.18,0:00:25.62,Default,,0,0,0,,{\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:25.62,0:00:27.06,Default,,0,0,0,,Would you survive this duel?
+Dialogue: 0,0:00:27.06,0:00:28.50,Default,,0,0,0,,Drop your answer below.
