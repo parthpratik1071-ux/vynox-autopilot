@@ -1,0 +1,26 @@
+{
+  "cues": [
+    {
+      "id": "cue_0",
+      "text": "Kyoto, 1603. Five hundred enemy siege warriors stormed the castle gate under a moonless sky."
+    },
+    {
+      "id": "cue_1",
+      "text": "Only one defender guarded the pagoda roof: the legendary Ghost Archer, who could hear an arrow in the dark."
+    },
+    {
+      "id": "cue_2",
+      "text": "In silence, whistling black arrows struck through armor before the enemy could draw their swords."
+    },
+    {
+      "id": "cue_3",
+      "text": "One bow. One soul. Would you hold the castle gate alone? Comment below."
+    }
+  ],
+  "durations": [
+    8.290975,
+    8.370975,
+    6.050975,
+    6.650975
+  ]
+}

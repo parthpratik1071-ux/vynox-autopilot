@@ -1,0 +1,4 @@
+file '/home/pratik/stickman-video-director/projects/samurai-bridge-duel/output/shot_0.mp4'
+file '/home/pratik/stickman-video-director/projects/samurai-bridge-duel/output/shot_1.mp4'
+file '/home/pratik/stickman-video-director/projects/samurai-bridge-duel/output/shot_2.mp4'
+file '/home/pratik/stickman-video-director/projects/samurai-bridge-duel/output/shot_3.mp4'

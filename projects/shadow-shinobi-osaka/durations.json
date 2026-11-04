@@ -1,0 +1,26 @@
+{
+  "cues": [
+    {
+      "id": "cue_0",
+      "text": "Osaka Castle, 1598. A thousand imperial guards locked the gates to capture the phantom on the roof."
+    },
+    {
+      "id": "cue_1",
+      "text": "The lone shinobi carried the stolen cipher scroll across moonlit tiles without making a single sound."
+    },
+    {
+      "id": "cue_2",
+      "text": "Surrounded on the watchtower edge, three smoke bombs shattered the dark before he vanished into thin air."
+    },
+    {
+      "id": "cue_3",
+      "text": "Never seen. Never caught. Would you trust a shinobi's oath? Drop your verdict below."
+    }
+  ],
+  "durations": [
+    8.064014,
+    6.264014,
+    6.48,
+    7.896009
+  ]
+}

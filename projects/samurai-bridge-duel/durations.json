@@ -1,0 +1,26 @@
+{
+  "cues": [
+    {
+      "id": "cue_0",
+      "text": "Midnight in 1616 Edo Japan. A lone blindfolded samurai guarded the Bridge of One Hundred Blades."
+    },
+    {
+      "id": "cue_1",
+      "text": "The Shogun offered ten thousand gold coins to any warlord who could cross. Ninety-nine had fallen."
+    },
+    {
+      "id": "cue_2",
+      "text": "When the demon executioner stepped forward, the blindfold dropped. In two breaths, lightning struck the water."
+    },
+    {
+      "id": "cue_3",
+      "text": "Honor is eternal. Would you dare step onto this bridge? Drop your answer below."
+    }
+  ],
+  "durations": [
+    8.410975,
+    7.010975,
+    7.090975,
+    6.770975
+  ]
+}
