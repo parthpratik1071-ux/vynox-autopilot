@@ -143,7 +143,7 @@ for t in timings:
         highlighted = part
         for kw in keywords:
             if kw.lower() in highlighted.lower():
-                highlighted = re.sub(f"(?i)({re.escape(kw)})", r"{\\c&H0033FFFF&}\\1{\\c&H00FFFFFF&}", highlighted)
+                highlighted = re.sub(f"(?i)({re.escape(kw)})", r"{\\c&H0033FFFF&}\g<1>{\\c&H00FFFFFF&}", highlighted)
         ass_lines.append(f"Dialogue: 0,{sec_to_ass(s_time)},{sec_to_ass(e_time)},Default,,0,0,0,,{highlighted}")
 
 ass_file = OUT_DIR / "subtitles.ass"
@@ -209,3 +209,4 @@ if raw_video.exists(): raw_video.unlink()
 
 print(f"🎉 RENDER COMPLETE: {final_film}")
 print(f"🖼️ COVER: {cover_img}")
+

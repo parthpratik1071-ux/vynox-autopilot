@@ -75,3 +75,4 @@ with open(PROJECT_DIR / "durations.json", "w") as f:
     json.dump({"cues": CUES, "durations": durations}, f, indent=2)
 
 print("✅ Speech synthesis complete!")
+

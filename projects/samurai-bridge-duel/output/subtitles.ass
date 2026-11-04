@@ -11,14 +11,14 @@ Style: Default,DejaVu Sans,44,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:00.20,0:00:03.85,Default,,0,0,0,,Midnight in {\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
-Dialogue: 0,0:00:03.85,0:00:07.51,Default,,0,0,0,,A lone {\c&H0033FFFF&}\1{\c&H00FFFFFF&} guarded the {\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
-Dialogue: 0,0:00:07.63,0:00:10.68,Default,,0,0,0,,The Shogun offered {\c&H0033FFFF&}\1{\c&H00FFFFFF&} to any {\c&H0033FFFF&}\1{\c&H00FFFFFF&} who could cross.
-Dialogue: 0,0:00:10.68,0:00:13.73,Default,,0,0,0,,{\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
-Dialogue: 0,0:00:13.85,0:00:15.39,Default,,0,0,0,,When the {\c&H0033FFFF&}\1{\c&H00FFFFFF&} stepped forward,
-Dialogue: 0,0:00:15.39,0:00:16.93,Default,,0,0,0,,the {\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:00.20,0:00:03.85,Default,,0,0,0,,Midnight in {\c&H0033FFFF&}1616 Edo Japan{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:03.85,0:00:07.51,Default,,0,0,0,,A lone {\c&H0033FFFF&}blindfolded samurai{\c&H00FFFFFF&} guarded the {\c&H0033FFFF&}Bridge of One Hundred Blades{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:07.63,0:00:10.68,Default,,0,0,0,,The Shogun offered {\c&H0033FFFF&}ten thousand gold coins{\c&H00FFFFFF&} to any {\c&H0033FFFF&}warlord{\c&H00FFFFFF&} who could cross.
+Dialogue: 0,0:00:10.68,0:00:13.73,Default,,0,0,0,,{\c&H0033FFFF&}Ninety-nine had fallen{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:13.85,0:00:15.39,Default,,0,0,0,,When the {\c&H0033FFFF&}demon executioner{\c&H00FFFFFF&} stepped forward,
+Dialogue: 0,0:00:15.39,0:00:16.93,Default,,0,0,0,,the {\c&H0033FFFF&}blindfold dropped{\c&H00FFFFFF&}.
 Dialogue: 0,0:00:16.93,0:00:18.48,Default,,0,0,0,,In two breaths,
-Dialogue: 0,0:00:18.48,0:00:20.02,Default,,0,0,0,,{\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
-Dialogue: 0,0:00:20.14,0:00:22.10,Default,,0,0,0,,{\c&H0033FFFF&}\1{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:18.48,0:00:20.02,Default,,0,0,0,,{\c&H0033FFFF&}lightning struck the water{\c&H00FFFFFF&}.
+Dialogue: 0,0:00:20.14,0:00:22.10,Default,,0,0,0,,{\c&H0033FFFF&}Honor is eternal{\c&H00FFFFFF&}.
 Dialogue: 0,0:00:22.10,0:00:24.07,Default,,0,0,0,,Would you dare step onto this bridge?
 Dialogue: 0,0:00:24.07,0:00:26.03,Default,,0,0,0,,Drop your answer below.
