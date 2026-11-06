@@ -6,7 +6,13 @@ on:
     - cron: '30 7 * * *'
     # 13:30 UTC = 7:00 PM IST (Evening Slot)
     - cron: '30 13 * * *'
-  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force dispatch immediately ignoring time slot and daily quota'
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   publish:
@@ -35,7 +41,11 @@ jobs:
         run: |
           mkdir -p ~/.config/stickman_video_director
           if [ -n "$INSTA_SESSION_DATA" ]; then
-            printf '%s\n' "$INSTA_SESSION_DATA" > ~/.config/stickman_video_director/insta_session.json
+            if [[ "$INSTA_SESSION_DATA" =~ ^[[:space:]]*\{ ]]; then
+              printf '%s\n' "$INSTA_SESSION_DATA" > ~/.config/stickman_video_director/insta_session.json
+            else
+              echo "$INSTA_SESSION_DATA" | base64 -d > ~/.config/stickman_video_director/insta_session.json 2>/dev/null || printf '%s\n' "$INSTA_SESSION_DATA" > ~/.config/stickman_video_director/insta_session.json
+            fi
             chmod 600 ~/.config/stickman_video_director/insta_session.json
             echo "✅ Successfully restored Instagram session from secrets."
           else
@@ -46,13 +56,24 @@ jobs:
         env:
           INSTA_USERNAME: ${{ secrets.INSTA_USERNAME }}
           INSTA_PASSWORD: ${{ secrets.INSTA_PASSWORD }}
+          FORCE_INPUT: ${{ inputs.force }}
         run: |
-          python3 scripts/daily_dispatcher.py
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$FORCE_INPUT" != "false" ]; then
+            echo "🚀 Manual trigger detected: forcing dispatch of next queued reel..."
+            python3 scripts/daily_dispatcher.py --force
+          else
+            python3 scripts/daily_dispatcher.py
+          fi
 
       - name: Commit Queue Updates & Logs
         run: |
           git config --global user.name "Vynox Bot"
           git config --global user.email "bot@vynox.ai"
           git add projects/queue/ projects/archive/ projects/daily_dispatcher.log
-          git commit -m "Automated daily Reel dispatched [skip ci]" || echo "No changes to commit"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Automated daily Reel dispatched [skip ci]"
+            git pull --rebase origin main || true
+            git push origin main
+          fi
