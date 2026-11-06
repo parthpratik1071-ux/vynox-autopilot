@@ -51,12 +51,19 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
 
     # If session not loaded, authenticate with credentials
     uname = username or os.environ.get("INSTA_USERNAME")
-    if not uname:
-        uname = input("Instagram Username: ").strip()
-
     pword = password or os.environ.get("INSTA_PASSWORD")
-    if not pword:
-        pword = getpass.getpass("Instagram Password (hidden): ")
+
+    if not session_loaded and not (uname and pword):
+        if not sys.stdin.isatty():
+            raise RuntimeError(
+                "❌ Instagram session is invalid or missing, and no credentials were provided in CI.\n"
+                "👉 Please ensure your INSTA_SESSION_JSON secret is correctly configured in your GitHub repository secrets:\n"
+                "   Repo Settings -> Secrets and variables -> Actions -> INSTA_SESSION_JSON"
+            )
+        if not uname:
+            uname = input("Instagram Username: ").strip()
+        if not pword:
+            pword = getpass.getpass("Instagram Password (hidden): ")
 
     print(f"🔄 Logging in as @{uname}...")
     try:

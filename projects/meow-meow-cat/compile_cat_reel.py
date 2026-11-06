@@ -31,18 +31,18 @@ ass_lines = [
     "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    "Style: Default,DejaVu Sans,48,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,4,2,2,40,40,240,1",
+    "Style: Default,Noto Sans Devanagari,44,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,4,2,2,40,40,240,1",
     "",
     "[Events]",
     "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(3.2)},Default,,0,0,0,,Meow Meow... Meow Meow... 🐱",
-    f"Dialogue: 0,{sec_to_ass(3.2)},{sec_to_ass(6.0)},Default,,0,0,0,,{{\\c&H0033FFFF&}}Kisko chhodu, kisko khau?{{\\c&H00FFFFFF&}} 🤔",
-    f"Dialogue: 0,{sec_to_ass(6.0)},{sec_to_ass(9.0)},Default,,0,0,0,,Ek taraf hai {{\\c&H0033FFFF&}}doodh malai{{\\c&H00FFFFFF&}} 🥛",
-    f"Dialogue: 0,{sec_to_ass(9.0)},{sec_to_ass(12.0)},Default,,0,0,0,,Ek taraf hai {{\\c&H0033FFFF&}}chuhiya aai!{{\\c&H00FFFFFF&}} 🐭",
-    f"Dialogue: 0,{sec_to_ass(12.0)},{sec_to_ass(15.0)},Default,,0,0,0,,Ek taraf hai {{\\c&H000000FF&}}malik aaya{{\\c&H00FFFFFF&}} 🏏",
-    f"Dialogue: 0,{sec_to_ass(15.0)},{sec_to_ass(17.5)},Default,,0,0,0,,Ek taraf hai {{\\c&H000000FF&}}kutta aaya!{{\\c&H00FFFFFF&}} 🐶",
-    f"Dialogue: 0,{sec_to_ass(17.5)},{sec_to_ass(20.5)},Default,,0,0,0,,{{\\c&H0033FFFF&}}Kidhar jau, kidhar jau?!{{\\c&H00FFFFFF&}} 🏃💨",
-    f"Dialogue: 0,{sec_to_ass(20.5)},{sec_to_ass(24.0)},Default,,0,0,0,,Donon leke bhaag gaya! 😂❤️"
+    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(3.2)},Default,,0,0,0,,{{\\c&H0033FFFF&}}म्याऊँ म्याऊँ... म्याऊँ म्याऊँ...{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Meow Meow... Meow Meow...",
+    f"Dialogue: 0,{sec_to_ass(3.2)},{sec_to_ass(6.0)},Default,,0,0,0,,{{\\c&H0033FFFF&}}किसको छोड़ूँ, किसको खाऊँ?{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Kisko chhodu, kisko khau?",
+    f"Dialogue: 0,{sec_to_ass(6.0)},{sec_to_ass(9.0)},Default,,0,0,0,,एक तरफ है {{\\c&H0033FFFF&}}दूध मलाई{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Ek taraf hai doodh malai",
+    f"Dialogue: 0,{sec_to_ass(9.0)},{sec_to_ass(12.0)},Default,,0,0,0,,एक तरफ है {{\\c&H0033FFFF&}}चुहिया आई!{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Ek taraf hai chuhiya aai!",
+    f"Dialogue: 0,{sec_to_ass(12.0)},{sec_to_ass(15.0)},Default,,0,0,0,,एक तरफ है {{\\c&H005555FF&}}मालिक आया{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Ek taraf hai malik aaya",
+    f"Dialogue: 0,{sec_to_ass(15.0)},{sec_to_ass(17.5)},Default,,0,0,0,,एक तरफ है {{\\c&H005555FF&}}कुत्ता आया!{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Ek taraf hai kutta aaya!",
+    f"Dialogue: 0,{sec_to_ass(17.5)},{sec_to_ass(20.5)},Default,,0,0,0,,{{\\c&H0033FFFF&}}किधर जाऊँ, किधर जाऊँ?!{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Kidhar jau, kidhar jau?!",
+    f"Dialogue: 0,{sec_to_ass(20.5)},{sec_to_ass(24.0)},Default,,0,0,0,,{{\\c&H0033FF33&}}दोनों लेके भाग गया!{{\\c&H00FFFFFF&}}\\N{{\\fs32\\c&H00FFFFFF&}}Donon leke bhaag gaya!"
 ]
 
 ass_file = OUT_DIR / "subtitles.ass"

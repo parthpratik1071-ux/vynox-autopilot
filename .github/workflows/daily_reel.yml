@@ -15,6 +15,7 @@ jobs:
       contents: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      ACTIONS_RUNNER_FORCE_NODE24: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -30,12 +31,25 @@ jobs:
           pip install instagrapi pillow
 
       - name: Restore Instagram Session
+        env:
+          INSTA_SESSION_DATA: ${{ secrets.INSTA_SESSION_JSON }}
         run: |
           mkdir -p ~/.config/stickman_video_director
-          echo "${{ secrets.INSTA_SESSION_JSON }}" > ~/.config/stickman_video_director/insta_session.json
-          chmod 600 ~/.config/stickman_video_director/insta_session.json
+          python3 -c "import os
+          data = os.environ.get('INSTA_SESSION_DATA', '').strip()
+          path = os.path.expanduser('~/.config/stickman_video_director/insta_session.json')
+          if data:
+              with open(path, 'w') as f:
+                  f.write(data)
+              os.chmod(path, 0o600)
+              print('✅ Successfully restored Instagram session from secrets.')
+          else:
+              print('⚠️ INSTA_SESSION_JSON secret is empty or unset.')"
 
       - name: Dispatch Queued Reel
+        env:
+          INSTA_USERNAME: ${{ secrets.INSTA_USERNAME }}
+          INSTA_PASSWORD: ${{ secrets.INSTA_PASSWORD }}
         run: |
           python3 scripts/daily_dispatcher.py
 
