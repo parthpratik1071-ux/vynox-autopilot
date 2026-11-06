@@ -46,7 +46,13 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
             print("✅ Successfully authenticated using saved session!")
             session_loaded = True
             return cl
+        except LoginRequired:
+            print("⚠️ Saved session is expired (LoginRequired). Re-authenticating...")
         except Exception as e:
+            if getattr(cl, "user_id", None):
+                print(f"⚠️ Timeline check warning ({e}), but session User ID {cl.user_id} is present. Proceeding with saved session.")
+                session_loaded = True
+                return cl
             print(f"⚠️ Saved session is expired or invalid ({e}). Re-authenticating...")
 
     # If session not loaded, authenticate with credentials

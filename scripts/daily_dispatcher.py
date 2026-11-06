@@ -27,6 +27,14 @@ def log(msg):
     with open(LOG_FILE, "a") as f:
         f.write(formatted + "\n")
 
+def parse_dt(dt_str):
+    if not dt_str:
+        return None
+    try:
+        return datetime.datetime.fromisoformat(dt_str)
+    except Exception:
+        return None
+
 def dispatch_next(force=False):
     QUEUE_DIR.mkdir(parents=True, exist_ok=True)
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
@@ -56,8 +64,8 @@ def dispatch_next(force=False):
         # Check slot fulfillment (Slot 1: Afternoon 2:00 PM IST | Slot 2: Evening 7:00 PM IST)
         if now.hour >= 18:
             evening_posted = any(
-                datetime.datetime.fromisoformat(p.get("published_at", "")).hour >= 18
-                for p in today_posts if p.get("published_at")
+                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour >= 18)
+                for p in today_posts
             )
             if evening_posted:
                 log(f"✅ Evening Reel already published today ({today_str}). Daily quota fulfilled!")
@@ -68,10 +76,10 @@ def dispatch_next(force=False):
         else:
             # Afternoon slot
             afternoon_posted = any(
-                datetime.datetime.fromisoformat(p.get("published_at", "")).hour < 18
-                for p in today_posts if p.get("published_at")
+                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour < 18)
+                for p in today_posts
             )
-            if afternoon_posted and not is_ci:
+            if afternoon_posted:
                 log(f"✅ Afternoon Reel already published today ({today_str}). Next slot at 7:00 PM IST.")
                 return True
 
@@ -100,7 +108,7 @@ def dispatch_next(force=False):
 
     if not video_path or not video_path.exists():
         log(f"❌ Video file does not exist: {video_path}")
-        return False
+        raise FileNotFoundError(f"Video file does not exist: {video_path}")
 
     log(f"🎬 Uploading video: {video_path}")
     
