@@ -53,7 +53,7 @@ def dispatch_next(force=False):
             except Exception:
                 pass
 
-        # Check slot fulfillment (Slot 1: Afternoon 1:00 PM IST | Slot 2: Evening 7:00 PM IST)
+        # Check slot fulfillment (Slot 1: Afternoon 2:00 PM IST | Slot 2: Evening 7:00 PM IST)
         if now.hour >= 18:
             evening_posted = any(
                 datetime.datetime.fromisoformat(p.get("published_at", "")).hour >= 18
@@ -62,8 +62,8 @@ def dispatch_next(force=False):
             if evening_posted:
                 log(f"✅ Evening Reel already published today ({today_str}). Daily quota fulfilled!")
                 return True
-        elif not is_ci and now.hour < 12:
-            log(f"⏳ Current time ({now.strftime('%H:%M')}) is before afternoon slot (13:00 IST). Waiting.")
+        elif not is_ci and now.hour < 13:
+            log(f"⏳ Current time ({now.strftime('%H:%M')}) is before afternoon slot (14:00 IST). Waiting.")
             return False
         else:
             # Afternoon slot
