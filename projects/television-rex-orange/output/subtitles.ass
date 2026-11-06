@@ -1,0 +1,22 @@
+[Script Info]
+Title: Television / So Far So Good
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 720
+PlayResY: 1280
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,DejaVu Sans,44,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,4,2,2,40,40,240,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.20,0:00:03.20,Default,,0,0,0,,If you're looking for something new...
+Dialogue: 0,0:00:03.20,0:00:06.25,Default,,0,0,0,,I know somebody that you could choose.
+Dialogue: 0,0:00:06.25,0:00:08.20,Default,,0,0,0,,{\c&H0033FFFF&}What about me?{\c&H00FFFFFF&}
+Dialogue: 0,0:00:08.20,0:00:10.20,Default,,0,0,0,,{\c&H0033FFFF&}What about me?{\c&H00FFFFFF&}
+Dialogue: 0,0:00:10.20,0:00:13.50,Default,,0,0,0,,What about {\c&H0033FFFF&}me and you together?{\c&H00FFFFFF&}
+Dialogue: 0,0:00:13.50,0:00:16.50,Default,,0,0,0,,Something that could {\c&H0033FFFF&}last forever{\c&H00FFFFFF&}...
+Dialogue: 0,0:00:16.50,0:00:18.50,Default,,0,0,0,,{\c&H0033FFFF&}What about me?{\c&H00FFFFFF&}
+Dialogue: 0,0:00:18.50,0:00:21.50,Default,,0,0,0,,What about {\c&H0033FFFF&}me and you together?{\c&H00FFFFFF&}
+Dialogue: 0,0:00:21.50,0:00:25.00,Default,,0,0,0,,{\c&H0033FFFF&}Something that could really last forever{\c&H00FFFFFF&} ✨
