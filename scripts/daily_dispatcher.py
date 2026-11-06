@@ -34,34 +34,46 @@ def dispatch_next(force=False):
     now = datetime.datetime.now(IST)
     today_str = now.date().isoformat()
 
-    # Daily 2-post quota check (1:00 PM and 7:00 PM IST)
-    today_posts = [f for f in ARCHIVE_DIR.glob(f"{today_str}*.json")]
-    if len(today_posts) >= 2 and not force:
-        log(f"✅ Already published 2 Reels today ({today_str}). Daily 2-post quota fulfilled!")
-        return True
-
-    # Detect if any previous day was completely missed
-    archive_dates = sorted([f.name[:10] for f in ARCHIVE_DIR.glob("*.json") if len(f.name) >= 10])
-    missed_previous_day = False
-    if archive_dates:
-        try:
-            last_dt = datetime.date.fromisoformat(archive_dates[-1])
-            if (datetime.date.today() - last_dt).days > 1:
-                missed_previous_day = True
-                log(f"⚡ Detected missed upload from previous day (last post: {last_dt}). Catching up immediately!")
-        except Exception:
-            pass
-
-    # Slot 1: 1:00 PM (13:00) | Slot 2: 7:00 PM (19:00)
-    target_hour = 13 if len(today_posts) == 0 else 19
-    if now.hour < target_hour and not force and not missed_previous_day:
-        log(f"⏳ Current time ({now.strftime('%H:%M')}) is before scheduled slot ({target_hour}:00 IST). Waiting.")
-        return False
-
     queue_files = sorted(list(QUEUE_DIR.glob("*.json")))
     if not queue_files:
         log("⚠️ No queued Reels found in projects/queue/! Queue is empty.")
-        return False
+        return True
+
+    is_ci = os.environ.get("GITHUB_ACTIONS") == "true"
+
+    if not force:
+        # Check valid posts published today (ignoring deleted posts)
+        today_posts = []
+        for p in ARCHIVE_DIR.glob(f"{today_str}*.json"):
+            try:
+                with open(p, "r") as f:
+                    data = json.load(f)
+                if data.get("status") != "deleted_from_instagram":
+                    today_posts.append(data)
+            except Exception:
+                pass
+
+        # Check slot fulfillment (Slot 1: Afternoon 1:00 PM IST | Slot 2: Evening 7:00 PM IST)
+        if now.hour >= 18:
+            evening_posted = any(
+                datetime.datetime.fromisoformat(p.get("published_at", "")).hour >= 18
+                for p in today_posts if p.get("published_at")
+            )
+            if evening_posted:
+                log(f"✅ Evening Reel already published today ({today_str}). Daily quota fulfilled!")
+                return True
+        elif not is_ci and now.hour < 12:
+            log(f"⏳ Current time ({now.strftime('%H:%M')}) is before afternoon slot (13:00 IST). Waiting.")
+            return False
+        else:
+            # Afternoon slot
+            afternoon_posted = any(
+                datetime.datetime.fromisoformat(p.get("published_at", "")).hour < 18
+                for p in today_posts if p.get("published_at")
+            )
+            if afternoon_posted and not is_ci:
+                log(f"✅ Afternoon Reel already published today ({today_str}). Next slot at 7:00 PM IST.")
+                return True
 
     next_file = queue_files[0]
     log(f"📦 Processing queue item: {next_file.name}")
