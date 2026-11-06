@@ -1,0 +1,4 @@
+file '/home/pratik/stickman-video-director/projects/deep-sea-trench/output/shot_0.mp4'
+file '/home/pratik/stickman-video-director/projects/deep-sea-trench/output/shot_1.mp4'
+file '/home/pratik/stickman-video-director/projects/deep-sea-trench/output/shot_2.mp4'
+file '/home/pratik/stickman-video-director/projects/deep-sea-trench/output/shot_3.mp4'

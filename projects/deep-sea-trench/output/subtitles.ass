@@ -1,0 +1,21 @@
+[Script Info]
+Title: The 3-Second Trench Rule
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 720
+PlayResY: 1280
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,DejaVu Sans,44,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,4,2,2,40,40,240,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.20,0:00:03.40,Default,,0,0,0,,{\c&H0033FFFF&}At 8,000 meters deep{\c&H00FFFFFF&}, the sub hull cracked.
+Dialogue: 0,0:00:03.40,0:00:06.44,Default,,0,0,0,,{\c&H000033FF&}Rule one:{\c&H00FFFFFF&} you have {\c&H0033FFFF&}three seconds{\c&H00FFFFFF&} to eject.
+Dialogue: 0,0:00:06.59,0:00:09.10,Default,,0,0,0,,His hand reached the emergency switch.
+Dialogue: 0,0:00:09.10,0:00:11.96,Default,,0,0,0,,In cargo sat the {\c&H00FFFF33&}only cure{\c&H00FFFFFF&} for his sick daughter.
+Dialogue: 0,0:00:12.11,0:00:14.80,Default,,0,0,0,,He could not save both.
+Dialogue: 0,0:00:14.80,0:00:17.98,Default,,0,0,0,,Touching her drawing on the dial, he locked the {\c&H00FFFF33&}cure into the pod{\c&H00FFFFFF&} instead.
+Dialogue: 0,0:00:18.13,0:00:21.80,Default,,0,0,0,,His last radio whisper: {\c&H0033FFFF&}'Tell her, daddy kept his promise.'{\c&H00FFFFFF&}
+Dialogue: 0,0:00:21.80,0:00:24.59,Default,,0,0,0,,{\c&H0033FF33&}Could you make this sacrifice?{\c&H00FFFFFF&} 👇
