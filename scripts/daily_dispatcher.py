@@ -18,8 +18,10 @@ QUEUE_DIR = BASE_DIR / "projects" / "queue"
 ARCHIVE_DIR = BASE_DIR / "projects" / "archive"
 LOG_FILE = BASE_DIR / "projects" / "daily_dispatcher.log"
 
+IST = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+
 def log(msg):
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S")
     formatted = f"[{timestamp}] {msg}"
     print(formatted)
     with open(LOG_FILE, "a") as f:
@@ -29,8 +31,8 @@ def dispatch_next(force=False):
     QUEUE_DIR.mkdir(parents=True, exist_ok=True)
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
 
-    today_str = datetime.date.today().isoformat()
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(IST)
+    today_str = now.date().isoformat()
 
     # Daily 2-post quota check (1:00 PM and 7:00 PM IST)
     today_posts = [f for f in ARCHIVE_DIR.glob(f"{today_str}*.json")]
@@ -105,12 +107,12 @@ def dispatch_next(force=False):
     reel_url = f"https://www.instagram.com/reel/{media.code}/"
     log(f"✅ Reel posted successfully: {reel_url}")
 
-    data["published_at"] = datetime.datetime.now().isoformat()
+    data["published_at"] = datetime.datetime.now(IST).isoformat()
     data["reel_url"] = reel_url
     data["media_id"] = media.pk
 
     # Move to archive
-    archive_dest = ARCHIVE_DIR / f"{datetime.date.today().isoformat()}_{next_file.name}"
+    archive_dest = ARCHIVE_DIR / f"{now.date().isoformat()}_{next_file.name}"
     with open(archive_dest, "w") as f:
         json.dump(data, f, indent=2)
     next_file.unlink()
