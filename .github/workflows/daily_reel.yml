@@ -35,16 +35,13 @@ jobs:
           INSTA_SESSION_DATA: ${{ secrets.INSTA_SESSION_JSON }}
         run: |
           mkdir -p ~/.config/stickman_video_director
-          python3 -c "import os
-          data = os.environ.get('INSTA_SESSION_DATA', '').strip()
-          path = os.path.expanduser('~/.config/stickman_video_director/insta_session.json')
-          if data:
-              with open(path, 'w') as f:
-                  f.write(data)
-              os.chmod(path, 0o600)
-              print('✅ Successfully restored Instagram session from secrets.')
-          else:
-              print('⚠️ INSTA_SESSION_JSON secret is empty or unset.')"
+          if [ -n "$INSTA_SESSION_DATA" ]; then
+            printf '%s\n' "$INSTA_SESSION_DATA" > ~/.config/stickman_video_director/insta_session.json
+            chmod 600 ~/.config/stickman_video_director/insta_session.json
+            echo "✅ Successfully restored Instagram session from secrets."
+          else
+            echo "⚠️ INSTA_SESSION_JSON secret is empty or unset."
+          fi
 
       - name: Dispatch Queued Reel
         env:
