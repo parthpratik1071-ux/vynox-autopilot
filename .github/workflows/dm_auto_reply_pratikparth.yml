@@ -3,7 +3,7 @@ name: Instagram DM Auto-Responder (@pratikparth_12)
 on:
   schedule:
     # Runs every 30 minutes 24/7 in GitHub cloud (without laptop on)
-    - cron: '*/30 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:

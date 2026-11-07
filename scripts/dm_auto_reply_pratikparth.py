@@ -213,6 +213,13 @@ def run_responder(dry_run=False):
             if "action_log" in item_type:
                 continue
 
+            is_placeholder = False
+            if raw_xma and "xma_clip" in raw_xma:
+                for c in raw_xma.get("xma_clip", []):
+                    if c.get("ig_template_type") == "placeholder" or c.get("title_text") == "Message unavailable":
+                        is_placeholder = True
+                        break
+
             is_reel = any(k in item_type for k in ["clip", "xma_clip", "media_share", "media", "video"])
             is_text = "text" in item_type
 
@@ -221,7 +228,10 @@ def run_responder(dry_run=False):
             raw_xma = getattr(msg, "raw_xma", {}) or {}
 
             # Generate emotionally intelligent response
-            reply_text = get_emotion_reply(item_type, text=msg_text, raw_xma=raw_xma)
+            if is_placeholder:
+                reply_text = "Bhai ye reel unavailable dikha raha hai, private account tha kya? 😂"
+            else:
+                reply_text = get_emotion_reply(item_type, text=msg_text, raw_xma=raw_xma)
 
             print(f"\n📩 Incoming from @{sender_name} [{item_type}]: \"{msg_text}\"")
             print(f"   💡 Emotional Response Picked: \"{reply_text}\"")
