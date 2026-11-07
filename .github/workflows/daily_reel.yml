@@ -23,7 +23,7 @@ jobs:
       TZ: 'Asia/Kolkata'
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -40,14 +40,18 @@ jobs:
           INSTA_SESSION_DATA: ${{ secrets.INSTA_SESSION_JSON }}
         run: |
           mkdir -p ~/.config/stickman_video_director
+          SESSION_PATH="$HOME/.config/stickman_video_director/insta_session.json"
           if [ -n "$INSTA_SESSION_DATA" ]; then
-            if [[ "$INSTA_SESSION_DATA" =~ ^[[:space:]]*\{ ]]; then
-              printf '%s\n' "$INSTA_SESSION_DATA" > ~/.config/stickman_video_director/insta_session.json
-            else
-              echo "$INSTA_SESSION_DATA" | base64 -d > ~/.config/stickman_video_director/insta_session.json 2>/dev/null || printf '%s\n' "$INSTA_SESSION_DATA" > ~/.config/stickman_video_director/insta_session.json
+            printf '%s\n' "$INSTA_SESSION_DATA" > "$SESSION_PATH"
+            if ! python3 -c "import json; json.load(open('$SESSION_PATH'))" 2>/dev/null; then
+              echo "$INSTA_SESSION_DATA" | base64 -d > "$SESSION_PATH" 2>/dev/null || true
             fi
-            chmod 600 ~/.config/stickman_video_director/insta_session.json
-            echo "✅ Successfully restored Instagram session from secrets."
+            if python3 -c "import json; json.load(open('$SESSION_PATH'))" 2>/dev/null; then
+              chmod 600 "$SESSION_PATH"
+              echo "✅ Successfully restored Instagram session from secrets."
+            else
+              echo "⚠️ Warning: Restored session is not valid JSON."
+            fi
           else
             echo "⚠️ INSTA_SESSION_JSON secret is empty or unset."
           fi
@@ -74,6 +78,5 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Automated daily Reel dispatched [skip ci]"
-            git pull --rebase origin main || true
-            git push origin main
+            git push origin HEAD:main
           fi
