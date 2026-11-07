@@ -1,0 +1,73 @@
+name: Instagram DM Auto-Responder (@pratikparth_12)
+
+on:
+  schedule:
+    # Runs every 30 minutes 24/7 in GitHub cloud (without laptop on)
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry Run (inspect only, do not send reactions or replies)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  auto_respond:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install instagrapi Pillow curl_cffi pycryptodomex
+
+      - name: Restore Session
+        env:
+          SESSION_SECRET: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON }}
+        run: |
+          mkdir -p ~/.config/stickman_video_director
+          TARGET="$HOME/.config/stickman_video_director/insta_session_pratikparth_12.json"
+          if [ -n "$SESSION_SECRET" ]; then
+            printf '%s\n' "$SESSION_SECRET" > "$TARGET"
+            if ! python3 -c "import json; json.load(open('$TARGET'))" 2>/dev/null; then
+              echo "$SESSION_SECRET" | base64 -d > "$TARGET" 2>/dev/null || true
+            fi
+            if python3 -c "import json; json.load(open('$TARGET'))" 2>/dev/null; then
+              chmod 600 "$TARGET"
+              echo "✅ Successfully restored @pratikparth_12 Instagram session from secret."
+            else
+              echo "⚠️ Warning: Restored session is not valid JSON."
+            fi
+          else
+            echo "⚠️ INSTA_SESSION_PRATIKPARTH_JSON secret is empty or unset."
+          fi
+
+      - name: Run DM Auto-Responder
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="--dry-run"
+          fi
+          python3 scripts/dm_auto_reply_pratikparth.py $ARGS
+
+      - name: Commit & Push Seen Message State
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add projects/dm_seen_pratikparth.json || true
+          if git commit -m "chore(dm): update seen message state for @pratikparth_12 [skip ci]"; then
+            git push origin main
+            echo "✅ State updated and committed."
+          else
+            echo "No state changes to commit."
+          fi
