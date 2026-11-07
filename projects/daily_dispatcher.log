@@ -34,3 +34,9 @@
 [2026-11-07 19:04:20] ✅ Reel posted successfully: https://www.instagram.com/reel/DfcTJYvMTlv/
 [2026-11-07 19:04:20] 📁 Archived record to: 2026-11-07_01_diwali_hindi_special.json
 [2026-11-07 19:04:20] 📊 Remaining queued items: 2
+[2026-11-07 20:32:28] 🤖 Scheduled GitHub Actions trigger detected (20:32 IST). Proceeding to dispatch next queued reel...
+[2026-11-07 20:32:28] 📦 Processing queue item: 01_diwali_special.json
+[2026-11-07 20:32:28] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/diwali-special/output/film_diwali.mp4
+[2026-11-07 20:33:01] ✅ Reel posted successfully: https://www.instagram.com/reel/DfcdS0GsL9q/
+[2026-11-07 20:33:01] 📁 Archived record to: 2026-11-07_01_diwali_special.json
+[2026-11-07 20:33:01] 📊 Remaining queued items: 1
