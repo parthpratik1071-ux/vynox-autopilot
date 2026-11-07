@@ -49,7 +49,7 @@ def dispatch_next(force=False):
 
     is_ci = os.environ.get("GITHUB_ACTIONS") == "true"
 
-    if not force:
+    if not force and not is_ci:
         # Check valid posts published today (ignoring deleted posts)
         today_posts = []
         for p in ARCHIVE_DIR.glob(f"{today_str}*.json"):
@@ -70,7 +70,7 @@ def dispatch_next(force=False):
             if evening_posted:
                 log(f"✅ Evening Reel already published today ({today_str}). Daily quota fulfilled!")
                 return True
-        elif not is_ci and now.hour < 13:
+        elif now.hour < 13:
             log(f"⏳ Current time ({now.strftime('%H:%M')}) is before afternoon slot (14:00 IST). Waiting.")
             return False
         else:
@@ -82,6 +82,8 @@ def dispatch_next(force=False):
             if afternoon_posted:
                 log(f"✅ Afternoon Reel already published today ({today_str}). Next slot at 7:00 PM IST.")
                 return True
+    elif is_ci:
+        log(f"🤖 Scheduled GitHub Actions trigger detected ({now.strftime('%H:%M')} IST). Proceeding to dispatch next queued reel...")
 
     next_file = queue_files[0]
     log(f"📦 Processing queue item: {next_file.name}")
