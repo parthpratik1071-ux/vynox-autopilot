@@ -57,3 +57,9 @@
 [2026-11-08 20:54:37] ✅ Reel posted successfully: https://www.instagram.com/reel/DffEj17MI_2/
 [2026-11-08 20:54:37] 📁 Archived record to: 2026-11-08_02_moon_survival.json
 [2026-11-08 20:54:37] 📊 Remaining queued items: 1
+[2026-11-08 21:01:23] 🤖 Scheduled GitHub Actions trigger detected (21:01 IST). Proceeding to dispatch next queued reel...
+[2026-11-08 21:01:23] 📦 Processing queue item: 03_bhai_dooj.json
+[2026-11-08 21:01:23] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/bhai-dooj/output/film_bhai_dooj.mp4
+[2026-11-08 21:01:51] ✅ Reel posted successfully: https://www.instagram.com/reel/DffFZRVsgiY/
+[2026-11-08 21:01:51] 📁 Archived record to: 2026-11-08_03_bhai_dooj.json
+[2026-11-08 21:01:51] 📊 Remaining queued items: 0
