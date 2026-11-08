@@ -31,34 +31,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install instagrapi Pillow curl_cffi pycryptodomex
 
-      - name: Restore Session
-        id: session_check
+      - name: Run NexoraAI DM Responder
         env:
-          SESSION_SECRET: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON }}
-        run: |
-          mkdir -p ~/.config/stickman_video_director
-          TARGET="$HOME/.config/stickman_video_director/insta_session_pratikparth_12.json"
-          if [ -n "$SESSION_SECRET" ]; then
-            printf '%s\n' "$SESSION_SECRET" > "$TARGET"
-            if ! python3 -c "import json; json.load(open('$TARGET'))" 2>/dev/null; then
-              echo "$SESSION_SECRET" | base64 -d > "$TARGET" 2>/dev/null || true
-            fi
-            if python3 -c "import json; json.load(open('$TARGET'))" 2>/dev/null; then
-              chmod 600 "$TARGET"
-              echo "✅ Successfully restored @pratikparth_12 Instagram session from secret."
-              echo "has_session=true" >> $GITHUB_OUTPUT
-            else
-              echo "⚠️ Warning: Restored session is not valid JSON."
-              echo "has_session=false" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "ℹ️ INSTA_SESSION_PRATIKPARTH_JSON secret is not configured in GitHub repository secrets yet."
-            echo "👉 To activate 24/7 cloud auto-responses without laptop, add this secret here: https://github.com/parthpratik1071-ux/vynox-autopilot/settings/secrets/actions"
-            echo "has_session=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Run DM Auto-Responder
-        if: steps.session_check.outputs.has_session == 'true'
+          INSTA_SESSION_PRATIKPARTH_JSON: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON || secrets.INSTA_SESSION_PRATIKPARTH }}
         run: |
           ARGS=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -67,7 +42,6 @@ jobs:
           python3 scripts/dm_auto_reply_pratikparth.py $ARGS
 
       - name: Commit & Push Seen Message State
-        if: steps.session_check.outputs.has_session == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
