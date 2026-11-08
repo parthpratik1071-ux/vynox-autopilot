@@ -1,0 +1,17 @@
+[Script Info]
+Title: Govardhan: The Mountain on a Little Finger
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 720
+PlayResY: 1280
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Noto Sans Devanagari,38,&H00FFFFFF,&H000000FF,&H00000000,&H90000000,-1,0,0,0,100,100,0.5,0,1,3.5,2,2,40,40,240,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.15,0:00:05.61,Default,,0,0,0,,{\c&H0000D7FF&}जब सात दिनों तक...{\c&H00FFFFFF&}\Nभयंकर तूफानी बारिश ने पूरे गोकुल को डुबो दिया।\N{\fs26\c&H00E0E0E0&}For 7 days, fierce thunderstorms submerged all of Gokul.
+Dialogue: 0,0:00:05.81,0:00:11.39,Default,,0,0,0,,{\c&H0000D7FF&}इंद्रदेव के क्रोध से आसमान टूट पड़ा...{\c&H00FFFFFF&}\Nऔर लोग जान बचाकर भागे!\N{\fs26\c&H00E0E0E0&}Under Indra's wrath the skies tore open, and people fled for their lives.
+Dialogue: 0,0:00:11.59,0:00:17.51,Default,,0,0,0,,तभी {\c&H0000D7FF&}नन्हे कान्हा ने अपनी छोटी उंगली पर,{\c&H00FFFFFF&}\Nपूरा गोवर्धन पर्वत उठा लिया!\N{\fs26\c&H00E0E0E0&}Then little Krishna lifted the entire Govardhan mountain on his pinky finger!
+Dialogue: 0,0:00:17.71,0:00:25.82,Default,,0,0,0,,{\c&H0033FF33&}अहंकार टूटा, प्रेम और प्रकृति की विजय हुई।{\c&H00FFFFFF&}\N{\c&H0000D7FF&}⛰️ शुभ गोवर्धन पूजा! 🪔{\c&H00FFFFFF&}\N{\fs26\c&H00E0E0E0&}Pride broke, nature and love won. Happy Govardhan Puja! 🪔

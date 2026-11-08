@@ -87,17 +87,40 @@ class NexoraAIBrain:
 
     def generate_response(self, item_type: str, text: Optional[str] = None, reel_meta: Optional[Dict[str, Any]] = None, emoji_priority: bool = True) -> str:
         """
-        Generates an authentic, context-matched response.
+        Generates an authentic, context-matched response across all DM types:
+        reels, stories, stickers, voice notes, photos, and direct text messages.
         """
         # 1. Handle Placeholder / Unavailable Reels
         if reel_meta and reel_meta.get("is_placeholder"):
-            return random.choice(["😂💀", "💀🤷‍♂️", "Bhai unavailable dikha raha hai ye 😂"])
+            return random.choice(["😂💀", "💀🤷‍♂️", "Bhai unavailable dikha raha hai ye 😂", "💀"])
 
         text_lower = (text or "").lower().strip()
 
-        # 2. Handle Text Messages
+        # 2. Handle Voice Notes / Audio
+        if any(k in item_type for k in ["voice", "audio", "voice_media"]):
+            if emoji_priority:
+                return random.choice(["👍🎧", "👌🎧", "👍"])
+            return random.choice(["Free hoke sunta hu bhai 👍", "Sunta hu thodi der me 👍"])
+
+        # 3. Handle Stickers / GIFs / Animated Media
+        if any(k in item_type for k in ["animated_media", "sticker", "gif"]):
+            return random.choice(["😂😂💀", "😭😭😂", "💀👍", "😂😂", "🔥💀"])
+
+        # 4. Handle Story Shares / Story Replies
+        if "story_share" in item_type or "story" in item_type:
+            if emoji_priority:
+                return random.choice(["🔥🙌", "✨🔥", "🙌❤️", "🔥"])
+            return random.choice(["Mast story hai bhai 🔥", "Sahi lag raha hai 🙌🔥", "Badhiya! ✨"])
+
+        # 5. Handle Photos / Media Shares
+        if any(k in item_type for k in ["raven_media", "photo"]) and not reel_meta:
+            if emoji_priority:
+                return random.choice(["🔥🙌", "😂😂", "👍❤️", "💀😂"])
+            return random.choice(["Mast photo hai bhai 👍🔥", "Badhiya 🙌", "Sahi hai!"])
+
+        # 6. Handle Direct Text Messages
         if "text" in item_type and text_lower:
-            # Special responses for "Nahi" / "No"
+            # Short affirmations / questions
             if text_lower in ["nahi", "nhi", "no", "nope", "na"]:
                 return random.choice(["Kyu kya hua? 😂", "Arre kyu bhai? 😂💀", "Kyu bhai sab theek na? 💀", "Theek hai bhai 👍"])
 
