@@ -45,3 +45,9 @@
 [2026-11-08 14:10:39] ✅ Reel posted successfully: https://www.instagram.com/reel/DfeWVU8sc-3/
 [2026-11-08 14:10:39] 📁 Archived record to: 2026-11-08_03_the_3_second_trench_rule.json
 [2026-11-08 14:10:39] 📊 Remaining queued items: 0
+[2026-11-08 20:50:11] 🤖 Scheduled GitHub Actions trigger detected (20:50 IST). Proceeding to dispatch next queued reel...
+[2026-11-08 20:50:11] 📦 Processing queue item: 01_govardhan_puja.json
+[2026-11-08 20:50:11] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/govardhan-puja/output/film_govardhan.mp4
+[2026-11-08 20:50:43] ✅ Reel posted successfully: https://www.instagram.com/reel/DffEHq4MVU4/
+[2026-11-08 20:50:43] 📁 Archived record to: 2026-11-08_01_govardhan_puja.json
+[2026-11-08 20:50:43] 📊 Remaining queued items: 2
