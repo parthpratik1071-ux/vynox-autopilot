@@ -2,7 +2,7 @@ name: Instagram DM Auto-Responder (@pratikparth_12)
 
 on:
   schedule:
-    # Runs every 30 minutes 24/7 in GitHub cloud (without laptop on)
+    # Runs every 15 minutes 24/7 in GitHub cloud (without laptop on)
     - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
@@ -32,6 +32,7 @@ jobs:
           pip install instagrapi Pillow curl_cffi pycryptodomex
 
       - name: Restore Session
+        id: session_check
         env:
           SESSION_SECRET: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON }}
         run: |
@@ -45,14 +46,19 @@ jobs:
             if python3 -c "import json; json.load(open('$TARGET'))" 2>/dev/null; then
               chmod 600 "$TARGET"
               echo "✅ Successfully restored @pratikparth_12 Instagram session from secret."
+              echo "has_session=true" >> $GITHUB_OUTPUT
             else
               echo "⚠️ Warning: Restored session is not valid JSON."
+              echo "has_session=false" >> $GITHUB_OUTPUT
             fi
           else
-            echo "⚠️ INSTA_SESSION_PRATIKPARTH_JSON secret is empty or unset."
+            echo "ℹ️ INSTA_SESSION_PRATIKPARTH_JSON secret is not configured in GitHub repository secrets yet."
+            echo "👉 To activate 24/7 cloud auto-responses without laptop, add this secret here: https://github.com/parthpratik1071-ux/vynox-autopilot/settings/secrets/actions"
+            echo "has_session=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Run DM Auto-Responder
+        if: steps.session_check.outputs.has_session == 'true'
         run: |
           ARGS=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -61,6 +67,7 @@ jobs:
           python3 scripts/dm_auto_reply_pratikparth.py $ARGS
 
       - name: Commit & Push Seen Message State
+        if: steps.session_check.outputs.has_session == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

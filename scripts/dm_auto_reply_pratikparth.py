@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Context & Emotion-Aware Instagram DM Responder for @pratikparth_12 (Private & Personal)
-Priority: Maximum emoji replies for fast, authentic Gen-Z friend vibes.
+Advanced Context & Deep Emotion Engine for @pratikparth_12 (Private & Personal)
+Analyzes shared reel captions, hashtags, creator context, and message semantics.
+Priority: Authentic Gen-Z Hinglish and contextual emojis with human-like delays.
 """
 
 import os
@@ -18,55 +19,125 @@ SESSION_FILE = SESSION_DIR / "insta_session_pratikparth_12.json"
 STATE_FILE = BASE_DIR / "projects" / "dm_seen_pratikparth.json"
 STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
 
-def get_emotion_reply(item_type, text=None, raw_xma=None, is_placeholder=False):
+def deep_analyze_reel(cl, raw_xma):
     """
-    Intelligently analyzes the context, mood, and content of incoming messages and reels.
-    Returns emoji-first authentic responses.
+    Fetches the actual caption, hashtags, and creator of the shared reel for 1000x deeper context.
     """
-    if is_placeholder:
+    creator = ""
+    caption = ""
+    hashtags = []
+    is_placeholder = False
+
+    if raw_xma and "xma_clip" in raw_xma:
+        clips = raw_xma["xma_clip"]
+        if clips and isinstance(clips, list):
+            clip = clips[0]
+            if clip.get("ig_template_type") == "placeholder" or clip.get("title_text") == "Message unavailable":
+                return {"is_placeholder": True, "creator": "", "caption": "", "hashtags": []}
+
+            creator = (clip.get("header_title_text") or clip.get("username") or "").lower()
+
+            # Attempt fetching live reel caption from media_id
+            ref_str = clip.get("serialized_content_ref")
+            if ref_str:
+                try:
+                    ref_data = json.loads(ref_str)
+                    media_id = ref_data.get("fetch_params", {}).get("media_igid")
+                    if media_id:
+                        info = cl.media_info(int(media_id))
+                        caption = (info.caption_text or "").lower()
+                        hashtags = [w.lower() for w in caption.split() if w.startswith("#")]
+                except Exception:
+                    pass
+
+    return {
+        "is_placeholder": is_placeholder,
+        "creator": creator,
+        "caption": caption,
+        "hashtags": hashtags
+    }
+
+def get_deep_emotion_reply(item_type, text=None, reel_data=None):
+    """
+    Selects the most natural, contextually accurate emoji/Hinglish reply.
+    """
+    if reel_data and reel_data.get("is_placeholder"):
         return random.choice(["😂💀", "💀🤷‍♂️", "😂😂"])
 
     text_lower = (text or "").lower().strip()
 
-    # 1. Text Messages (Emoji priority)
+    # ==========================================
+    # 1. TEXT MESSAGES (Intent & Sentiment)
+    # ==========================================
     if "text" in item_type and text_lower:
-        if any(w in text_lower for w in ["diwali", "deepavali"]):
-            return random.choice(["✨🪔❤️", "🪔✨", "✨🙏"])
+        # Festive / Diwali
+        if any(w in text_lower for w in ["diwali", "deepavali", "patakhe", "mithai"]):
+            return random.choice(["✨🪔❤️", "🪔✨ Happy Diwali bhai!", "✨🙏 Same to you bhai! 🪔"])
+
+        # Urgent / Phone calls
         if any(w in text_lower for w in ["call", "phone", "uthana", "utha", "urgent"]):
-            return random.choice(["📞 5 min bhai", "ruk call karta hu 👍", "📞👍"])
+            return random.choice(["📞 5 min me call karta hu", "ruk bhai free hoke call lagata hu 👍", "📞👍"])
+
+        # Check-in / How are you
         if any(w in text_lower for w in ["kaisa hai", "kya haal", "sab sahi", "wassup", "sup"]):
-            return random.choice(["ekdum badiya bhai 👍🔥", "mast bhai tu bata 🙌", "all good 👍"])
+            return random.choice(["ekdum mast bhai tu bata 🙌🔥", "sab badhiya bhai! 👍", "all good bhai tu suna?"])
+
+        # Banter / "Jane de marna mat" / Laughter
         if any(w in text_lower for w in ["marna mat", "jane de", "mat kar", "haha", "lmao", "lol", "xd", "😂", "💀"]):
             return random.choice(["😂😂💀", "😭😭😂", "💀👍", "😂💀"])
+
+        # Location / Hangout
+        if any(w in text_lower for w in ["kahan hai", "kidhar hai", "scene", "plan", "chale"]):
+            return random.choice(["bata kya plan hai? chalte hai 👍", "Ghar pe hi hu bhai, bol kya scene hai?", "Done bhai time bata"])
+
+        # Gratitude
         if any(w in text_lower for w in ["thanks", "thank you", "thx"]):
-            return random.choice(["❤️🙌", "🙌👍", "❤️"])
-        return random.choice(["👍😂", "🙌🔥", "👍"])
+            return random.choice(["❤️🙌", "anytime bhai ❤️", "mention not bhai 👍"])
 
-    # 2. Reel / Video Clip (Emoji priority)
-    reel_creator = ""
-    if raw_xma and "xma_clip" in raw_xma:
-        clips = raw_xma["xma_clip"]
-        if clips and isinstance(clips, list):
-            reel_creator = (clips[0].get("header_title_text") or clips[0].get("username") or "").lower()
+        # Default natural acknowledgments
+        return random.choice(["👍😂", "🙌🔥", "👍", "sahi hai bhai 👍"])
 
-    # Animals / Pets
-    if any(k in reel_creator for k in ["cat", "dog", "kitten", "puppy", "paw", "animal", "pet"]):
-        return random.choice(["🥺❤️", "😭❤️", "😂❤️", "🐱❤️"])
+    # ==========================================
+    # 2. SHARED REELS (Deep Caption & Creator Context)
+    # ==========================================
+    context_blob = ""
+    if reel_data:
+        context_blob = f"{reel_data.get('creator', '')} {reel_data.get('caption', '')} {' '.join(reel_data.get('hashtags', []))}".lower()
 
-    # Cricket / Sports
-    if any(k in reel_creator for k in ["cricket", "cric", "ipl", "virat", "rohit", "sports", "football"]):
-        return random.choice(["🔥🏏", "🐐🔥", "🔥🔥"])
+    # Diwali / Rangoli / Festive Reels
+    if any(k in context_blob for k in ["rangoli", "diwali", "deepavali", "diwalivibes", "festive"]):
+        return random.choice(["✨🪔❤️", "mast banaya hai yaar ✨🪔", "bohot pyara hai ✨❤️", "🪔✨"])
 
-    # Gym / Motivation
-    if any(k in reel_creator for k in ["gym", "fitness", "workout", "grind", "motivation"]):
-        return random.choice(["💪🔥", "💀💪", "🔥💪"])
+    # Cute Animals / Cats / Dogs / Pets
+    if any(k in context_blob for k in ["cat", "dog", "kitten", "puppy", "paw", "animal", "pet", "cute"]):
+        return random.choice(["🥺❤️", "so cute yaar 😭❤️", "cat/dog reels are therapy fr 🥺❤️", "😂❤️"])
 
-    # Memes / Relatable / Comedy (Sheetalbeingreal, etc.)
-    if any(k in reel_creator for k in ["sheetal", "meme", "dank", "sarcasm", "shitpost", "troll", "bakchodi", "desi"]):
-        return random.choice(["😂😂💀", "😭😭😂", "💀💀", "😂😂", "🔥💀"])
+    # Moms / Parents / Relatable Family
+    if any(k in context_blob for k in ["mummy", "mom", "papa", "dad", "ghar wale", "parivar", "family"]):
+        return random.choice(["😂😂💀", "literally mummy log aise hi karti hai 😭😂", "too accurate bhai 😭💀", "😂😂"])
 
-    # Default Reel emoji reactions
-    return random.choice(["😂😂💀", "😭😭😂", "💀💀", "😂😂", "🔥💀"])
+    # College / Exams / Backlogs / Studies
+    if any(k in context_blob for k in ["exam", "college", "btech", "backlog", "sem", "padhai", "study", "student"]):
+        return random.choice(["us bhai us 😭💀", "literally me fr 😭😂", "dard bhai dard 💀💀", "😭😭"])
+
+    # Cricket / Sports / Matches
+    if any(k in context_blob for k in ["cricket", "cric", "ipl", "virat", "kohli", "rohit", "six", "wicket", "football"]):
+        return random.choice(["🔥🏏", "GOAT behavior fr 🐐🔥", "khatarnak bhai 🔥", "absolute goosebumps 🔥🏏"])
+
+    # Gym / Workout / Motivation
+    if any(k in context_blob for k in ["gym", "fitness", "workout", "grind", "motivation", "bodybuilder"]):
+        return random.choice(["💪🔥", "motivation peak pe hai bhai 💪", "kal se pakka grind shuru 💪💀", "🔥💪"])
+
+    # Pranks / Drama / Breakup
+    if any(k in context_blob for k in ["prank", "breakup", "lafda", "kalesh"]):
+        return random.choice(["😂😂💀", "bhai ye prank to alag level tha 💀💀", "kalesh alag hi hai 😂", "😭😭😂"])
+
+    # Dank Memes / High Comedy / Relatable
+    if any(k in context_blob for k in ["meme", "dank", "sarcasm", "shitpost", "troll", "bakchodi", "desi", "sheetal"]):
+        return random.choice(["😂😂💀", "😭😭😂", "💀💀", "bhai ye to direct narak leke jayega 💀", "kahan se dhoondte ho aisi reels 😂🔥"])
+
+    # Default versatile friend reaction
+    return random.choice(["😂😂💀", "😭😭😂", "💀💀", "mast reel thi ye fr 😂🔥", "😂😂"])
 
 def load_seen():
     if STATE_FILE.exists():
@@ -109,10 +180,16 @@ def get_client():
         cl.load_settings(SESSION_FILE)
         return cl
 
-    raise FileNotFoundError(f"Session not found at {SESSION_FILE} and INSTA_SESSION_PRATIKPARTH_JSON is not set.")
+    print("⚠️ No session found locally or in INSTA_SESSION_PRATIKPARTH_JSON.")
+    print("👉 Please add the secret in your repository: https://github.com/parthpratik1071-ux/vynox-autopilot/settings/secrets/actions")
+    return None
 
 def run_responder(max_targets=5, dry_run=False):
     cl = get_client()
+    if cl is None:
+        print("⚠️ Exiting cleanly without error. Add INSTA_SESSION_PRATIKPARTH_JSON secret to enable 24/7 cloud auto-responses.")
+        sys.exit(0)
+
     my_user_id = str(cl.user_id)
     print(f"👤 Connected to: @{cl.user_info(my_user_id).username} (ID: {my_user_id})")
 
@@ -143,24 +220,24 @@ def run_responder(max_targets=5, dry_run=False):
             if "action_log" in item_type:
                 continue
 
-            is_placeholder = False
             raw_xma = getattr(msg, "raw_xma", {}) or {}
-            if raw_xma and "xma_clip" in raw_xma:
-                for c in raw_xma.get("xma_clip", []):
-                    if c.get("ig_template_type") == "placeholder" or c.get("title_text") == "Message unavailable":
-                        is_placeholder = True
-                        break
-
             sender_name = users[0] if users else sender_id
             msg_text = getattr(msg, "text", "") or ""
 
-            # Pick emoji response
-            reply_text = get_emotion_reply(item_type, text=msg_text, raw_xma=raw_xma, is_placeholder=is_placeholder)
+            # Deep analysis of reel content
+            reel_data = None
+            if "clip" in item_type or "media" in item_type:
+                reel_data = deep_analyze_reel(cl, raw_xma)
 
-            print(f"\n📩 [{processed_count+1}/{max_targets}] Pending message from @{sender_name} ({item_type}):")
+            # Deep Emotion Reaction Selection
+            reply_text = get_deep_emotion_reply(item_type, text=msg_text, reel_data=reel_data)
+
+            print(f"\n📩 [{processed_count+1}/{max_targets}] Message from @{sender_name} ({item_type}):")
             if msg_text:
                 print(f"   Text: \"{msg_text}\"")
-            print(f"   Picked Emoji Reply: {reply_text}")
+            if reel_data and reel_data.get("caption"):
+                print(f"   Reel Caption: \"{reel_data['caption'][:60]}...\"")
+            print(f"   💡 Intelligent Reply: {reply_text}")
 
             if dry_run:
                 print(f"   [DRY-RUN] Liked & replied.")
@@ -178,10 +255,10 @@ def run_responder(max_targets=5, dry_run=False):
             except Exception as e:
                 print(f"   ⚠️ Like failed: {e}")
 
-            # 2. Send Emoji Reply
+            # 2. Send Intelligent Emoji Reply
             try:
                 cl.direct_answer(thread_id, reply_text)
-                print(f"   💬 Sent emoji reply: {reply_text}")
+                print(f"   💬 Sent reply: {reply_text}")
                 time.sleep(random.uniform(2.5, 4.0))
             except Exception as e:
                 print(f"   ⚠️ Reply failed: {e}")
@@ -196,7 +273,7 @@ def run_responder(max_targets=5, dry_run=False):
             break
 
     save_seen(seen_ids)
-    print(f"\n🎉 Successfully processed {processed_count} pending messages!")
+    print(f"\n🎉 Successfully processed {processed_count} messages with 1000x Deep Emotion Engine!")
 
 if __name__ == "__main__":
     import argparse
