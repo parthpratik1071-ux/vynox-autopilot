@@ -51,28 +51,33 @@ jobs:
           INSTA_SESSION_VYNOX: ${{ secrets.INSTA_SESSION_JSON || secrets.INSTA_SESSION }}
         run: |
           mkdir -p ~/.config/stickman_video_director
-          if [ -n "$INSTA_SESSION_PRATIKPARTH" ]; then
-            P_PATH="$HOME/.config/stickman_video_director/insta_session_pratikparth_12.json"
-            printf '%s\n' "$INSTA_SESSION_PRATIKPARTH" > "$P_PATH"
-            if ! python3 -c "import json; json.load(open('$P_PATH'))" 2>/dev/null; then
-              echo "$INSTA_SESSION_PRATIKPARTH" | base64 -d > "$P_PATH" 2>/dev/null || true
-            fi
-            chmod 600 "$P_PATH" 2>/dev/null || true
-            echo "✅ Session restored for @pratikparth_12"
-          else
-            echo "⚠️ Secret INSTA_SESSION_PRATIKPARTH_JSON not found in repository secrets."
-          fi
-          if [ -n "$INSTA_SESSION_VYNOX" ]; then
-            V_PATH="$HOME/.config/stickman_video_director/insta_session.json"
-            printf '%s\n' "$INSTA_SESSION_VYNOX" > "$V_PATH"
-            if ! python3 -c "import json; json.load(open('$V_PATH'))" 2>/dev/null; then
-              echo "$INSTA_SESSION_VYNOX" | base64 -d > "$V_PATH" 2>/dev/null || true
-            fi
-            chmod 600 "$V_PATH" 2>/dev/null || true
-            echo "✅ Session restored for @vynox_00000"
-          else
-            echo "⚠️ Secret INSTA_SESSION_JSON not found in repository secrets."
-          fi
+          python3 -c "
+          import os, json, base64
+          from pathlib import Path
+          sess_dir = Path.home() / '.config' / 'stickman_video_director'
+          targets = [
+              ('INSTA_SESSION_PRATIKPARTH', sess_dir / 'insta_session_pratikparth_12.json', 'pratikparth_12'),
+              ('INSTA_SESSION_VYNOX', sess_dir / 'insta_session.json', 'vynox_00000')
+          ]
+          for env_k, file_p, user in targets:
+              val = os.environ.get(env_k, '').strip()
+              if not val:
+                  print(f'⚠️ Secret {env_k} not found in repository secrets.')
+                  continue
+              data = None
+              try:
+                  data = json.loads(val)
+              except Exception:
+                  try:
+                      data = json.loads(base64.b64decode(val).decode())
+                  except Exception as e:
+                      print(f'❌ Failed to decode/parse {env_k}: {e}')
+              if data:
+                  with open(file_p, 'w') as f:
+                      json.dump(data, f)
+                  file_p.chmod(0o600)
+                  print(f'✅ Successfully restored session for @{user}')
+          "
 
       - name: Run NexoraAI 24/7 Multi-Account DM Monitor
         env:
