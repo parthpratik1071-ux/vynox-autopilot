@@ -196,9 +196,15 @@ class AccountManager:
             ]
             latest_msg = unprocessed[-1]
 
-            reply_target = text_msgs[-1] if text_msgs else latest_msg
-            reply_item_type = str(reply_target.item_type).lower()
-            reply_text_content = getattr(reply_target, "text", "") or ""
+            if text_msgs:
+                reply_target = text_msgs[-1]
+                reply_item_type = "text"
+                # Join all text messages in the burst so conversational context is fully understood
+                reply_text_content = " ".join([getattr(m, "text", "").strip() for m in text_msgs if getattr(m, "text", "").strip()])
+            else:
+                reply_target = latest_msg
+                reply_item_type = str(reply_target.item_type).lower()
+                reply_text_content = getattr(reply_target, "text", "") or ""
 
             # Check for incoming voice note to transcribe
             if any(k in reply_item_type for k in ["voice", "audio"]):

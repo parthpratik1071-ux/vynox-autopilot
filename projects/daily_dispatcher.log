@@ -46,9 +46,8 @@
 [2026-11-08 14:10:39] 📁 Archived record to: 2026-11-08_03_the_3_second_trench_rule.json
 [2026-11-08 14:10:39] 📊 Remaining queued items: 0
 [2026-11-09 11:15:46] ⏳ Current time (11:15) is before afternoon slot (14:00 IST). Waiting.
-[2026-11-09 12:29:21] 🤖 Scheduled GitHub Actions trigger detected (12:29 IST). Proceeding to dispatch next queued reel...
-[2026-11-09 12:29:21] 📦 Processing queue item: 01_nexora_ai_commercial_launch.json
-[2026-11-09 12:29:21] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/nexora-ai-launch-ad/output/film_nexora_ad.mp4
-[2026-11-09 12:29:53] ✅ Reel posted successfully: https://www.instagram.com/reel/DfgvmBEMmqk/
-[2026-11-09 12:29:53] 📁 Archived record to: 2026-11-09_01_nexora_ai_commercial_launch.json
-[2026-11-09 12:29:53] 📊 Remaining queued items: 2
+[2026-11-09 14:11:59] 📦 Processing queue item: 01_nexora_ai_commercial_launch.json
+[2026-11-09 14:11:59] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/nexora-ai-launch-ad/output/film_nexora_ad.mp4
+[2026-11-09 14:13:04] ✅ Reel posted successfully: https://www.instagram.com/reel/Dfg7V1IMXB9/
+[2026-11-09 14:13:04] 📁 Archived record to: 2026-11-09_01_nexora_ai_commercial_launch.json
+[2026-11-09 14:13:04] 📊 Remaining queued items: 2

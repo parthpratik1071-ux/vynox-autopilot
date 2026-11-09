@@ -155,6 +155,17 @@ class NexoraAIBrain:
             if text_lower in ["hlo", "hello", "hi", "hey", "hy", "heyy", "hloo", "hii", "hiii"]:
                 return pick_unique(["Ha bol bhai", "Bol kya scene hai? 😂", "Ha bol na kya hua", "Hello bhai! Tu bata?"])
 
+            # Counter-Inquiries: "tum ?", "tu ?", "aur tu ?", "tu bata", "tum batao", "aur bata"
+            clean_inquiry = text_lower.replace("?", "").replace("!", "").strip()
+            if clean_inquiry in ["tum", "tu", "aur tu", "aur tum", "tu bata", "tum batao", "aur bata", "aur bta", "aur suna"]:
+                return pick_unique([
+                    "Me badhiya bhai, tu bata kya scene? 😂",
+                    "Bas chill kar raha hu bhai 😂 tu bata?",
+                    "Kuch khas nahi bhai, room pe hu tu bata? 😂",
+                    "Bas baitha tha bhai, tu bata kya chal raha?",
+                    "Mast hu bhai, tu suna kya haal chal! 🙌"
+                ])
+
             # Exam / Student Misery / Academic Stress / "Paper dekhna ja baad dppresion"
             if any(w in text_lower for w in ["paper", "exam", "depression", "dppresion", "fail", "marks", "result", "backlog", "sem", "padhai", "kharab", "khrb"]):
                 return pick_unique([
