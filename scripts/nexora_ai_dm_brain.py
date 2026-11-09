@@ -147,6 +147,10 @@ class NexoraAIBrain:
 
         # 6. Handle Direct Text Messages (Human Conversational Semantics)
         if "text" in item_type and text_lower:
+            # NexoraAI Platform & Product Inquiry: "nexora", "link", "ai", "platform"
+            if any(w in text_lower for w in ["nexora", "nexoraai", "link", "website", "platform", "docs", "trial"]):
+                return "Bhai here is the official NexoraAI platform link: https://nexora-cloud-licensing.onrender.com 🚀 Check out the live demo and docs!"
+
             # Greetings: "hi", "hello", "hlo", "hey", "hy"
             if text_lower in ["hlo", "hello", "hi", "hey", "hy", "heyy", "hloo", "hii", "hiii"]:
                 return pick_unique(["Ha bol bhai", "Bol kya scene hai? 😂", "Ha bol na kya hua", "Hello bhai! Tu bata?"])
