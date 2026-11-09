@@ -1,0 +1,17 @@
+[Script Info]
+Title: The Blind Astronomer of Ancient Ujjain
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Noto Sans Devanagari,54,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0.5,0,1,5.0,3.0,2,50,50,340,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:08.00,Default,,0,0,0,,{\c&H0000D7FF&}नासा से 1500 साल पहले...{\c&H00FFFFFF&}\Nउज्जैन में एक ऋषि ने केवल छड़ी और रेत से ग्रहों की चाल नाप दी थी!\N{\fs34\c&H00E0E0E0&}1,500 years before NASA, he mapped planetary orbits with sand!
+Dialogue: 0,0:00:08.15,0:00:15.05,Default,,0,0,0,,आर्यभट ने बिना कंप्यूटर के...\N{\c&H0000D7FF&}पृथ्वी की परिधि{\c&H00FFFFFF&} और ग्रहों की कक्षा की सटीक गणना कर दी थी!\N{\fs34\c&H00E0E0E0&}Aryabhata calculated Earth's circumference without any computers!
+Dialogue: 0,0:00:15.20,0:00:22.40,Default,,0,0,0,,जब दुनिया ग्रहण से डरती थी...\Nतब उन्होंने साबित किया कि {\c&H0033FF33&}ये केवल पृथ्वी की परछाई है!{\c&H00FFFFFF&}\N{\fs34\c&H00E0E0E0&}He proved eclipses are merely the Earth's spherical shadow!
+Dialogue: 0,0:00:22.55,0:00:28.77,Default,,0,0,0,,ये है हमारे भारत का गौरवशाली विज्ञान!\N{\c&H0000D7FF&}✨ क्या आप इस प्राचीन प्रतिभा को जानते थे? 👇{\c&H00FFFFFF&}\N{\fs34\c&H00E0E0E0&}Ancient Indian astronomy. Did you know about this genius?

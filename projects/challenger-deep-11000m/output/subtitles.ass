@@ -1,0 +1,17 @@
+[Script Info]
+Title: The Mariana Trench at 11000M: Challenger Deep
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Noto Sans Devanagari,54,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0.5,0,1,5.0,3.0,2,50,50,340,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:06.60,Default,,0,0,0,,{\c&H0000D7FF&}चाँद पर बारह लोग गए...{\c&H00FFFFFF&}\Nलेकिन मारियाना ट्रेंच की अतल गहराई में सिर्फ कुछ लोग!\N{\fs34\c&H00E0E0E0&}12 walked on Moon, but only a few reached Mariana Trench!
+Dialogue: 0,0:00:06.75,0:00:13.90,Default,,0,0,0,,11,000 मीटर नीचे, दबाव इतना है...\Nजैसे सिर पर {\c&H003333FF&}पचास बोइंग विमान{\c&H00FFFFFF&} खड़े हों!\N{\fs34\c&H00E0E0E0&}At 11,000m, pressure is like 50 Boeing jets on your skull!
+Dialogue: 0,0:00:14.05,0:00:19.60,Default,,0,0,0,,पर इस स्याह अंधेरे में भी...\Nखौलते वेंट्स के पास {\c&H0000D7FF&}जीवन की अनोखी दुनिया{\c&H00FFFFFF&} मिली!\N{\fs34\c&H00E0E0E0&}Yet in pitch darkness, an alien world thrives near boiling vents!
+Dialogue: 0,0:00:19.75,0:00:26.44,Default,,0,0,0,,असली रहस्य अंतरिक्ष में नहीं, महासागर में है।\N{\c&H0033FF33&}🌊 क्या आप यहाँ उतरेंगे? 👇{\c&H00FFFFFF&}\N{\fs34\c&H00E0E0E0&}Earth's deepest mystery. Would you dare dive here?
