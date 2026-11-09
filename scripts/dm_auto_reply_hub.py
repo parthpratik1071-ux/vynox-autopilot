@@ -34,10 +34,14 @@ SESSION_DIR.mkdir(parents=True, exist_ok=True)
 PROJECTS_DIR = BASE_DIR / "projects"
 PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
 
-# Blacklisted / Excluded Accounts (Family, siblings, or accounts that should NEVER be touched by auto-reply)
+# Blacklisted / Excluded Accounts & Threads (Family, siblings, or accounts that should NEVER be touched by auto-reply)
 IGNORED_USERS = {
     "paras_kumar_thakur",
-    "palak"
+    "palak",
+    "palak_thakur"
+}
+IGNORED_THREAD_IDS = {
+    "340282366841710301244276067887556527788"
 }
 IGNORED_FILE = PROJECTS_DIR / "dm_ignored_users.json"
 if IGNORED_FILE.exists():
@@ -135,20 +139,34 @@ class AccountManager:
         recent_replies = self.load_history()
 
         # Own Accounts Exclusions (Prevents Pratik & Vynox from ever messaging each other)
-        MANAGED_ACCOUNTS = {"pratikparth_12", "vynox_00000"}
+        MANAGED_ACCOUNTS = {"pratikparth_12", "vynox_00000", "35566427576", "16183885323"}
         if self.username:
             MANAGED_ACCOUNTS.add(self.username.lower())
+        if self.user_id:
+            MANAGED_ACCOUNTS.add(str(self.user_id))
 
         threads = self.cl.direct_threads(amount=15)
         processed_conversations = 0
 
         for t in threads:
+            thread_id = str(t.id)
+
+            # Strict exclusion check for explicitly ignored thread IDs (e.g. Sister Palak)
+            if thread_id in IGNORED_THREAD_IDS:
+                continue
+
             users = [u.username for u in t.users if getattr(u, 'username', None)]
+            user_ids = [str(getattr(u, 'pk', '') or getattr(u, 'id', '')) for u in t.users]
+
             if any(u.lower() in ["meta ai", "instagram"] for u in users):
                 continue
 
             # Strict self-account exclusion: never message between user's own accounts
-            if any(u.lower() in MANAGED_ACCOUNTS for u in users) or any(m in (t.thread_title or "").lower() for m in MANAGED_ACCOUNTS):
+            if (
+                any(u.lower() in MANAGED_ACCOUNTS for u in users)
+                or any(uid in MANAGED_ACCOUNTS for uid in user_ids)
+                or any(m in (t.thread_title or "").lower() for m in MANAGED_ACCOUNTS)
+            ):
                 continue
 
             if target_user and not any(target_user.lower() in u.lower() for u in users):
@@ -157,6 +175,7 @@ class AccountManager:
             # Strict exclusion check: never touch family or ignored users
             is_excluded = (
                 any(u.lower() in IGNORED_USERS for u in users)
+                or any(uid in IGNORED_USERS for uid in user_ids)
                 or any(ign in (t.thread_title or "").lower() for ign in IGNORED_USERS)
             )
             if is_excluded:

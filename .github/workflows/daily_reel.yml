@@ -40,21 +40,30 @@ jobs:
           INSTA_SESSION_DATA: ${{ secrets.INSTA_SESSION_JSON }}
         run: |
           mkdir -p ~/.config/stickman_video_director
-          SESSION_PATH="$HOME/.config/stickman_video_director/insta_session.json"
-          if [ -n "$INSTA_SESSION_DATA" ]; then
-            printf '%s\n' "$INSTA_SESSION_DATA" > "$SESSION_PATH"
-            if ! python3 -c "import json; json.load(open('$SESSION_PATH'))" 2>/dev/null; then
-              echo "$INSTA_SESSION_DATA" | base64 -d > "$SESSION_PATH" 2>/dev/null || true
-            fi
-            if python3 -c "import json; json.load(open('$SESSION_PATH'))" 2>/dev/null; then
-              chmod 600 "$SESSION_PATH"
-              echo "✅ Successfully restored Instagram session from secrets."
-            else
-              echo "⚠️ Warning: Restored session is not valid JSON."
-            fi
-          else
-            echo "⚠️ INSTA_SESSION_JSON secret is empty or unset."
-          fi
+          python3 -c "
+          import os, json, base64
+          from pathlib import Path
+          sess_p = Path.home() / '.config' / 'stickman_video_director' / 'insta_session.json'
+          val = os.environ.get('INSTA_SESSION_DATA', '').strip()
+          if not val:
+              print('⚠️ INSTA_SESSION_JSON secret is empty or unset.')
+          else:
+              data = None
+              try:
+                  data = json.loads(val)
+              except Exception:
+                  try:
+                      data = json.loads(base64.b64decode(val).decode())
+                  except Exception as e:
+                      print(f'❌ Failed to parse session: {e}')
+              if data:
+                  with open(sess_p, 'w') as f:
+                      json.dump(data, f)
+                  sess_p.chmod(0o600)
+                  print('✅ Successfully restored Instagram session from secrets.')
+              else:
+                  print('⚠️ Restored session data is invalid.')
+          "
 
       - name: Dispatch Queued Reel
         env:
