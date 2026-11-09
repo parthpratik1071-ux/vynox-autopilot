@@ -270,16 +270,16 @@ class AccountManager:
                             print(f"   🎙️ [Voice-Reply] Sent native Instagram voice note to @{sender_name}!")
                         except Exception as e:
                             print(f"   ⚠️ Voice send failed, falling back to text: {e}")
-                            self.cl.direct_answer(thread_id, reply_text)
+                            self.cl.direct_send(reply_text, thread_ids=[int(thread_id)])
                             print(f"   💬 Sent text reply to @{sender_name}: {reply_text}")
                         if os.path.exists(voice_file):
                             os.unlink(voice_file)
                     else:
-                        self.cl.direct_answer(thread_id, reply_text)
+                        self.cl.direct_send(reply_text, thread_ids=[int(thread_id)])
                         print(f"   💬 Sent reply to @{sender_name}: {reply_text}")
                 else:
                     try:
-                        self.cl.direct_answer(thread_id, reply_text)
+                        self.cl.direct_send(reply_text, thread_ids=[int(thread_id)])
                         print(f"   💬 Sent reply to @{sender_name}: {reply_text}")
                     except Exception as e:
                         print(f"   ⚠️ Reply failed: {e}")
