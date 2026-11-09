@@ -45,8 +45,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add projects/dm_seen_pratikparth.json || true
-          if git commit -m "chore(dm): update seen message state for @pratikparth_12 [skip ci]"; then
+          git add projects/dm_seen_pratikparth.json projects/dm_recent_replies.json || true
+          if git commit -m "chore(dm): update seen state & human anti-repetition memory [skip ci]"; then
             git pull --rebase origin main
             git push origin main
             echo "✅ State updated and committed."

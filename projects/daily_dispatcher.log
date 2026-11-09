@@ -45,22 +45,4 @@
 [2026-11-08 14:10:39] ✅ Reel posted successfully: https://www.instagram.com/reel/DfeWVU8sc-3/
 [2026-11-08 14:10:39] 📁 Archived record to: 2026-11-08_03_the_3_second_trench_rule.json
 [2026-11-08 14:10:39] 📊 Remaining queued items: 0
-[2026-11-08 20:50:11] 🤖 Scheduled GitHub Actions trigger detected (20:50 IST). Proceeding to dispatch next queued reel...
-[2026-11-08 20:50:11] 📦 Processing queue item: 01_govardhan_puja.json
-[2026-11-08 20:50:11] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/govardhan-puja/output/film_govardhan.mp4
-[2026-11-08 20:50:43] ✅ Reel posted successfully: https://www.instagram.com/reel/DffEHq4MVU4/
-[2026-11-08 20:50:43] 📁 Archived record to: 2026-11-08_01_govardhan_puja.json
-[2026-11-08 20:50:43] 📊 Remaining queued items: 2
-[2026-11-08 20:54:06] 🤖 Scheduled GitHub Actions trigger detected (20:54 IST). Proceeding to dispatch next queued reel...
-[2026-11-08 20:54:06] 📦 Processing queue item: 02_moon_survival.json
-[2026-11-08 20:54:06] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/moon-survival/output/film_moon_survival.mp4
-[2026-11-08 20:54:37] ✅ Reel posted successfully: https://www.instagram.com/reel/DffEj17MI_2/
-[2026-11-08 20:54:37] 📁 Archived record to: 2026-11-08_02_moon_survival.json
-[2026-11-08 20:54:37] 📊 Remaining queued items: 1
-[2026-11-08 21:01:23] 🤖 Scheduled GitHub Actions trigger detected (21:01 IST). Proceeding to dispatch next queued reel...
-[2026-11-08 21:01:23] 📦 Processing queue item: 03_bhai_dooj.json
-[2026-11-08 21:01:23] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/bhai-dooj/output/film_bhai_dooj.mp4
-[2026-11-08 21:01:51] ✅ Reel posted successfully: https://www.instagram.com/reel/DffFZRVsgiY/
-[2026-11-08 21:01:51] 📁 Archived record to: 2026-11-08_03_bhai_dooj.json
-[2026-11-08 21:01:51] 📊 Remaining queued items: 0
-[2026-11-08 23:55:48] ⚠️ No queued Reels found in projects/queue/! Queue is empty.
+[2026-11-09 11:15:46] ⏳ Current time (11:15) is before afternoon slot (14:00 IST). Waiting.
