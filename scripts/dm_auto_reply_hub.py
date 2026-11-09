@@ -28,6 +28,7 @@ from nexora_ai_dm_brain import nexora_brain
 from emergency_alerter import alerter
 from voice_engine import voice_engine
 from reels_booster import reels_booster
+from nexora_sentinel_guardian import sentinel_ai
 
 SESSION_DIR = Path.home() / ".config" / "stickman_video_director"
 SESSION_DIR.mkdir(parents=True, exist_ok=True)
@@ -331,6 +332,18 @@ class AccountManager:
 
             print(f"   🧠 [NexoraAI Intent]: {intent_label} -> Response: \"{reply_text}\"")
 
+            # 👁️ Sentinel AI Pre-Send Inspection Gatekeeper
+            is_approved, audit_reason = sentinel_ai.pre_send_audit(
+                sender_account=self.username or self.identifier,
+                recipient_username=sender_name,
+                thread_id=thread_id,
+                message_text=reply_text,
+                item_type=reply_item_type
+            )
+            if not is_approved:
+                print(f"   🚫 [SENTINEL BLOCKED]: Outgoing message to @{sender_name} vetoed by Sentinel AI: {audit_reason}")
+                continue
+
             if dry_run:
                 print(f"   [DRY-RUN] Liked & drafted reply: \"{reply_text}\"")
             else:
@@ -382,6 +395,13 @@ class AccountManager:
             self.save_seen(seen_ids)
             self.save_history(recent_replies)
             print(f"💾 [@{self.username}] Committed updated state to disk.")
+
+        # 👁️ Sentinel AI Post-Sweep Audit & Safety Verification
+        if not dry_run and self.cl:
+            try:
+                sentinel_ai.audit_and_purge_recent_sent(self.cl, self.username or self.identifier, max_threads=10)
+            except Exception as e:
+                print(f"⚠️ [SENTINEL-AI] Post-sweep audit error: {e}")
 
         return processed_conversations
 

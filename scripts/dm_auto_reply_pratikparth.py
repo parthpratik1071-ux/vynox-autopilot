@@ -25,6 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR / "scripts"))
 
 from nexora_ai_dm_brain import nexora_brain
+from nexora_sentinel_guardian import sentinel_ai
 
 SESSION_DIR = Path.home() / ".config" / "stickman_video_director"
 SESSION_FILE = SESSION_DIR / "insta_session_pratikparth_12.json"
@@ -285,6 +286,18 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
 
             print(f"   🧠 [NexoraAI Intent]: {intent_label} -> Response: \"{reply_text}\"")
 
+            # 👁️ Sentinel AI Pre-Send Inspection Gatekeeper
+            is_approved, audit_reason = sentinel_ai.pre_send_audit(
+                sender_account="pratikparth_12",
+                recipient_username=sender_name,
+                thread_id=thread_id,
+                message_text=reply_text,
+                item_type=reply_item_type
+            )
+            if not is_approved:
+                print(f"   🚫 [SENTINEL BLOCKED]: Outgoing message to @{sender_name} vetoed by Sentinel AI: {audit_reason}")
+                continue
+
             if dry_run:
                 print(f"   [DRY-RUN] Liked & drafted reply: \"{reply_text}\"")
             else:
@@ -310,6 +323,13 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
         save_seen(seen_ids)
         save_recent_replies(recent_replies)
         print(f"💾 Committed updated seen message IDs and conversation history to disk.")
+
+    # 👁️ Sentinel AI Post-Sweep Audit & Safety Verification
+    if not dry_run and cl:
+        try:
+            sentinel_ai.audit_and_purge_recent_sent(cl, "pratikparth_12", max_threads=10)
+        except Exception as e:
+            print(f"⚠️ [SENTINEL-AI] Post-sweep audit error: {e}")
 
     return processed_conversations
 

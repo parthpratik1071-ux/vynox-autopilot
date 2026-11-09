@@ -1,0 +1,14 @@
+{
+  "status": "active_guarding",
+  "last_check": "09 Nov 2026, 03:46:08 PM IST",
+  "total_inspections": 5,
+  "total_violations_blocked": 4,
+  "total_unsent_messages": 0,
+  "last_event": {
+    "action": "PRE_SEND_APPROVED",
+    "details": "@pratikparth_12 -> @sarthakvibes2026: \"Ha bol bhai\"",
+    "severity": "INFO",
+    "timestamp": "09 Nov 2026, 03:46:08 PM IST"
+  },
+  "kill_switch_active": false
+}
