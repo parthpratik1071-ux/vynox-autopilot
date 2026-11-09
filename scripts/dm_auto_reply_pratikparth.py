@@ -90,7 +90,7 @@ def get_client():
     print("⚠️ No session found locally or in environment secrets.")
     return None
 
-def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False):
+def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, target_user=None):
     # 1. Real Human Sleep Cycle Check (India IST: UTC+5:30)
     IST = timezone(timedelta(hours=5, minutes=30))
     now_ist = datetime.now(IST)
@@ -103,12 +103,15 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
     seen_ids = load_seen()
     recent_replies = load_recent_replies()
 
-    threads = cl.direct_threads(amount=10)
+    threads = cl.direct_threads(amount=15)
     processed_conversations = 0
 
     for t in threads:
         users = [u.username for u in t.users if getattr(u, 'username', None)]
         if any(u.lower() in ["meta ai", "instagram"] for u in users):
+            continue
+
+        if target_user and not any(target_user.lower() in u.lower() for u in users):
             continue
 
         thread_id = str(t.id)
@@ -139,7 +142,13 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
                 pass
             time.sleep(random.uniform(1.8, 3.5))
 
-        # Step 2: Double-tap like incoming messages
+        # Step 2: Mark messages seen, but like ONLY the latest reel/message (don't like all msgs)
+        likeable_msgs = [
+            m for m in unprocessed
+            if not any(k in str(m.item_type).lower() for k in ["call", "event", "action_log"])
+        ]
+        target_to_like = likeable_msgs[-1] if likeable_msgs else None
+
         for m in unprocessed:
             m_id = str(m.id)
             m_type = str(m.item_type).lower()
@@ -149,15 +158,11 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
             else:
                 print(f"   🎬 Incoming: [{m_type}]")
 
-            # Skip double-tap liking system logs or call events
-            if any(k in m_type for k in ["call", "event", "action_log"]):
-                seen_ids.add(m_id)
-                continue
-
-            if not dry_run:
+            # Like ONLY the latest message/reel in the batch, not all messages
+            if not dry_run and target_to_like and str(m.id) == str(target_to_like.id):
                 try:
                     cl.direct_message_like(thread_id, m.id)
-                    print(f"   ❤️ Double-tap liked message {m_id}")
+                    print(f"   ❤️ Double-tap liked latest message {m_id} (skipped older to avoid spam)")
                     time.sleep(random.uniform(1.2, 2.5))
                 except Exception as e:
                     print(f"   ⚠️ Like failed: {e}")
@@ -175,17 +180,7 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
         reply_item_type = str(reply_target.item_type).lower()
         reply_text_content = getattr(reply_target, "text", "") or ""
 
-        only_reels = (not text_msgs) and (not has_call_event) and all(
-            any(k in str(m.item_type).lower() for k in ["clip", "media", "video"])
-            for m in unprocessed
-        )
-
         should_send_text_reply = True
-        if only_reels:
-            # ~30% chance to like only without text
-            if random.random() < 0.30:
-                should_send_text_reply = False
-                print(f"   👤 [Human Choice]: Liked only (no text reply sent, natural human friend behavior).")
 
         if should_send_text_reply:
             user_history = recent_replies.get(sender_name, [])
@@ -244,7 +239,7 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
 
     return processed_conversations
 
-def run_continuous_monitor(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, loop_minutes=0):
+def run_continuous_monitor(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, loop_minutes=0, target_user=None):
     cl = get_client()
     if cl is None:
         print("🛑 Exiting: Session not available or invalid credentials.")
@@ -275,7 +270,8 @@ def run_continuous_monitor(max_targets=5, dry_run=False, emoji_priority=True, ig
                 max_targets=max_targets,
                 dry_run=dry_run,
                 emoji_priority=emoji_priority,
-                ignore_sleep=ignore_sleep
+                ignore_sleep=ignore_sleep,
+                target_user=target_user
             )
             total_processed += processed
         except Exception as e:
@@ -300,6 +296,7 @@ if __name__ == "__main__":
     parser.add_argument("--text-mode", action="store_true", help="Prefer text responses over emojis")
     parser.add_argument("--ignore-sleep", action="store_true", help="Bypass real human sleep cycle check")
     parser.add_argument("--loop-minutes", type=int, default=0, help="Minutes to keep monitoring continuously")
+    parser.add_argument("--target-user", type=str, default=None, help="Filter to a specific username")
     args = parser.parse_args()
 
     run_continuous_monitor(
@@ -307,5 +304,6 @@ if __name__ == "__main__":
         dry_run=args.dry_run,
         emoji_priority=not args.text_mode,
         ignore_sleep=args.ignore_sleep,
-        loop_minutes=args.loop_minutes
+        loop_minutes=args.loop_minutes,
+        target_user=args.target_user
     )

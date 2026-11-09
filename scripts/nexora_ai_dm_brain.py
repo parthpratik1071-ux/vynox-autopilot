@@ -319,7 +319,7 @@ class NexoraAIBrain:
 
         if intent == "sports_hype":
             if emoji_priority:
-                return pick_unique(["🔥🏏", "GOAT behavior fr 🐐🔥", "🔥🔥"])
+                return pick_unique(["🔥🏏", "🐐🔥", "🔥🔥", "🏏🔥"])
             return pick_unique(["Absolute goosebumps bhai 🔥🏏", "GOAT behavior fr 🐐🔥", "Khatarnak moment tha ye 🔥"])
 
         if intent == "family_relatable":
@@ -329,7 +329,7 @@ class NexoraAIBrain:
 
         if intent == "student_misery":
             if emoji_priority:
-                return pick_unique(["us bhai us 😭💀", "literally me 😭😂", "💀💀"])
+                return pick_unique(["😭💀", "💀💀", "😭😭😂", "😭😭", "💀👍"])
             return pick_unique(["Dard bhai dard 💀💀", "Us moment ho gaya ye to 😭😂", "Literally me fr 😭💀"])
 
         if intent == "prank_drama":
