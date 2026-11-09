@@ -1,11 +1,11 @@
 name: Daily Instagram Reel Publisher
 
 on:
-  schedule:
-    # 08:30 UTC = 2:00 PM IST (Afternoon Slot)
-    - cron: '30 8 * * *'
-    # 13:30 UTC = 7:00 PM IST (Evening Slot)
-    - cron: '30 13 * * *'
+  # schedule:
+  #   # 08:30 UTC = 2:00 PM IST (Afternoon Slot)
+  #   - cron: '30 8 * * *'
+  #   # 13:30 UTC = 7:00 PM IST (Evening Slot)
+  #   - cron: '30 13 * * *'
   workflow_dispatch:
     inputs:
       force:

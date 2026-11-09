@@ -1,117 +1,47 @@
 name: Instagram DM Multi-Account Auto-Responder Hub
 
 on:
-  schedule:
-    # Backup cron every 15 minutes in case a loop completes or delays
-    - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
         description: 'Dry Run (inspect only, do not send reactions or replies)'
         required: false
         type: boolean
-        default: false
+        default: true
       loop_minutes:
-        description: 'Minutes to keep monitoring inbox continuously (default: 45)'
+        description: 'Minutes to keep monitoring inbox'
         required: false
         type: number
-        default: 45
+        default: 5
+  push:
+    branches:
+      - main
 
-# Prevent concurrent overlapping runs from colliding on the Instagram session
+# Cancel any running workflow in this group immediately on push
 concurrency:
   group: instagram_dm_hub
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  auto_respond:
+  emergency_stop:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 5
     permissions:
       contents: write
       actions: write
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install instagrapi Pillow curl_cffi pycryptodomex imageio-ffmpeg SpeechRecognition edge-tts
-
-      - name: Restore Multi-Account Instagram Sessions
-        env:
-          INSTA_SESSION_PRATIKPARTH: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON || secrets.INSTA_SESSION_PRATIKPARTH }}
-          INSTA_SESSION_VYNOX: ${{ secrets.INSTA_SESSION_JSON || secrets.INSTA_SESSION }}
-        run: |
-          mkdir -p ~/.config/stickman_video_director
-          python3 -c "
-          import os, json, base64
-          from pathlib import Path
-          sess_dir = Path.home() / '.config' / 'stickman_video_director'
-          targets = [
-              ('INSTA_SESSION_PRATIKPARTH', sess_dir / 'insta_session_pratikparth_12.json', 'pratikparth_12'),
-              ('INSTA_SESSION_VYNOX', sess_dir / 'insta_session.json', 'vynox_00000')
-          ]
-          for env_k, file_p, user in targets:
-              val = os.environ.get(env_k, '').strip()
-              if not val:
-                  print(f'⚠️ Secret {env_k} not found in repository secrets.')
-                  continue
-              data = None
-              try:
-                  data = json.loads(val)
-              except Exception:
-                  try:
-                      data = json.loads(base64.b64decode(val).decode())
-                  except Exception as e:
-                      print(f'❌ Failed to decode/parse {env_k}: {e}')
-              if data:
-                  with open(file_p, 'w') as f:
-                      json.dump(data, f)
-                  file_p.chmod(0o600)
-                  print(f'✅ Successfully restored session for @{user}')
-          "
-
-      - name: Run NexoraAI 24/7 Multi-Account DM Monitor
-        env:
-          INSTA_SESSION_PRATIKPARTH_JSON: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON || secrets.INSTA_SESSION_PRATIKPARTH }}
-          INSTA_SESSION_JSON: ${{ secrets.INSTA_SESSION_JSON || secrets.INSTA_SESSION }}
-        run: |
-          LOOP=45
-          if [ -n "${{ github.event.inputs.loop_minutes }}" ]; then
-            LOOP="${{ github.event.inputs.loop_minutes }}"
-          fi
-          ARGS="--loop-minutes $LOOP"
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            ARGS="$ARGS --dry-run"
-          fi
-          python3 scripts/dm_auto_reply_hub.py $ARGS
-
-      - name: Commit & Push State Changes
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add projects/dm_seen_*.json projects/dm_recent_replies_*.json || true
-          if git commit -m "chore(dm): update multi-account seen states & history [skip ci]"; then
-            git pull --rebase origin main
-            git push origin main
-            echo "✅ State updated and committed."
-          else
-            echo "No state changes to commit."
-          fi
-
-      - name: Chain Next Continuous 24/7 Run
-        if: always() && github.event.inputs.dry_run != 'true'
+      - name: Cancel All In-Progress & Queued Runs
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
-          echo "🔄 Launching next continuous monitor session..."
-          gh workflow run dm_auto_reply_pratikparth.yml || true
+          echo "🛑 Emergency STOP requested: Halting all active GitHub Actions..."
+          gh run list --json databaseId,status,name -q '.[] | select(.status != "completed") | .databaseId' | while read -r id; do
+            if [ -n "$id" ] && [ "$id" != "$GITHUB_RUN_ID" ]; then
+              echo "Cancelling run ID: $id"
+              gh run cancel "$id" || true
+            fi
+          done
+          echo "Disabling automatic triggers..."
+          gh workflow disable dm_auto_reply_pratikparth.yml || true
+          echo "✅ All GitHub workflows halted and disabled."
