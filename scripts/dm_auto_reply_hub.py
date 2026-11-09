@@ -25,6 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR / "scripts"))
 
 from nexora_ai_dm_brain import nexora_brain
+from emergency_alerter import alerter
+from voice_engine import voice_engine
+from reels_booster import reels_booster
 
 SESSION_DIR = Path.home() / ".config" / "stickman_video_director"
 SESSION_DIR.mkdir(parents=True, exist_ok=True)
@@ -145,6 +148,11 @@ class AccountManager:
             sender_name = users[0] if users else str(unprocessed[0].user_id)
             print(f"\n📬 [@{self.username}] Detected {len(unprocessed)} new interaction(s) from @{sender_name}:")
 
+            # Emergency Alert Detection
+            is_emergency = alerter.check_for_emergency(sender_name, unprocessed)
+            if is_emergency:
+                print(f"   🚨 [EMERGENCY DETECTED] Immediate alert logged & dispatched for @{sender_name}!")
+
             # 1. Human Action: Mark thread seen
             if not dry_run:
                 try:
@@ -192,6 +200,22 @@ class AccountManager:
             reply_item_type = str(reply_target.item_type).lower()
             reply_text_content = getattr(reply_target, "text", "") or ""
 
+            # Check for incoming voice note to transcribe
+            if any(k in reply_item_type for k in ["voice", "audio"]):
+                audio_url = None
+                vm = getattr(reply_target, "voice_media", None)
+                if vm and hasattr(vm, "media") and hasattr(vm.media, "audio"):
+                    audio_url = getattr(vm.media.audio, "audio_src", None)
+                if not audio_url:
+                    raw_xma = getattr(reply_target, "raw_xma", {}) or {}
+                    audio_url = raw_xma.get("audio_src") or raw_xma.get("url")
+
+                if audio_url:
+                    print(f"   🎙️ [Voice-Note] Transcribing incoming audio from @{sender_name}...")
+                    transcribed = voice_engine.transcribe_audio(audio_url)
+                    if transcribed:
+                        reply_text_content = transcribed
+
             user_history = recent_replies.get(sender_name, [])
 
             if has_call_event and not text_msgs:
@@ -225,19 +249,47 @@ class AccountManager:
             else:
                 type_delay = random.uniform(3.5, 6.0)
                 time.sleep(type_delay)
-                try:
-                    self.cl.direct_answer(thread_id, reply_text)
-                    print(f"   💬 Sent reply to @{sender_name}: {reply_text}")
-                    user_history.append(reply_text)
-                    recent_replies[sender_name] = user_history[-5:]
-                except Exception as e:
-                    print(f"   ⚠️ Reply failed: {e}")
+
+                # Check if we should reply with a spoken voice note
+                should_voice_reply = (
+                    any(k in reply_item_type for k in ["voice", "audio"])
+                    or any(w in (reply_text_content or "").lower() for w in ["voice note", "bol ke bata", "voice bhej"])
+                ) and not emoji_priority
+
+                if should_voice_reply:
+                    voice_file = voice_engine.generate_voice_note(reply_text)
+                    if voice_file:
+                        try:
+                            self.cl.direct_send_voice(voice_file, thread_ids=[int(thread_id)])
+                            print(f"   🎙️ [Voice-Reply] Sent native Instagram voice note to @{sender_name}!")
+                        except Exception as e:
+                            print(f"   ⚠️ Voice send failed, falling back to text: {e}")
+                            self.cl.direct_answer(thread_id, reply_text)
+                            print(f"   💬 Sent text reply to @{sender_name}: {reply_text}")
+                        if os.path.exists(voice_file):
+                            os.unlink(voice_file)
+                    else:
+                        self.cl.direct_answer(thread_id, reply_text)
+                        print(f"   💬 Sent reply to @{sender_name}: {reply_text}")
+                else:
+                    try:
+                        self.cl.direct_answer(thread_id, reply_text)
+                        print(f"   💬 Sent reply to @{sender_name}: {reply_text}")
+                    except Exception as e:
+                        print(f"   ⚠️ Reply failed: {e}")
+
+                user_history.append(reply_text)
+                recent_replies[sender_name] = user_history[-5:]
 
             processed_conversations += 1
             if processed_conversations >= max_targets:
                 break
 
             time.sleep(random.uniform(2.5, 4.5))
+
+        # Brand account algorithm booster check (e.g. @vynox_00000)
+        if "vynox" in self.username.lower():
+            reels_booster.boost_latest_reel(self.cl, dry_run=dry_run)
 
         if not dry_run and processed_conversations > 0:
             self.save_seen(seen_ids)
@@ -422,3 +474,4 @@ if __name__ == "__main__":
         target_user=args.target_user,
         account_filter=args.account
     )
+

@@ -81,7 +81,16 @@ class NexoraAIBrain:
         elif any(w in full_text for w in ["meme", "dank", "sarcasm", "shitpost", "troll", "bakchodi", "desi"]):
             result["intent"] = "dank_meme"
         else:
-            result["intent"] = "general_funny"
+            # Fallback: Visual analysis for captionless reels
+            thumb_url = clip.get("thumbnail_url") or clip.get("image_url") or clip.get("preview_url")
+            if thumb_url:
+                try:
+                    from vision_engine import vision_engine
+                    result["intent"] = vision_engine.analyze_image_url(thumb_url)
+                except Exception:
+                    result["intent"] = "general_funny"
+            else:
+                result["intent"] = "general_funny"
 
         return result
 
