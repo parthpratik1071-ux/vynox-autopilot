@@ -9,6 +9,7 @@ Designed to behave 100% like a REAL HUMAN USER:
 - Realistic viewing & typing delays
 - Anti-repetition memory per contact
 - IST Sleep Cycle guard (3:00 AM - 7:00 AM IST)
+- Continuous monitoring mode with configurable sweep loop
 """
 
 import os
@@ -69,7 +70,6 @@ def get_client():
         try:
             data = json.loads(env_session)
             cl.set_settings(data)
-            cl.init()
             return cl
         except Exception:
             import base64
@@ -77,7 +77,6 @@ def get_client():
                 decoded = base64.b64decode(env_session).decode("utf-8")
                 data = json.loads(decoded)
                 cl.set_settings(data)
-                cl.init()
                 return cl
             except Exception as e:
                 print(f"⚠️ Could not load session from env var: {e}")
@@ -91,31 +90,20 @@ def get_client():
     print("⚠️ No session found locally or in environment secrets.")
     return None
 
-def run_responder(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False):
+def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False):
     # 1. Real Human Sleep Cycle Check (India IST: UTC+5:30)
     IST = timezone(timedelta(hours=5, minutes=30))
     now_ist = datetime.now(IST)
     if not ignore_sleep and (3 <= now_ist.hour < 7):
         print(f"🌙 [Real Human Sleep Cycle]: It is {now_ist.strftime('%I:%M %p')} IST.")
         print(f"   Friends expect @pratikparth_12 to be asleep. Skipping auto-reply until morning.")
-        return
-
-    cl = get_client()
-    if cl is None:
-        print("🛑 Exiting: Session not available.")
-        sys.exit(0)
+        return 0
 
     my_user_id = str(cl.user_id)
-    username = cl.user_info(my_user_id).username
-    print(f"👤 Connected as: @{username} (ID: {my_user_id})")
-
     seen_ids = load_seen()
     recent_replies = load_recent_replies()
-    print(f"📂 Loaded {len(seen_ids)} previously processed message IDs.")
 
     threads = cl.direct_threads(amount=10)
-    print(f"📬 Scanning active message threads...")
-
     processed_conversations = 0
 
     for t in threads:
@@ -151,7 +139,7 @@ def run_responder(max_targets=5, dry_run=False, emoji_priority=True, ignore_slee
                 pass
             time.sleep(random.uniform(1.8, 3.5))
 
-        # Step 2: Double-tap like the incoming messages with natural human pauses
+        # Step 2: Double-tap like incoming messages
         for m in unprocessed:
             m_id = str(m.id)
             m_type = str(m.item_type).lower()
@@ -175,7 +163,7 @@ def run_responder(max_targets=5, dry_run=False, emoji_priority=True, ignore_slee
                     print(f"   ⚠️ Like failed: {e}")
             seen_ids.add(m_id)
 
-        # Step 3: Determine the single cohesive human response for this conversation burst
+        # Step 3: Determine single cohesive human response
         has_call_event = any("call" in str(m.item_type).lower() for m in unprocessed)
         text_msgs = [
             m for m in unprocessed
@@ -183,12 +171,10 @@ def run_responder(max_targets=5, dry_run=False, emoji_priority=True, ignore_slee
         ]
         latest_msg = unprocessed[-1]
 
-        # Prioritize replying to the text message if the friend typed something alongside a reel
         reply_target = text_msgs[-1] if text_msgs else latest_msg
         reply_item_type = str(reply_target.item_type).lower()
         reply_text_content = getattr(reply_target, "text", "") or ""
 
-        # Natural human touch: if only reels/clips were sent, real humans often just like (❤️)
         only_reels = (not text_msgs) and (not has_call_event) and all(
             any(k in str(m.item_type).lower() for k in ["clip", "media", "video"])
             for m in unprocessed
@@ -196,7 +182,7 @@ def run_responder(max_targets=5, dry_run=False, emoji_priority=True, ignore_slee
 
         should_send_text_reply = True
         if only_reels:
-            # ~30% chance to only like (❤️) without text (very common among close friends)
+            # ~30% chance to like only without text
             if random.random() < 0.30:
                 should_send_text_reply = False
                 print(f"   👤 [Human Choice]: Liked only (no text reply sent, natural human friend behavior).")
@@ -239,7 +225,6 @@ def run_responder(max_targets=5, dry_run=False, emoji_priority=True, ignore_slee
                 try:
                     cl.direct_answer(thread_id, reply_text)
                     print(f"   💬 Sent reply to @{sender_name}: {reply_text}")
-                    # Update anti-repetition memory
                     user_history.append(reply_text)
                     recent_replies[sender_name] = user_history[-5:]
                 except Exception as e:
@@ -247,33 +232,80 @@ def run_responder(max_targets=5, dry_run=False, emoji_priority=True, ignore_slee
 
         processed_conversations += 1
         if processed_conversations >= max_targets:
-            print(f"🛑 Reached target of {max_targets} conversations.")
+            print(f"🛑 Reached target of {max_targets} conversations for this sweep.")
             break
 
-        # Human delay between interacting with different friends
         time.sleep(random.uniform(2.5, 5.0))
 
-    if not dry_run:
+    if not dry_run and processed_conversations > 0:
         save_seen(seen_ids)
         save_recent_replies(recent_replies)
-        print(f"💾 Committed updated seen message IDs and conversation history.")
-    else:
-        print(f"ℹ️ [DRY-RUN]: State not committed to disk.")
+        print(f"💾 Committed updated seen message IDs and conversation history to disk.")
 
-    print(f"\n✨ NexoraAI Inbox sweep complete. Processed {processed_conversations} conversation(s).")
+    return processed_conversations
+
+def run_continuous_monitor(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, loop_minutes=0):
+    cl = get_client()
+    if cl is None:
+        print("🛑 Exiting: Session not available or invalid credentials.")
+        sys.exit(1)
+
+    my_user_id = str(cl.user_id)
+    username = cl.user_info(my_user_id).username
+    print(f"👤 Connected as: @{username} (ID: {my_user_id})")
+
+    start_time = time.time()
+    loop_duration = loop_minutes * 60
+
+    if loop_minutes > 0:
+        print(f"🔄 Starting continuous inbox monitor (duration: {loop_minutes}m)...")
+    else:
+        print(f"📬 Starting single inbox sweep...")
+
+    cycle = 1
+    total_processed = 0
+
+    while True:
+        try:
+            IST = timezone(timedelta(hours=5, minutes=30))
+            now_str = datetime.now(IST).strftime('%I:%M:%S %p')
+            print(f"\n--- [Sweep #{cycle} @ {now_str} IST] ---")
+            processed = run_responder_cycle(
+                cl,
+                max_targets=max_targets,
+                dry_run=dry_run,
+                emoji_priority=emoji_priority,
+                ignore_sleep=ignore_sleep
+            )
+            total_processed += processed
+        except Exception as e:
+            print(f"⚠️ Error during inbox sweep: {e}")
+
+        elapsed = time.time() - start_time
+        if loop_minutes <= 0 or elapsed >= loop_duration:
+            print(f"\n🏁 Finished monitor session ({elapsed/60:.1f}m elapsed, {total_processed} conversations handled).")
+            break
+
+        sleep_sec = random.uniform(45, 65)
+        rem_min = int((loop_duration - elapsed) / 60)
+        print(f"⏳ Sleeping {sleep_sec:.0f}s before next inbox check ({rem_min}m remaining in session)...")
+        time.sleep(sleep_sec)
+        cycle += 1
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Inspect without liking or replying")
-    parser.add_argument("--count", type=int, default=5, help="Number of conversations to reply to")
+    parser.add_argument("--count", type=int, default=5, help="Max conversations per sweep")
     parser.add_argument("--text-mode", action="store_true", help="Prefer text responses over emojis")
     parser.add_argument("--ignore-sleep", action="store_true", help="Bypass real human sleep cycle check")
+    parser.add_argument("--loop-minutes", type=int, default=0, help="Minutes to keep monitoring continuously")
     args = parser.parse_args()
 
-    run_responder(
+    run_continuous_monitor(
         max_targets=args.count,
         dry_run=args.dry_run,
         emoji_priority=not args.text_mode,
-        ignore_sleep=args.ignore_sleep
+        ignore_sleep=args.ignore_sleep,
+        loop_minutes=args.loop_minutes
     )

@@ -2,8 +2,8 @@ name: Instagram DM Auto-Responder (@pratikparth_12)
 
 on:
   schedule:
-    # Runs every 15 minutes 24/7 in GitHub cloud (without laptop on)
-    - cron: '*/15 * * * *'
+    # Safety backup cron every 30 minutes in case a chain run stops
+    - cron: '*/30 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -11,12 +11,25 @@ on:
         required: false
         type: boolean
         default: false
+      loop_minutes:
+        description: 'Minutes to keep monitoring inbox continuously (default: 45)'
+        required: false
+        type: number
+        default: 45
+
+# Prevent concurrent overlapping runs from colliding on the Instagram session
+concurrency:
+  group: instagram_dm_pratikparth
+  cancel-in-progress: false
 
 jobs:
   auto_respond:
     runs-on: ubuntu-24.04
+    timeout-minutes: 60
     permissions:
       contents: write
+      actions: write
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,23 +38,29 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install instagrapi Pillow curl_cffi pycryptodomex
 
-      - name: Run NexoraAI DM Responder
+      - name: Run NexoraAI 24/7 DM Monitor
         env:
           INSTA_SESSION_PRATIKPARTH_JSON: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON || secrets.INSTA_SESSION_PRATIKPARTH }}
         run: |
-          ARGS=""
+          LOOP=45
+          if [ -n "${{ github.event.inputs.loop_minutes }}" ]; then
+            LOOP="${{ github.event.inputs.loop_minutes }}"
+          fi
+          ARGS="--loop-minutes $LOOP"
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            ARGS="--dry-run"
+            ARGS="$ARGS --dry-run"
           fi
           python3 scripts/dm_auto_reply_pratikparth.py $ARGS
 
-      - name: Commit & Push Seen Message State
+      - name: Commit & Push State Changes
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -53,3 +72,11 @@ jobs:
           else
             echo "No state changes to commit."
           fi
+
+      - name: Chain Next Continuous 24/7 Run
+        if: always() && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔄 Launching next continuous monitor session..."
+          gh workflow run dm_auto_reply_pratikparth.yml || true
