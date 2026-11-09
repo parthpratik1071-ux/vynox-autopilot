@@ -13,9 +13,6 @@ on:
         required: false
         type: number
         default: 5
-  push:
-    branches:
-      - main
 
 # Cancel any running workflow in this group immediately on push
 concurrency:
