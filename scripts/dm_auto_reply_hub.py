@@ -34,6 +34,20 @@ SESSION_DIR.mkdir(parents=True, exist_ok=True)
 PROJECTS_DIR = BASE_DIR / "projects"
 PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
 
+# Blacklisted / Excluded Accounts (Family, siblings, or accounts that should NEVER be touched by auto-reply)
+IGNORED_USERS = {
+    "paras_kumar_thakur",
+    "palak"
+}
+IGNORED_FILE = PROJECTS_DIR / "dm_ignored_users.json"
+if IGNORED_FILE.exists():
+    try:
+        with open(IGNORED_FILE, "r") as f:
+            custom_ignored = json.load(f)
+            IGNORED_USERS.update([u.lower().strip() for u in custom_ignored])
+    except Exception:
+        pass
+
 class AccountManager:
     """
     Manages authentication and state for a specific Instagram account.
@@ -129,6 +143,14 @@ class AccountManager:
                 continue
 
             if target_user and not any(target_user.lower() in u.lower() for u in users):
+                continue
+
+            # Strict exclusion check: never touch family or ignored users
+            is_excluded = (
+                any(u.lower() in IGNORED_USERS for u in users)
+                or any(ign in (t.thread_title or "").lower() for ign in IGNORED_USERS)
+            )
+            if is_excluded:
                 continue
 
             thread_id = str(t.id)
