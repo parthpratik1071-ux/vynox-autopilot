@@ -119,16 +119,9 @@ class AccountManager:
 
         return False
 
-    def sweep_inbox(self, max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, target_user=None, all_managed_usernames=None) -> int:
+    def sweep_inbox(self, max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, target_user=None) -> int:
         if not self.cl:
             return 0
-
-        # Build comprehensive set of user's own accounts to prevent any cross-messaging loops
-        all_managed = set(all_managed_usernames or [])
-        if self.username:
-            all_managed.add(self.username.lower())
-        all_managed.update(["pratikparth_12", "vynox_00000"])
-        all_managed.discard("")
 
         # Check sleep cycle for personal accounts (3 AM - 7 AM IST)
         IST = timezone(timedelta(hours=5, minutes=30))
@@ -141,25 +134,29 @@ class AccountManager:
         seen_ids = self.load_seen()
         recent_replies = self.load_history()
 
+        # Own Accounts Exclusions (Prevents Pratik & Vynox from ever messaging each other)
+        MANAGED_ACCOUNTS = {"pratikparth_12", "vynox_00000"}
+        if self.username:
+            MANAGED_ACCOUNTS.add(self.username.lower())
+
         threads = self.cl.direct_threads(amount=15)
         processed_conversations = 0
 
         for t in threads:
-            users = [u.username.lower() for u in t.users if getattr(u, 'username', None)]
-            # 1. Skip system bots
-            if any(u in ["meta ai", "instagram"] for u in users):
+            users = [u.username for u in t.users if getattr(u, 'username', None)]
+            if any(u.lower() in ["meta ai", "instagram"] for u in users):
                 continue
 
-            # 2. STRICT CROSS-ACCOUNT PROTECTION: Never message between user's own accounts!
-            if any(u in all_managed for u in users) or any(m in (t.thread_title or "").lower() for m in all_managed):
+            # Strict self-account exclusion: never message between user's own accounts
+            if any(u.lower() in MANAGED_ACCOUNTS for u in users) or any(m in (t.thread_title or "").lower() for m in MANAGED_ACCOUNTS):
                 continue
 
-            if target_user and not any(target_user.lower() in u for u in users):
+            if target_user and not any(target_user.lower() in u.lower() for u in users):
                 continue
 
-            # 3. Strict family & blacklist exclusion check
+            # Strict exclusion check: never touch family or ignored users
             is_excluded = (
-                any(u in IGNORED_USERS for u in users)
+                any(u.lower() in IGNORED_USERS for u in users)
                 or any(ign in (t.thread_title or "").lower() for ign in IGNORED_USERS)
             )
             if is_excluded:
@@ -297,7 +294,8 @@ class AccountManager:
                     text=reply_text_content,
                     reel_meta=reel_data,
                     emoji_priority=emoji_priority,
-                    recent_history=user_history
+                    recent_history=user_history,
+                    sender_username=sender_name
                 )
                 intent_label = reel_data.get("intent", "conversational_text") if reel_data else "conversational_text"
 
@@ -473,9 +471,6 @@ def run_hub(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=Fals
     cycle = 1
     total_processed = 0
 
-    all_managed = {acc.username.lower() for acc in connected_accounts if acc.username}
-    all_managed.update(["pratikparth_12", "vynox_00000"])
-
     while True:
         IST = timezone(timedelta(hours=5, minutes=30))
         now_str = datetime.now(IST).strftime('%I:%M:%S %p')
@@ -490,8 +485,7 @@ def run_hub(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=Fals
                     dry_run=dry_run,
                     emoji_priority=emoji_priority,
                     ignore_sleep=ignore_sleep,
-                    target_user=target_user,
-                    all_managed_usernames=all_managed
+                    target_user=target_user
                 )
                 total_processed += processed
             except Exception as e:

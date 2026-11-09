@@ -100,7 +100,8 @@ class NexoraAIBrain:
         text: Optional[str] = None,
         reel_meta: Optional[Dict[str, Any]] = None,
         emoji_priority: bool = True,
-        recent_history: Optional[List[str]] = None
+        recent_history: Optional[List[str]] = None,
+        sender_username: Optional[str] = None
     ) -> str:
         """
         Generates an authentic, context-matched response across all DM types:
@@ -342,6 +343,15 @@ class NexoraAIBrain:
             ])
 
         # 7. Handle Shared Reels using Nexora Intent Classification
+        is_brother = False
+        if sender_username:
+            s_low = sender_username.lower()
+            is_brother = any(b in s_low for b in ["sarthak", "navneet", "jisan", "tiwari", "arpit", "sharma", "shadox", "akap"])
+
+        if is_brother:
+            # Pratik authentic reaction to brothers: pure authentic laughing/crying meme emojis
+            return pick_unique(["😂😂💀", "😭😭😂", "😭😭", "💀💀", "🔥💀", "Us bhai us 😭💀"])
+
         intent = reel_meta.get("intent", "general_funny") if reel_meta else "general_funny"
 
         if intent == "festive_diwali":
