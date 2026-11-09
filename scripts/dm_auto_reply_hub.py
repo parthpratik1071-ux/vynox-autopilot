@@ -163,6 +163,25 @@ class AccountManager:
                 and "action_log" not in str(m.item_type).lower()
             ]
 
+            # 🛡️ Real Human Freshness Guard:
+            # Never react or reply to old/stale messages from hours or days ago.
+            # Only process interactions received within the last 45 minutes.
+            now = datetime.now()
+            MAX_AGE_SECONDS = 45 * 60
+            fresh_messages = []
+            for m in unprocessed:
+                msg_time = getattr(m, "timestamp", None)
+                if isinstance(msg_time, datetime):
+                    if msg_time.tzinfo is not None:
+                        msg_time = msg_time.astimezone().replace(tzinfo=None)
+                    age = (now - msg_time).total_seconds()
+                    if age > MAX_AGE_SECONDS:
+                        # Silently mark stale message as seen without any reaction or reply
+                        seen_ids.add(str(m.id))
+                        continue
+                fresh_messages.append(m)
+
+            unprocessed = fresh_messages
             if not unprocessed:
                 continue
 

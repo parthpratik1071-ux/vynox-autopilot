@@ -166,6 +166,15 @@ class NexoraAIBrain:
                     "Mast hu bhai, tu suna kya haal chal! 🙌"
                 ])
 
+            # Inquiries / Confusion / "Kya hua", "Mtlb", "Matlab", "Sanak gaya", "Kya bol raha"
+            if any(w in text_lower for w in ["kya hua", "mtlb", "matlab", "hua kya", "sanake", "sanak", "pagal", "pagla", "kya mtlb", "kya bol rha", "kya bol raha"]):
+                return pick_unique([
+                    "Kuch nahi re bas aise hi 😂",
+                    "Arre kuch nahi chill maar 😂",
+                    "Kuch nahi bhai bas chill kar raha tha 😂",
+                    "Arey kuch nahi re, tu bata kya scene? 😂"
+                ])
+
             # Exam / Student Misery / Academic Stress / "Paper dekhna ja baad dppresion"
             if any(w in text_lower for w in ["paper", "exam", "depression", "dppresion", "fail", "marks", "result", "backlog", "sem", "padhai", "kharab", "khrb"]):
                 return pick_unique([
@@ -323,10 +332,14 @@ class NexoraAIBrain:
             if any(w in text_lower for w in ["thanks", "thank you", "thx", "dhanyawad"]):
                 return pick_unique(["❤️🙌", "Mention not bhai ❤️", "Anytime bhai 👍"])
 
-            # Default text reply
-            if emoji_priority:
-                return pick_unique(["👍😂", "🙌🔥", "👍", "😂😂", "💀👍"])
-            return pick_unique(["Sahi hai bhai 👍", "Haan bhai samjha", "Badiya 👍"])
+            # Default text reply (Conversational fallback - always real words when someone sends a text)
+            return pick_unique([
+                "Ha bhai samjha 👍",
+                "Sahi hai re 👍",
+                "Theek hai bhai 👍",
+                "Chill maar bhai 😂",
+                "Ha bhai bol na kya scene 😂"
+            ])
 
         # 7. Handle Shared Reels using Nexora Intent Classification
         intent = reel_meta.get("intent", "general_funny") if reel_meta else "general_funny"
