@@ -388,7 +388,7 @@ def add_new_account(username, password):
         print(f"❌ Login failed: {e}")
         return False
 
-def run_hub(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, loop_minutes=0, target_user=None, account_filter=None):
+def run_hub(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=False, loop_minutes=0, target_user=None, account_filter=None, daemon=False):
     accounts = discover_accounts()
     if account_filter:
         accounts = [a for a in accounts if account_filter.lower() in a.identifier.lower()]
@@ -410,7 +410,9 @@ def run_hub(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=Fals
     start_time = time.time()
     loop_duration = loop_minutes * 60
 
-    if loop_minutes > 0:
+    if daemon:
+        print(f"\n🔄 [24/7 Daemon] Starting perpetual multi-account continuous monitor...")
+    elif loop_minutes > 0:
         print(f"\n🔄 Starting multi-account continuous monitor (duration: {loop_minutes}m)...")
     else:
         print(f"\n📬 Starting single multi-account sweep...")
@@ -441,13 +443,16 @@ def run_hub(max_targets=5, dry_run=False, emoji_priority=True, ignore_sleep=Fals
             time.sleep(random.uniform(2.0, 4.0))
 
         elapsed = time.time() - start_time
-        if loop_minutes <= 0 or elapsed >= loop_duration:
+        if not daemon and (loop_minutes <= 0 or elapsed >= loop_duration):
             print(f"\n🏁 Finished multi-account session ({elapsed/60:.1f}m elapsed, {total_processed} conversations handled).")
             break
 
         sleep_sec = random.uniform(45, 65)
-        rem_min = int((loop_duration - elapsed) / 60)
-        print(f"\n⏳ Sleeping {sleep_sec:.0f}s before next inbox check ({rem_min}m remaining in session)...")
+        if daemon:
+            print(f"\n⏳ Sleeping {sleep_sec:.0f}s before next inbox check (24/7 perpetual daemon active)...")
+        else:
+            rem_min = int((loop_duration - elapsed) / 60)
+            print(f"\n⏳ Sleeping {sleep_sec:.0f}s before next inbox check ({rem_min}m remaining in session)...")
         time.sleep(sleep_sec)
         cycle += 1
 
@@ -458,6 +463,7 @@ if __name__ == "__main__":
     parser.add_argument("--text-mode", action="store_true", help="Prefer text responses over emojis")
     parser.add_argument("--ignore-sleep", action="store_true", help="Bypass real human sleep cycle check")
     parser.add_argument("--loop-minutes", type=int, default=0, help="Minutes to keep monitoring continuously")
+    parser.add_argument("--daemon", action="store_true", help="Run continuously forever in perpetual 24/7 background mode")
     parser.add_argument("--account", type=str, default=None, help="Specific account to run (e.g. pratikparth_12 or vynox_00000)")
     parser.add_argument("--target-user", type=str, default=None, help="Filter to a specific friend username")
     parser.add_argument("--add-account", type=str, default=None, help="Username of new account to add")
@@ -478,6 +484,7 @@ if __name__ == "__main__":
         ignore_sleep=args.ignore_sleep,
         loop_minutes=args.loop_minutes,
         target_user=args.target_user,
-        account_filter=args.account
+        account_filter=args.account,
+        daemon=args.daemon
     )
 
