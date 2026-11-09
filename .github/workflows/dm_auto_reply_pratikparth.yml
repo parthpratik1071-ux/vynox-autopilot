@@ -4,6 +4,9 @@ on:
   schedule:
     # Runs every 15 minutes to keep 24/7 continuous monitoring live
     - cron: '*/15 * * * *'
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       dry_run:
