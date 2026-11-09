@@ -2,8 +2,8 @@ name: Instagram DM Multi-Account Auto-Responder Hub
 
 on:
   schedule:
-    # Safety backup cron every 30 minutes in case a chain run stops
-    - cron: '*/30 * * * *'
+    # Backup cron every 15 minutes in case a loop completes or delays
+    - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -43,7 +43,36 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install instagrapi Pillow curl_cffi pycryptodomex
+          pip install instagrapi Pillow curl_cffi pycryptodomex imageio-ffmpeg SpeechRecognition edge-tts
+
+      - name: Restore Multi-Account Instagram Sessions
+        env:
+          INSTA_SESSION_PRATIKPARTH: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON || secrets.INSTA_SESSION_PRATIKPARTH }}
+          INSTA_SESSION_VYNOX: ${{ secrets.INSTA_SESSION_JSON || secrets.INSTA_SESSION }}
+        run: |
+          mkdir -p ~/.config/stickman_video_director
+          if [ -n "$INSTA_SESSION_PRATIKPARTH" ]; then
+            P_PATH="$HOME/.config/stickman_video_director/insta_session_pratikparth_12.json"
+            printf '%s\n' "$INSTA_SESSION_PRATIKPARTH" > "$P_PATH"
+            if ! python3 -c "import json; json.load(open('$P_PATH'))" 2>/dev/null; then
+              echo "$INSTA_SESSION_PRATIKPARTH" | base64 -d > "$P_PATH" 2>/dev/null || true
+            fi
+            chmod 600 "$P_PATH" 2>/dev/null || true
+            echo "✅ Session restored for @pratikparth_12"
+          else
+            echo "⚠️ Secret INSTA_SESSION_PRATIKPARTH_JSON not found in repository secrets."
+          fi
+          if [ -n "$INSTA_SESSION_VYNOX" ]; then
+            V_PATH="$HOME/.config/stickman_video_director/insta_session.json"
+            printf '%s\n' "$INSTA_SESSION_VYNOX" > "$V_PATH"
+            if ! python3 -c "import json; json.load(open('$V_PATH'))" 2>/dev/null; then
+              echo "$INSTA_SESSION_VYNOX" | base64 -d > "$V_PATH" 2>/dev/null || true
+            fi
+            chmod 600 "$V_PATH" 2>/dev/null || true
+            echo "✅ Session restored for @vynox_00000"
+          else
+            echo "⚠️ Secret INSTA_SESSION_JSON not found in repository secrets."
+          fi
 
       - name: Run NexoraAI 24/7 Multi-Account DM Monitor
         env:
@@ -77,7 +106,7 @@ jobs:
       - name: Chain Next Continuous 24/7 Run
         if: always() && github.event.inputs.dry_run != 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
           echo "🔄 Launching next continuous monitor session..."
           gh workflow run dm_auto_reply_pratikparth.yml || true

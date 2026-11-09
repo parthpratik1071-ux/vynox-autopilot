@@ -19,3 +19,4 @@ projects/**/audio_*/
 # Sensitive local sessions
 insta_session.json
 *session*.json
+projects/insta_session_pratikparth_secret.txt
