@@ -67,3 +67,4 @@ class VisionEngine:
             return "general_funny"
 
 vision_engine = VisionEngine()
+

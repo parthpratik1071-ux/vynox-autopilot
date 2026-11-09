@@ -98,3 +98,4 @@ class ReelsBooster:
             print(f"⚠️ Reels booster run error: {e}")
 
 reels_booster = ReelsBooster()
+

@@ -1,0 +1,17 @@
+[Script Info]
+Title: NexoraAI V14.2 Commercial Launch
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Noto Sans Devanagari,54,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0.5,0,1,5.0,3.0,2,50,50,340,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.20,0:00:07.10,Default,,0,0,0,,AI सब्सक्रिप्शन और डेटा लीक से परेशान हैं?\N{\c&H003333FF&}क्लाउड कंपनियाँ{\c&H00FFFFFF&} आपका प्राइवेट डेटा देखती हैं!\N{\fs34\c&H00E0E0E0&}Tired of costly AI subscriptions and data leak fears?
+Dialogue: 0,0:00:07.25,0:00:14.80,Default,,0,0,0,,मिलिए {\c&H00FFFF00&}NexoraAI V14.2{\c&H00FFFFFF&} से!\N{\c&H0000D7FF&}100% प्राइवेट AI{\c&H00FFFFFF&} जो बिना इंटरनेट सीधे आपके लैपटॉप पर चलता है!\N{\fs34\c&H00E0E0E0&}100% private local AI running on your own CPU!
+Dialogue: 0,0:00:14.95,0:00:21.40,Default,,0,0,0,,{\c&H0033FF33&}जीरो मंथली फीस, जीरो डेटा लीक!{\c&H00FFFFFF&}\Nक्लाउड लाइसेंसिंग अब {\c&H0000D7FF&}Render पर लाइव तैनात{\c&H00FFFFFF&} है!\N{\fs34\c&H00E0E0E0&}Zero subscription. Enterprise licensing live on Render!
+Dialogue: 0,0:00:21.55,0:00:28.19,Default,,0,0,0,,अपने AI के खुद मालिक बनिए!\N{\c&H00FFFF00&}🚀 nexora-cloud-licensing.onrender.com 👇{\c&H00FFFFFF&}\N{\fs34\c&H00E0E0E0&}Own your AI today. Check link in bio!
