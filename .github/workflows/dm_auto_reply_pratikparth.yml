@@ -1,4 +1,4 @@
-name: Instagram DM Auto-Responder (@pratikparth_12)
+name: Instagram DM Multi-Account Auto-Responder Hub
 
 on:
   schedule:
@@ -19,7 +19,7 @@ on:
 
 # Prevent concurrent overlapping runs from colliding on the Instagram session
 concurrency:
-  group: instagram_dm_pratikparth
+  group: instagram_dm_hub
   cancel-in-progress: false
 
 jobs:
@@ -45,9 +45,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install instagrapi Pillow curl_cffi pycryptodomex
 
-      - name: Run NexoraAI 24/7 DM Monitor
+      - name: Run NexoraAI 24/7 Multi-Account DM Monitor
         env:
           INSTA_SESSION_PRATIKPARTH_JSON: ${{ secrets.INSTA_SESSION_PRATIKPARTH_JSON || secrets.INSTA_SESSION_PRATIKPARTH }}
+          INSTA_SESSION_JSON: ${{ secrets.INSTA_SESSION_JSON || secrets.INSTA_SESSION }}
         run: |
           LOOP=45
           if [ -n "${{ github.event.inputs.loop_minutes }}" ]; then
@@ -57,15 +58,15 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             ARGS="$ARGS --dry-run"
           fi
-          python3 scripts/dm_auto_reply_pratikparth.py $ARGS
+          python3 scripts/dm_auto_reply_hub.py $ARGS
 
       - name: Commit & Push State Changes
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add projects/dm_seen_pratikparth.json projects/dm_recent_replies.json || true
-          if git commit -m "chore(dm): update seen state & human anti-repetition memory [skip ci]"; then
+          git add projects/dm_seen_*.json projects/dm_recent_replies_*.json || true
+          if git commit -m "chore(dm): update multi-account seen states & history [skip ci]"; then
             git pull --rebase origin main
             git push origin main
             echo "✅ State updated and committed."
