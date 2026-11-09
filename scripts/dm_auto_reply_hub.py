@@ -181,6 +181,17 @@ class AccountManager:
             if is_excluded:
                 continue
 
+            # 🛡️ Personal Account Strict Whitelist Guard (@pratikparth_12):
+            # Never randomly message friends or open-sweep private inbox.
+            # ONLY interact if the contact is explicitly in the approved Brothers inner-circle or specified target!
+            if "pratikparth" in (self.username or "").lower():
+                is_allowed_brother = any(
+                    any(b in (u or "").lower() for b in ["sarthak", "navneet", "jisan", "tiwari", "arpit", "sharma", "shadox", "roxit", "rohit", "akap", "akash"])
+                    for u in users
+                )
+                if not is_allowed_brother and not (target_user and any(target_user.lower() in u.lower() for u in users)):
+                    continue
+
             thread_id = str(t.id)
             messages = self.cl.direct_messages(thread_id, amount=10)
 

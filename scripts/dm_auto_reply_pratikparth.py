@@ -157,9 +157,19 @@ def run_responder_cycle(cl, max_targets=5, dry_run=False, emoji_priority=True, i
             any(u.lower() in IGNORED_USERS for u in users)
             or any(uid in IGNORED_USERS for uid in user_ids)
             or any(ign in (t.thread_title or "").lower() for ign in IGNORED_USERS)
-        ):
-            if is_excluded:
-                continue
+        )
+        if is_excluded:
+            continue
+
+        # 🛡️ Personal Account Strict Whitelist Guard (@pratikparth_12):
+        # Never randomly message friends or open-sweep private inbox.
+        # ONLY interact if the contact is explicitly in the approved Brothers inner-circle or specified target!
+        is_allowed_brother = any(
+            any(b in (u or "").lower() for b in ["sarthak", "navneet", "jisan", "tiwari", "arpit", "sharma", "shadox", "roxit", "rohit", "akap", "akash"])
+            for u in users
+        )
+        if not is_allowed_brother and not (target_user and any(target_user.lower() in u.lower() for u in users)):
+            continue
 
         messages = cl.direct_messages(thread_id, amount=10)
 
