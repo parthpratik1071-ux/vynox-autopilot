@@ -202,3 +202,4 @@ if shots_concat.exists(): shots_concat.unlink()
 
 print(f"🎉 1080p FULL HD RENDER COMPLETE: {final_film}")
 print(f"🖼️ HIGH-RES COVER EXTRACTED: {cover_img}")
+
