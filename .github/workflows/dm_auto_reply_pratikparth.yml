@@ -103,10 +103,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add projects/dm_seen_*.json projects/dm_recent_replies_*.json || true
-          if git commit -m "chore(dm): update multi-account seen states & history [skip ci]"; then
-            git pull --rebase origin main
-            git push origin main
-            echo "✅ State updated and committed."
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(dm): update multi-account seen states & history [skip ci]" || true
+            git pull --rebase origin main || true
+            git push origin main || echo "⚠️ Notice: State push skipped or read-only."
+            echo "✅ State updated and handled."
           else
             echo "No state changes to commit."
           fi
