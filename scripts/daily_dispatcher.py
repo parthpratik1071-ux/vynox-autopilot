@@ -124,18 +124,31 @@ def dispatch_next(force=False):
     # Import and run our local instagram poster
     sys.path.insert(0, str(BASE_DIR / "scripts"))
     import insta_local_post
+    import duplicate_guard
+
+    # Zero-Repeat Check: Never re-publish an already posted video or caption headline
+    is_dup, dup_reason = duplicate_guard.is_duplicate_video(video_path, caption)
+    if is_dup and not force:
+        log(f"🛑 ZERO-REPEAT GUARD: {dup_reason}. Skipping upload to prevent duplicate post.")
+        archive_dest = ARCHIVE_DIR / f"{now.date().isoformat()}_{next_file.name}"
+        with open(archive_dest, "w") as f:
+            data["status"] = "skipped_duplicate"
+            data["reason"] = dup_reason
+            json.dump(data, f, indent=2)
+        next_file.unlink()
+        return True
 
     cl = insta_local_post.get_client()
 
     # Safety duplicate guard: Check if identical caption was already posted in latest medias
     if not force:
         try:
-            recent_medias = cl.user_medias(cl.user_id, amount=3)
+            recent_medias = cl.user_medias(cl.user_id, amount=10)
             first_sentence = caption.split('\n')[0].strip()
             for rm in recent_medias:
                 rm_cap = (rm.caption_text or '').strip()
                 if first_sentence and first_sentence in rm_cap:
-                    log(f"⚠️ Duplicate detected: '{first_sentence[:40]}...' already exists as https://www.instagram.com/reel/{rm.code}/. Skipping upload.")
+                    log(f"⚠️ Live Instagram duplicate detected: '{first_sentence[:40]}...' already exists as https://www.instagram.com/reel/{rm.code}/. Skipping upload.")
                     # Archive and remove from queue to avoid repeated triggers
                     archive_dest = ARCHIVE_DIR / f"{now.date().isoformat()}_{next_file.name}"
                     with open(archive_dest, "w") as f:
@@ -165,6 +178,13 @@ def dispatch_next(force=False):
     archive_dest = ARCHIVE_DIR / f"{now.date().isoformat()}_{next_file.name}"
     with open(archive_dest, "w") as f:
         json.dump(data, f, indent=2)
+
+    duplicate_guard.register_video(
+        title=data.get("title", ""),
+        video_path=video_path,
+        caption=caption,
+        status="published_to_instagram"
+    )
     next_file.unlink()
 
     log(f"📁 Archived record to: {archive_dest.name}")

@@ -117,28 +117,18 @@ def log(msg):
     with open(LOG_FILE, "a") as f:
         f.write(f_msg + "\n")
 
-def get_existing_song_ids():
-    existing = set()
-    if SERIES_DIR.exists():
-        for d in SERIES_DIR.iterdir():
-            if d.is_dir():
-                for c in CURATED_TRENDING_CANDIDATES:
-                    if c["id"] in d.name.lower():
-                        existing.add(c["id"])
-    if QUEUE_DIR.exists():
-        for qf in QUEUE_DIR.glob("*.json"):
-            for c in CURATED_TRENDING_CANDIDATES:
-                if c["id"] in qf.name.lower():
-                    existing.add(c["id"])
-    return existing
+sys.path.insert(0, str(BASE_DIR / "scripts"))
+import duplicate_guard
 
 def discover_next_trending():
-    existing = get_existing_song_ids()
-    log(f"🔍 Currently completed/queued songs: {list(existing)}")
+    log("🔍 Scanning candidate catalog through Zero-Repeat Duplicate Guard...")
     for candidate in CURATED_TRENDING_CANDIDATES:
-        if candidate["id"] not in existing:
-            log(f"🎯 Selected next trending track: {candidate['title']} by {candidate['artist']}")
-            return candidate
+        is_dup, reason = duplicate_guard.is_duplicate_song(candidate["title"], candidate["artist"])
+        if is_dup:
+            log(f"⏭️ Skipping duplicate: {candidate['title']} ({reason})")
+            continue
+        log(f"🎯 Selected next unique trending track: {candidate['title']} by {candidate['artist']}")
+        return candidate
     log("ℹ️ All curated songs have already been produced or queued!")
     return None
 
