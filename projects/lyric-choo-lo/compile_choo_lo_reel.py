@@ -26,10 +26,10 @@ def sec_to_ass(s):
     sec = s % 60
     return f"{h:01d}:{m:02d}:{sec:05.2f}"
 
-# 1. Generate beautifully styled ASS subtitles with Devanagari + Romanized lyrics
+# 1. Generate beautifully styled ASS subtitles with pure Romanized lyrics & modern aesthetic typography
 ass_lines = [
     "[Script Info]",
-    "Title: The Local Train - Choo Lo (Animated Lyric Reel)",
+    "Title: The Local Train - Choo Lo (Aesthetic Lyric Reel)",
     "ScriptType: v4.00+",
     "WrapStyle: 0",
     "PlayResX: 1080",
@@ -37,34 +37,28 @@ ass_lines = [
     "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    "Style: TitleBadge,DejaVu Sans,34,&H0088EEFF,&H00000000,&H00101010,&H80000000,-1,0,0,0,100,100,2,0,1,3,2,8,40,40,160,1",
-    "Style: HindiLyric,Noto Sans Devanagari,56,&H00FFFFFF,&H000000FF,&H0014100D,&HB0000000,-1,0,0,0,100,100,2,0,1,5,3,2,40,40,360,1",
-    "Style: EngLyric,DejaVu Sans,38,&H00D0E8FF,&H000000FF,&H0014100D,&HB0000000,-1,1,0,0,100,100,1,0,1,4,2,2,40,40,290,1",
+    "Style: TitleBadge,DejaVu Sans,30,&H00C0E8FF,&H00000000,&H00101010,&H80000000,-1,0,0,0,100,100,2,0,1,2,1,8,40,40,180,1",
+    "Style: ModernLyric,DejaVu Sans,68,&H00FFFFFF,&H000000FF,&H00080808,&H90000000,-1,0,0,0,100,100,2,0,1,3.5,4,2,50,50,380,1",
     "",
     "[Events]",
     "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-    # Top Song Badge (constant throughout)
-    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(27.0)},TitleBadge,,0,0,0,,{{\\fade(600,600)}}🎵  THE LOCAL TRAIN  •  CHOO LO",
+    # Top Song Badge
+    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(27.0)},TitleBadge,,0,0,0,,{{\\fade(500,500)}}♫  THE LOCAL TRAIN  •  CHOO LO",
     
     # Line 1: Khada hoon aaj bhi wahin (02.8s - 07.2s)
-    f"Dialogue: 1,{sec_to_ass(2.8)},{sec_to_ass(7.2)},HindiLyric,,0,0,0,,{{\\fade(300,300)}}{{\\c&H007CE7FF&}}खड़ा हूँ{{\\c&H00FFFFFF&}} आज भी वहीं...",
-    f"Dialogue: 1,{sec_to_ass(2.8)},{sec_to_ass(7.2)},EngLyric,,0,0,0,,{{\\fade(300,300)}}Khada hoon aaj bhi wahin...",
+    f"Dialogue: 1,{sec_to_ass(2.8)},{sec_to_ass(7.2)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}{{\\c&H0044EEFF&}}Khada hoon{{\\c&H00FFFFFF&}} aaj bhi wahin...",
     
     # Line 2: Ke dil phir bekarar hai (07.2s - 12.5s)
-    f"Dialogue: 1,{sec_to_ass(7.2)},{sec_to_ass(12.5)},HindiLyric,,0,0,0,,{{\\fade(300,300)}}कि दिल फिर {{\\c&H0066FFFF&}}बेक़रार{{\\c&H00FFFFFF&}} है...",
-    f"Dialogue: 1,{sec_to_ass(7.2)},{sec_to_ass(12.5)},EngLyric,,0,0,0,,{{\\fade(300,300)}}Ke dil phir bekarar hai...",
+    f"Dialogue: 1,{sec_to_ass(7.2)},{sec_to_ass(12.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Ke dil phir {{\\c&H0055EEFF&}}bekarar{{\\c&H00FFFFFF&}} hai...",
     
     # Line 3: Khada hoon aaj bhi wahin (12.5s - 17.8s)
-    f"Dialogue: 1,{sec_to_ass(12.5)},{sec_to_ass(17.8)},HindiLyric,,0,0,0,,{{\\fade(300,300)}}{{\\c&H0088EEFF&}}खड़ा हूँ{{\\c&H00FFFFFF&}} आज भी वहीं...",
-    f"Dialogue: 1,{sec_to_ass(12.5)},{sec_to_ass(17.8)},EngLyric,,0,0,0,,{{\\fade(300,300)}}Khada hoon aaj bhi wahin...",
+    f"Dialogue: 1,{sec_to_ass(12.5)},{sec_to_ass(17.8)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}{{\\c&H0044EEFF&}}Khada hoon{{\\c&H00FFFFFF&}} aaj bhi wahin...",
     
     # Line 4: Ke tera intezaar hai (17.8s - 22.2s)
-    f"Dialogue: 1,{sec_to_ass(17.8)},{sec_to_ass(22.2)},HindiLyric,,0,0,0,,{{\\fade(300,300)}}कि तेरा {{\\c&H0055EEFF&}}इंतज़ार{{\\c&H00FFFFFF&}} है...",
-    f"Dialogue: 1,{sec_to_ass(17.8)},{sec_to_ass(22.2)},EngLyric,,0,0,0,,{{\\fade(300,300)}}Ke tera intezaar hai...",
+    f"Dialogue: 1,{sec_to_ass(17.8)},{sec_to_ass(22.2)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Ke tera {{\\c&H0066FFFF&}}intezaar{{\\c&H00FFFFFF&}} hai...",
     
     # Line 5 / Drop: Choo lo jo mujhe tum kabhi (22.2s - 27.2s)
-    f"Dialogue: 1,{sec_to_ass(22.2)},{sec_to_ass(27.2)},HindiLyric,,0,0,0,,{{\\fade(250,500)}}{{\\c&H0038E8FF&}}छू लो{{\\c&H00FFFFFF&}} जो मुझे तुम कभी ✨",
-    f"Dialogue: 1,{sec_to_ass(22.2)},{sec_to_ass(27.2)},EngLyric,,0,0,0,,{{\\fade(250,500)}}Choo lo jo mujhe tum kabhi..."
+    f"Dialogue: 1,{sec_to_ass(22.2)},{sec_to_ass(27.2)},ModernLyric,,0,0,0,,{{\\fade(250,450)}}{{\\c&H0038E8FF&}}Choo lo{{\\c&H00FFFFFF&}} jo mujhe tum kabhi..."
 ]
 
 ass_file = OUT_DIR / "choo_lo_subtitles.ass"
