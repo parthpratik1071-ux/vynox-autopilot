@@ -1,0 +1,26 @@
+[Script Info]
+Title: Sheru vs Oggy - Part 2
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: TopHeader,DejaVu Sans,48,&H00FFFFFF,&H00000000,&H00050505,&H80000000,-1,0,0,0,100,100,2,0,1,4,3,8,40,40,220,1
+Style: BrandPill,DejaVu Sans,30,&H0038E8FF,&H00000000,&H00050505,&HA0000000,-1,0,0,0,100,100,2,0,1,2.5,2,8,40,40,290,1
+Style: WatermarkTag,DejaVu Sans,26,&H00FFFFFF,&H00000000,&H00000000,&H90000000,-1,0,0,0,100,100,1,0,1,2,2,3,40,40,650,1
+Style: ComedyCaption,DejaVu Sans,64,&H0000FFFF,&H000000FF,&H000A0A0A,&H90000000,-1,0,0,0,100,100,2,0,1,4,4,2,40,40,320,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.20,0:00:32.50,TopHeader,,0,0,0,,{\fade(300,300)}SHERU VS OGGY  •  PART 2
+Dialogue: 0,0:00:00.20,0:00:32.50,BrandPill,,0,0,0,,{\fade(300,300)}@vynox_00000
+Dialogue: 0,0:00:00.20,0:00:32.50,WatermarkTag,,0,0,0,,{\fade(300,300)}@vynox_00000
+Dialogue: 1,0:00:00.30,0:00:04.50,ComedyCaption,,0,0,0,,{\fade(150,150)}Sun mera beta{\c&H00FFFFFF&} teri school mein nahi padega!
+Dialogue: 1,0:00:04.50,0:00:08.20,ComedyCaption,,0,0,0,,{\fade(150,150)}Ab main banaunga{\c&H0000FFFF&} duniya ka sabse bada school!
+Dialogue: 1,0:00:08.20,0:00:12.80,ComedyCaption,,0,0,0,,{\c&H0038E8FF&}{\fade(150,150)}Beta is shahar mein mera raul hai...
+Dialogue: 1,0:00:12.80,0:00:17.50,ComedyCaption,,0,0,0,,{\fade(150,150)}Mere paas {\c&H0000FFFF&}MULTI-TRILLION DOLLARS{\c&H00FFFFFF&} hain!
+Dialogue: 1,0:00:17.50,0:00:23.00,ComedyCaption,,0,0,0,,{\fade(150,150)}Tere se {\c&H0000FFFF&}TRILLION TIMES{\c&H00FFFFFF&} zyada paise hain!
+Dialogue: 1,0:00:23.00,0:00:27.00,ComedyCaption,,0,0,0,,{\c&H003CE0FF&}{\fade(150,150)}Chal mere joote saaf kar!
+Dialogue: 1,0:00:27.00,0:00:32.50,ComedyCaption,,0,0,0,,{\c&H0000FFFF&}{\fade(150,300)}JACK IS CALLING... TO BE CONTINUED!
