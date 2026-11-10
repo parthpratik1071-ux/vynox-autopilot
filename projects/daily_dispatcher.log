@@ -80,3 +80,9 @@
 [2026-11-10 17:18:26] ✅ Reel posted successfully: https://www.instagram.com/reel/Dfj1Z2ys6IK/
 [2026-11-10 17:18:26] 📁 Archived record to: 2026-11-10_01_lyric_choo_lo_the_local_train.json
 [2026-11-10 17:18:26] 📊 Remaining queued items: 1
+[2026-11-10 22:00:23] 🤖 Scheduled GitHub Actions trigger detected (22:00 IST). Proceeding to dispatch next queued reel...
+[2026-11-10 22:00:23] 📦 Processing queue item: 01_romantic_kashish.json
+[2026-11-10 22:00:23] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/series-romantic-animations/01-kashish/output/film_kashish_romantic.mp4
+[2026-11-10 22:00:58] ✅ Reel posted successfully: https://www.instagram.com/reel/DfkVv0YMC3b/
+[2026-11-10 22:00:58] 📁 Archived record to: 2026-11-10_01_romantic_kashish.json
+[2026-11-10 22:00:58] 📊 Remaining queued items: 4
