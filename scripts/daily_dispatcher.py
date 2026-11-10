@@ -39,6 +39,13 @@ def dispatch_next(force=False):
     QUEUE_DIR.mkdir(parents=True, exist_ok=True)
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
 
+    # 1. Synchronize with remote repository to prevent duplicate dispatches
+    try:
+        import subprocess
+        subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=str(BASE_DIR), capture_output=True, timeout=15)
+    except Exception as e:
+        log(f"⚠️ Git sync skipped: {e}")
+
     now = datetime.datetime.now(IST)
     today_str = now.date().isoformat()
 
@@ -119,6 +126,27 @@ def dispatch_next(force=False):
     import insta_local_post
 
     cl = insta_local_post.get_client()
+
+    # Safety duplicate guard: Check if identical caption was already posted in latest medias
+    if not force:
+        try:
+            recent_medias = cl.user_medias(cl.user_id, amount=3)
+            first_sentence = caption.split('\n')[0].strip()
+            for rm in recent_medias:
+                rm_cap = (rm.caption_text or '').strip()
+                if first_sentence and first_sentence in rm_cap:
+                    log(f"⚠️ Duplicate detected: '{first_sentence[:40]}...' already exists as https://www.instagram.com/reel/{rm.code}/. Skipping upload.")
+                    # Archive and remove from queue to avoid repeated triggers
+                    archive_dest = ARCHIVE_DIR / f"{now.date().isoformat()}_{next_file.name}"
+                    with open(archive_dest, "w") as f:
+                        data["status"] = "skipped_duplicate"
+                        data["duplicate_of"] = f"https://www.instagram.com/reel/{rm.code}/"
+                        json.dump(data, f, indent=2)
+                    next_file.unlink()
+                    return True
+        except Exception as e:
+            log(f"⚠️ Duplicate check warning: {e}")
+
     media = insta_local_post.upload_reel(
         cl,
         video_path=video_path,
