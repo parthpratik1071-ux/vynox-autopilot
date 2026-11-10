@@ -57,3 +57,21 @@
 [2026-11-10 04:37:04] ✅ Reel posted successfully: https://www.instagram.com/reel/DfieSEGszYD/
 [2026-11-10 04:37:04] 📁 Archived record to: 2026-11-10_01_challenger_deep_11000m.json
 [2026-11-10 04:37:04] 📊 Remaining queued items: 2
+[2026-11-10 17:12:00] 📦 Processing queue item: 01_lyric_choo_lo_the_local_train.json
+[2026-11-10 17:12:00] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/lyric-choo-lo/output/film_choo_lo_lyric.mp4
+[2026-11-10 17:12:20] 💥 Error during daily dispatch: Clip upload failed during rupload_upload: HTTP 503: <html>
+<head>
+<title>5xx Server Error</title>
+</head>
+
+<body>
+<h1>5xx Server Error</h1>
+</body>
+
+</html>
+
+[2026-11-10 17:12:55] 📦 Processing queue item: 01_lyric_choo_lo_the_local_train.json
+[2026-11-10 17:12:55] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/lyric-choo-lo/output/film_choo_lo_lyric.mp4
+[2026-11-10 17:13:31] ✅ Reel posted successfully: https://www.instagram.com/reel/Dfj016pMm5S/
+[2026-11-10 17:13:31] 📁 Archived record to: 2026-11-10_01_lyric_choo_lo_the_local_train.json
+[2026-11-10 17:13:31] 📊 Remaining queued items: 1

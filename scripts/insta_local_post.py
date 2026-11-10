@@ -109,14 +109,31 @@ def upload_reel(cl, video_path, caption="", thumbnail_path=None):
             "#whatif #survival #animation #scifi #viralreels #cartoon #reels"
         )
 
-    print(f"\n🚀 Uploading Reel: {video_p.name} ({video_p.stat().st_size / (1024*1024):.2f} MB)...")
-    print("⏳ Processing and optimizing on Instagram servers (this takes 15-40 seconds)...")
+    max_retries = 3
+    media = None
+    last_err = None
 
-    media = cl.clip_upload(
-        path=video_p,
-        caption=caption,
-        thumbnail=thumb_p
-    )
+    for attempt in range(1, max_retries + 1):
+        try:
+            print(f"\n🚀 Uploading Reel (Attempt {attempt}/{max_retries}): {video_p.name} ({video_p.stat().st_size / (1024*1024):.2f} MB)...")
+            print("⏳ Processing and optimizing on Instagram servers (this takes 15-40 seconds)...")
+            media = cl.clip_upload(
+                path=video_p,
+                caption=caption,
+                thumbnail=thumb_p
+            )
+            if media:
+                break
+        except Exception as e:
+            last_err = e
+            print(f"⚠️ Upload attempt {attempt} failed: {e}")
+            if attempt < max_retries:
+                wait_s = attempt * 10
+                print(f"⏳ Waiting {wait_s}s before retry...")
+                time.sleep(wait_s)
+    
+    if not media:
+        raise last_err
 
     reel_url = f"https://www.instagram.com/reel/{media.code}/"
     print("\n" + "="*50)
