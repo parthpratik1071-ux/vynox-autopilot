@@ -8,6 +8,7 @@ __pycache__/
 autopilot-work/
 
 # Render cache & temp media
+projects/reference_reels_analysis/
 projects/**/cache/
 projects/**/tmp_*/
 projects/**/audio_*/
@@ -15,6 +16,7 @@ projects/**/audio_*/
 *.pcm
 *.log
 !projects/daily_dispatcher.log
+!projects/trend_producer.log
 
 # Sensitive local sessions
 insta_session.json
