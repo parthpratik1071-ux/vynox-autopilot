@@ -12,8 +12,8 @@ ASSETS_DIR = PROJECT_DIR / "assets"
 OUT_DIR = PROJECT_DIR / "output"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-FFMPEG = "/home/pratik/.gemini/antigravity-ide/bin/ffmpeg"
-FFPROBE = "/home/pratik/.gemini/antigravity-ide/bin/ffprobe"
+FFMPEG = "/home/pratik/.local/bin/ffmpeg"
+FFPROBE = "/home/pratik/.local/bin/ffprobe"
 
 def sec_to_ass(s):
     h = int(s // 3600)
@@ -76,7 +76,7 @@ cmd_audio = [
     f"[2:a]adelay=200|200[sfx1];"
     f"[3:a]adelay=8200|8200[sfx2];"
     f"[4:a]adelay=15500|15500[sfx3];"
-    f"[v][b][sfx1][sfx2][sfx3]amix=inputs=5:duration=first[a]",
+    f"[v][b][sfx1][sfx2][sfx3]amix=inputs=5:duration=first:normalize=0,loudnorm=I=-14:TP=-1.0:LRA=9[a]",
     "-map", "[a]",
     "-t", str(TOTAL_DUR),
     str(master_audio)
@@ -95,14 +95,14 @@ ass_lines = [
     "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    "Style: Default,Noto Sans Devanagari,54,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0.5,0,1,5.0,3.0,2,50,50,340,1",
+    "Style: Default,Noto Sans Devanagari,54,&H00FFFFFF,&H000000FF,&H00000000,&HA0000000,-1,0,0,0,100,100,0,0,1,5.0,3.0,2,50,50,340,1",
     "",
     "[Events]",
     "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     f"Dialogue: 0,{sec_to_ass(0.30)},{sec_to_ass(8.00)},Default,,0,0,0,,{{\\c&H0000D7FF&}}नासा से 1500 साल पहले...{{\\c&H00FFFFFF&}}\\Nउज्जैन में एक ऋषि ने केवल छड़ी और रेत से ग्रहों की चाल नाप दी थी!\\N{{\\fs34\\c&H00E0E0E0&}}1,500 years before NASA, he mapped planetary orbits with sand!",
     f"Dialogue: 0,{sec_to_ass(8.15)},{sec_to_ass(15.05)},Default,,0,0,0,,आर्यभट ने बिना कंप्यूटर के...\\N{{\\c&H0000D7FF&}}पृथ्वी की परिधि{{\\c&H00FFFFFF&}} और ग्रहों की कक्षा की सटीक गणना कर दी थी!\\N{{\\fs34\\c&H00E0E0E0&}}Aryabhata calculated Earth's circumference without any computers!",
     f"Dialogue: 0,{sec_to_ass(15.20)},{sec_to_ass(22.40)},Default,,0,0,0,,जब दुनिया ग्रहण से डरती थी...\\Nतब उन्होंने साबित किया कि {{\\c&H0033FF33&}}ये केवल पृथ्वी की परछाई है!{{\\c&H00FFFFFF&}}\\N{{\\fs34\\c&H00E0E0E0&}}He proved eclipses are merely the Earth's spherical shadow!",
-    f"Dialogue: 0,{sec_to_ass(22.55)},{sec_to_ass(TOTAL_DUR-0.20)},Default,,0,0,0,,ये है हमारे भारत का गौरवशाली विज्ञान!\\N{{\\c&H0000D7FF&}}✨ क्या आप इस प्राचीन प्रतिभा को जानते थे? 👇{{\\c&H00FFFFFF&}}\\N{{\\fs34\\c&H00E0E0E0&}}Ancient Indian astronomy. Did you know about this genius?"
+    f"Dialogue: 0,{sec_to_ass(22.55)},{sec_to_ass(TOTAL_DUR-0.20)},Default,,0,0,0,,ये है हमारे भारत का गौरवशाली विज्ञान!\\N{{\\c&H0000D7FF&}}क्या आप इस प्राचीन प्रतिभा को जानते थे?{{\\c&H00FFFFFF&}}\\N{{\\fs34\\c&H00E0E0E0&}}Ancient Indian astronomy. Did you know about this genius?"
 ]
 
 ass_file = OUT_DIR / "subtitles.ass"
@@ -180,6 +180,7 @@ cmd_final = [
     "-c:v", "libx264", "-preset", "slow", "-crf", "17",
     "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
     "-c:a", "aac", "-b:a", "256k",
+    "-movflags", "+faststart",
     "-shortest",
     str(final_film)
 ]

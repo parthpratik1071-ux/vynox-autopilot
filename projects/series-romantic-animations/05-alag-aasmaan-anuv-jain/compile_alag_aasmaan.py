@@ -146,8 +146,10 @@ subprocess.run([
     "-i", str(concat_mp4),
     "-i", str(audio_file),
     "-vf", f"ass={ass_file.resolve()}",
+    "-af", "volume=2.0dB,alimiter=limit=0.95:attack=5:release=60",
     "-c:v", "libx264", "-preset", "slow", "-crf", "17",
     "-c:a", "aac", "-b:a", "256k",
+    "-movflags", "+faststart",
     "-shortest",
     str(final_mp4)
 ], check=True)
