@@ -13,9 +13,17 @@ Usage:
 
 import sys
 import os
+import json
+import re
 import time
 import getpass
 import argparse
+import subprocess
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime
+from types import SimpleNamespace
 from pathlib import Path
 from instagrapi import Client
 from instagrapi.exceptions import (
@@ -28,6 +36,7 @@ from instagrapi.exceptions import (
 
 SESSION_DIR = Path.home() / ".config" / "stickman_video_director"
 DEFAULT_SESSION_FILE = SESSION_DIR / "insta_session.json"
+GRAPH_API_BASE = "https://graph.facebook.com/v21.0"
 
 
 def is_restriction_error(exc: Exception) -> bool:
@@ -49,10 +58,157 @@ def is_restriction_error(exc: Exception) -> bool:
     )
     return any(m in name or m in msg for m in markers)
 
+
+def _derive_public_media_url(local_path: Path) -> str | None:
+    """Builds a public raw.githubusercontent.com URL for repo-tracked media files."""
+    repo_root = Path(__file__).resolve().parent.parent
+    try:
+        rel = local_path.resolve().relative_to(repo_root.resolve()).as_posix()
+    except ValueError:
+        return None
+
+    base = os.environ.get("PUBLIC_MEDIA_BASE_URL", "").strip().rstrip("/")
+    if base:
+        return f"{base}/{urllib.parse.quote(rel)}"
+
+    try:
+        remote = subprocess.check_output(
+            ["git", "remote", "get-url", "origin"], cwd=str(repo_root), text=True
+        ).strip()
+        m = re.search(r"github\.com[:/]([^/]+/[^/.]+?)(?:\.git)?$", remote)
+        if m:
+            return f"https://raw.githubusercontent.com/{m.group(1)}/main/{urllib.parse.quote(rel)}"
+    except Exception:
+        pass
+    return None
+
+
+class OfficialGraphClient:
+    """
+    Zero-ban-risk Meta Official Instagram Graph API v21.0 client.
+    Mirrors the subset of `instagrapi.Client` methods used by daily_dispatcher & reels_booster.
+    Requires a Professional (Creator/Business) account + INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID.
+    """
+
+    def __init__(self, access_token: str, ig_user_id: str):
+        self.access_token = access_token.strip()
+        self.user_id = str(ig_user_id).strip()
+        self.is_official_graph = True
+
+    def _request(self, path: str, params: dict | None = None, method: str = "GET") -> dict:
+        query = dict(params or {})
+        query["access_token"] = self.access_token
+        encoded = urllib.parse.urlencode(query)
+        url = f"{GRAPH_API_BASE}/{path.lstrip('/')}"
+        if method == "GET":
+            req = urllib.request.Request(f"{url}?{encoded}", method="GET")
+        else:
+            req = urllib.request.Request(url, data=encoded.encode(), method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode())
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode(errors="ignore")
+            raise RuntimeError(f"Graph API {e.code}: {detail}") from e
+
+    def account_info(self):
+        info = self._request(self.user_id, {"fields": "id,username"})
+        return SimpleNamespace(pk=info.get("id", self.user_id), username=info.get("username", "unknown"))
+
+    def user_medias(self, uid: str, amount: int = 10) -> list:
+        res = self._request(
+            f"{self.user_id}/media",
+            {"fields": "id,caption,permalink,timestamp,like_count,comments_count,media_type", "limit": amount},
+        )
+        items = []
+        for row in res.get("data", []):
+            code_match = re.search(r"/(?:reel|p)/([^/]+)/", row.get("permalink", ""))
+            taken_raw = row.get("timestamp", "")
+            try:
+                taken_at = datetime.fromisoformat(taken_raw.replace("Z", "+00:00")) if taken_raw else None
+            except Exception:
+                taken_at = None
+            items.append(SimpleNamespace(
+                pk=row.get("id"),
+                code=code_match.group(1) if code_match else "",
+                caption_text=row.get("caption", ""),
+                taken_at=taken_at,
+                like_count=row.get("like_count", 0),
+                comment_count=row.get("comments_count", 0),
+                play_count=0,
+            ))
+        return items
+
+    def media_comments(self, media_id: str, amount: int = 10) -> list:
+        res = self._request(f"{media_id}/comments", {"fields": "id,text,username,timestamp", "limit": amount})
+        return [
+            SimpleNamespace(
+                pk=c.get("id"),
+                user_id=c.get("username", ""),
+                user=SimpleNamespace(username=c.get("username", "")),
+                text=c.get("text", ""),
+                has_liked_comment=True,  # Graph API does not expose comment likes
+            )
+            for c in res.get("data", [])
+        ]
+
+    def media_comment(self, media_id: str, text: str):
+        res = self._request(f"{media_id}/comments", {"message": text}, method="POST")
+        return SimpleNamespace(pk=res.get("id"))
+
+    def comment_pin(self, comment_pk: str):
+        # Not exposed on Graph API; ignore cleanly so booster proceeds
+        return None
+
+    def comment_like(self, comment_pk: str):
+        return None
+
+    def clip_upload(self, path: Path, caption: str, thumbnail: Path | None = None):
+        video_url = _derive_public_media_url(Path(path))
+        if not video_url:
+            raise RuntimeError("Official Graph API upload requires a repo-tracked file or PUBLIC_MEDIA_BASE_URL.")
+        container_params = {
+            "media_type": "REELS",
+            "video_url": video_url,
+            "caption": caption,
+            "share_to_feed": "true",
+        }
+        if thumbnail:
+            thumb_url = _derive_public_media_url(Path(thumbnail))
+            if thumb_url:
+                container_params["cover_url"] = thumb_url
+
+        container = self._request(f"{self.user_id}/media", container_params, method="POST")
+        cid = container["id"]
+        status = None
+        for _ in range(30):
+            status = self._request(cid, {"fields": "status_code,status"}).get("status_code")
+            if status == "FINISHED":
+                break
+            if status in ("ERROR", "EXPIRED"):
+                raise RuntimeError(f"Graph API container {cid} failed with status={status}")
+            time.sleep(5)
+        if status != "FINISHED":
+            raise RuntimeError(f"Graph API container {cid} timed out with status={status}")
+
+        pub = self._request(f"{self.user_id}/media_publish", {"creation_id": cid}, method="POST")
+        media_id = pub["id"]
+        meta = self._request(media_id, {"fields": "id,permalink"})
+        m = re.search(r"/(?:reel|p)/([^/]+)/", meta.get("permalink", ""))
+        return SimpleNamespace(pk=media_id, code=m.group(1) if m else str(media_id))
+
+
 def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
     """
-    Initializes and authenticates the Instagram client using saved session or user credentials.
+    Initializes and authenticates the Instagram client.
+    Automatically uses Meta Official Instagram Graph API when INSTA_GRAPH_ACCESS_TOKEN
+    and INSTA_IG_USER_ID are configured, falling back to `instagrapi` session auth.
     """
+    graph_token = os.environ.get("INSTA_GRAPH_ACCESS_TOKEN", "").strip()
+    graph_uid = os.environ.get("INSTA_IG_USER_ID", "").strip()
+    if graph_token and graph_uid:
+        print("🏛️ Using Official Meta Instagram Graph API v21.0 (Zero-Ban Engine)!")
+        return OfficialGraphClient(graph_token, graph_uid)
     SESSION_DIR.mkdir(parents=True, exist_ok=True)
     cl = Client()
     # Emulate modern mobile device settings

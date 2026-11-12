@@ -76,6 +76,8 @@ jobs:
           INSTA_USERNAME: ${{ secrets.INSTA_USERNAME }}
           INSTA_PASSWORD: ${{ secrets.INSTA_PASSWORD }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          INSTA_GRAPH_ACCESS_TOKEN: ${{ secrets.INSTA_GRAPH_ACCESS_TOKEN }}
+          INSTA_IG_USER_ID: ${{ secrets.INSTA_IG_USER_ID }}
         run: |
           ARGS="--max-likes 5"
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -88,7 +90,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add projects/reels_boosted.json projects/booster_cooldown.json projects/reel_analytics.json projects/fan_requests.json || true
+          git add projects/reels_boosted.json projects/booster_cooldown.json projects/reel_analytics.json projects/fan_requests.json projects/hook_leaderboard.json || true
           if ! git diff --cached --quiet; then
             git commit -m "chore(booster): update booster state, analytics & shield [skip ci]"
             git pull --rebase origin main || true
