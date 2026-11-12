@@ -115,6 +115,19 @@ class OfficialGraphClient:
         info = self._request(self.user_id, {"fields": "id,username"})
         return SimpleNamespace(pk=info.get("id", self.user_id), username=info.get("username", "unknown"))
 
+    def _fetch_reel_plays(self, media_id: str) -> int:
+        """Fetches Reel play/view count via Graph API insights, falling back to 0."""
+        if not media_id:
+            return 0
+        for metric in ("plays", "views"):
+            try:
+                ins = self._request(f"{media_id}/insights", {"metric": metric})
+                values = (ins.get("data") or [{}])[0].get("values") or [{}]
+                return int(values[0].get("value", 0) or 0)
+            except Exception:
+                continue
+        return 0
+
     def user_medias(self, uid: str, amount: int = 10) -> list:
         res = self._request(
             f"{self.user_id}/media",
@@ -128,14 +141,15 @@ class OfficialGraphClient:
                 taken_at = datetime.fromisoformat(taken_raw.replace("Z", "+00:00")) if taken_raw else None
             except Exception:
                 taken_at = None
+            media_id = row.get("id")
             items.append(SimpleNamespace(
-                pk=row.get("id"),
+                pk=media_id,
                 code=code_match.group(1) if code_match else "",
                 caption_text=row.get("caption", ""),
                 taken_at=taken_at,
                 like_count=row.get("like_count", 0),
                 comment_count=row.get("comments_count", 0),
-                play_count=0,
+                play_count=self._fetch_reel_plays(str(media_id or "")),
             ))
         return items
 
@@ -198,12 +212,13 @@ class OfficialGraphClient:
         return SimpleNamespace(pk=media_id, code=m.group(1) if m else str(media_id))
 
 
-def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
+def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None, interactive: bool = True):
     """
     Initializes and authenticates the Instagram client.
     Automatically uses Meta Official Instagram Graph API when INSTA_GRAPH_ACCESS_TOKEN
     and INSTA_IG_USER_ID are configured, falling back to `instagrapi` session auth.
     """
+    allow_prompt = interactive and sys.stdin.isatty()
     graph_token = os.environ.get("INSTA_GRAPH_ACCESS_TOKEN", "").strip()
     graph_uid = os.environ.get("INSTA_IG_USER_ID", "").strip()
     if graph_token and graph_uid:
@@ -227,7 +242,7 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
             print("⚠️ Saved session is expired (LoginRequired). Re-authenticating...")
         except Exception as e:
             if is_restriction_error(e):
-                if not sys.stdin.isatty():
+                if not allow_prompt:
                     raise RuntimeError(f"❌ Instagram session blocked/challenged ({type(e).__name__}): {e}")
                 print(f"⚠️ Instagram challenge/restriction detected ({type(e).__name__}: {e}). Re-authenticating...")
             elif getattr(cl, "user_id", None):
@@ -242,11 +257,11 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
     pword = password or os.environ.get("INSTA_PASSWORD")
 
     if not session_loaded and not (uname and pword):
-        if not sys.stdin.isatty():
+        if not allow_prompt:
             raise RuntimeError(
-                "❌ Instagram session is invalid or missing, and no credentials were provided in CI.\n"
-                "👉 Please ensure your INSTA_SESSION_JSON secret is correctly configured in your GitHub repository secrets:\n"
-                "   Repo Settings -> Secrets and variables -> Actions -> INSTA_SESSION_JSON"
+                "❌ Instagram session is invalid or missing, and no credentials were provided.\n"
+                "👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, "
+                "set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update INSTA_SESSION_JSON in GitHub Secrets."
             )
         if not uname:
             uname = input("Instagram Username: ").strip()
@@ -257,13 +272,13 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
     try:
         cl.login(uname, pword)
     except TwoFactorRequired:
-        if not sys.stdin.isatty():
+        if not allow_prompt:
             raise RuntimeError("❌ Two-Factor Authentication (2FA) required; cannot prompt in non-interactive mode.")
         print("🔐 Two-Factor Authentication (2FA) is enabled on this account.")
         code = input("Enter 2FA Code (from Authenticator App or SMS): ").strip()
         cl.login(uname, pword, verification_code=code)
     except ChallengeRequired:
-        if not sys.stdin.isatty():
+        if not allow_prompt:
             raise RuntimeError("❌ Instagram security challenge required; resolve in official app and update INSTA_SESSION_JSON.")
         print("⚠️ Instagram requested a security challenge.")
         code = input("Enter the security code sent to your Email/SMS: ").strip()

@@ -180,7 +180,7 @@ def generate_smart_hook(caption: str, use_ai: bool = True, leaderboard_file: Pat
             pass
 
     pool = MOOD_HOOKS[niche][1] if niche in MOOD_HOOKS else DEFAULT_HOOKS
-    if winners and random.random() < 0.75 and winners[0]["best_hook"] in pool:
+    if winners and random.random() < 0.75:
         return winners[0]["best_hook"], f"winner:{niche}"
     return random.choice(pool), f"template:{niche}"
 
@@ -272,18 +272,27 @@ class ReelsBooster:
             print(f"🛡️ [Ban-Shield] Restriction signal in {context}; paused until {until.strftime('%Y-%m-%d %H:%M IST')}.")
         return True
 
-    def _update_leaderboard(self, strategy_key: str, niche: str, hook_text: str, eng_rate: float, views: int):
+    def _update_leaderboard(self, strategy_key: str, niche: str, hook_text: str, eng_rate: float, views: int, media_id: str = ""):
         if not strategy_key:
             return
         board = _load_json(self.leaderboard_file, {})
         if not isinstance(board, dict):
             board = {}
         rec = board.get(strategy_key, {"niche": niche, "runs": 0, "avg_engagement_pct": 0.0, "best_views": 0, "best_hook": ""})
-        runs = int(rec.get("runs", 0))
-        prev_avg = float(rec.get("avg_engagement_pct", 0.0))
         rec["niche"] = niche
-        rec["runs"] = runs + 1
-        rec["avg_engagement_pct"] = round(((prev_avg * runs) + eng_rate) / (runs + 1), 2)
+        if media_id:
+            scores = rec.get("media_scores")
+            if not isinstance(scores, dict):
+                scores = {}
+            scores[str(media_id)] = float(eng_rate)
+            rec["media_scores"] = scores
+            rec["runs"] = len(scores)
+            rec["avg_engagement_pct"] = round(sum(scores.values()) / len(scores), 2)
+        else:
+            runs = int(rec.get("runs", 0))
+            prev_avg = float(rec.get("avg_engagement_pct", 0.0))
+            rec["runs"] = runs + 1
+            rec["avg_engagement_pct"] = round(((prev_avg * runs) + eng_rate) / (runs + 1), 2)
         if views >= int(rec.get("best_views", 0)) or not rec.get("best_hook"):
             rec["best_views"] = views
             if hook_text:
@@ -322,7 +331,7 @@ class ReelsBooster:
             entry["hook_text"] = eff_hook
         analytics[media_id] = entry
         _save_json(self.analytics_file, analytics)
-        self._update_leaderboard(eff_source, niche, eff_hook, eng_rate, views)
+        self._update_leaderboard(eff_source, niche, eff_hook, eng_rate, views, media_id=media_id)
         print(f"📡 [Viral-Radar] {tier} | views={views:,} likes={likes:,} comments={comment_count} ({eng_rate}% eng, niche={niche})")
 
         new_reqs = extract_fan_requests(comments, own_user_id)
@@ -633,6 +642,14 @@ def print_status_board():
     print("=" * 56 + "\n")
 
 
+def _story_card_from_json(json_path: Path) -> Path:
+    """Resolves a queued/archived Reel JSON to its cover and renders a Story card."""
+    meta = _load_json(json_path, {})
+    cover_p = BASE_DIR / str(meta.get("cover_path", "")).split("stickman-video-director/")[-1]
+    title = meta.get("title", json_path.stem)
+    return generate_story_card(cover_p, title)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Standalone Vynox Viral Intelligence & Reels Booster (@vynox_00000)")
     parser.add_argument("--dry-run", action="store_true", help="Inspect without commenting, liking, or saving cooldowns")
@@ -640,7 +657,7 @@ def main():
     parser.add_argument("--ignore-sleep", action="store_true", help="Run even during 3 AM - 7 AM IST sleep hours")
     parser.add_argument("--status", action="store_true", help="Show offline Viral Radar, queue, requests, and Ban Shield state")
     parser.add_argument("--preview-queue", action="store_true", help="Audit staged queued Reels offline and preview generated hooks")
-    parser.add_argument("--story-card", nargs="?", const="queue_0", help="Generate a 1080x1920 Story promo card from a cover or queue JSON")
+    parser.add_argument("--story-card", nargs="?", const="queue_0", help="Generate a 1080x1920 Story promo card ('queue_0', 'all', JSON path, or cover image)")
     parser.add_argument("--cockpit", action="store_true", help="Generate interactive HTML studio cockpit at projects/vynox_cockpit.html")
     parser.add_argument("--clear-cooldown", action="store_true", help="Clear active Ban Shield cooldown after verifying account")
     args = parser.parse_args()
@@ -663,22 +680,26 @@ def main():
         return
 
     if args.story_card:
+        qfiles = sorted((PROJECTS_DIR / "queue").glob("*.json"))
+        if args.story_card == "all":
+            if not qfiles:
+                print("❌ Queue is empty; nothing to render.")
+                sys.exit(1)
+            for qf in qfiles:
+                out = _story_card_from_json(qf)
+                print(f"🎨 Generated 1080x1920 Story Promo Card ({qf.name}): {out}")
+            return
         if args.story_card == "queue_0":
-            qfiles = sorted((PROJECTS_DIR / "queue").glob("*.json"))
             if not qfiles:
                 print("❌ Queue is empty; pass a cover image or Reel JSON path.")
                 sys.exit(1)
-            meta = _load_json(qfiles[0], {})
-            cover_p = BASE_DIR / str(meta.get("cover_path", "")).split("stickman-video-director/")[-1]
-            title = meta.get("title", qfiles[0].stem)
+            out = _story_card_from_json(qfiles[0])
         elif args.story_card.endswith(".json"):
-            meta = _load_json(Path(args.story_card), {})
-            cover_p = BASE_DIR / str(meta.get("cover_path", "")).split("stickman-video-director/")[-1]
-            title = meta.get("title", Path(args.story_card).stem)
+            out = _story_card_from_json(Path(args.story_card))
         else:
             cover_p = Path(args.story_card)
             title = cover_p.parent.parent.name.replace("-", " ").title()
-        out = generate_story_card(cover_p, title)
+            out = generate_story_card(cover_p, title)
         print(f"🎨 Generated 1080x1920 Story Promo Card: {out}")
         return
 
@@ -686,7 +707,7 @@ def main():
         return
 
     try:
-        cl = insta_local_post.get_client()
+        cl = insta_local_post.get_client(interactive=sys.stdin.isatty() and not args.dry_run)
     except Exception as e:
         print(f"⚠️ Instagram client init failed: {e}")
         reels_booster._trip_shield_if_restricted(e, "client_init", dry_run=args.dry_run)
@@ -700,6 +721,9 @@ def main():
     )
     if not ok:
         sys.exit(1)
+    if not args.dry_run:
+        cockpit_path = generate_cockpit_html()
+        print(f"🖥️ Refreshed Vynox Cyber Cockpit: {cockpit_path}")
 
 
 if __name__ == "__main__":

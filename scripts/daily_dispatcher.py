@@ -35,6 +35,36 @@ def parse_dt(dt_str):
     except Exception:
         return None
 
+def _sync_local_state_to_remote():
+    """Commits and pushes queue/archive state after a local dispatch so CI stays synchronized."""
+    import subprocess
+
+    targets = ["projects/queue/", "projects/archive/", "projects/daily_dispatcher.log"]
+    for extra in ("projects/duplicate_registry.json", "projects/vynox_cockpit.html"):
+        if (BASE_DIR / extra).exists():
+            targets.append(extra)
+
+    try:
+        subprocess.run(["git", "add", *targets], cwd=str(BASE_DIR), check=False, capture_output=True)
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=str(BASE_DIR), check=False)
+        if diff.returncode == 0:
+            return
+        subprocess.run(
+            ["git", "commit", "-m", "chore: auto-sync Reel dispatch state [skip ci]"],
+            cwd=str(BASE_DIR),
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(["git", "pull", "--rebase", "--autostash", "origin", "main"], cwd=str(BASE_DIR), check=False, capture_output=True)
+        res = subprocess.run(["git", "push", "origin", "main"], cwd=str(BASE_DIR), check=False, capture_output=True)
+        if res.returncode == 0:
+            log("☁️ Synced queue and archive state to origin/main.")
+        else:
+            log("⚠️ Local dispatch committed; git push skipped/failed.")
+    except Exception as e:
+        log(f"⚠️ Remote state sync skipped: {e}")
+
+
 def dispatch_next(force=False):
     QUEUE_DIR.mkdir(parents=True, exist_ok=True)
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
@@ -190,6 +220,8 @@ def dispatch_next(force=False):
     log(f"📁 Archived record to: {archive_dest.name}")
     remaining = len(list(QUEUE_DIR.glob("*.json")))
     log(f"📊 Remaining queued items: {remaining}")
+    if not is_ci:
+        _sync_local_state_to_remote()
     return True
 
 if __name__ == "__main__":
