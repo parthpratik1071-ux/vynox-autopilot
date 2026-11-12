@@ -1,101 +1,194 @@
 #!/usr/bin/env python3
 """
-NexoraAI Reels Algorithm Booster Engine (for @vynox_00000)
-Supercharges Instagram engagement during the golden 30-minute post window:
-1. Auto-pins an engaging discussion hook as the first comment on new Reels
-2. Auto-likes fan comments to double notification engagement
-3. Replies with creator appreciation emojis to multiply comment velocity
+Vynox Reels Engagement Booster Engine (standalone, @vynox_00000 only)
+Safe, low-frequency post-upload engagement helper:
+1. Drops and pins one niche discussion hook on a newly published Reel (< 24h old)
+2. Persists boosted Reel IDs to `projects/reels_boosted.json` to prevent duplicate comments
+3. Likes a small batch of recent fan comments with human-like pacing and sleep-hour guards
 """
 
+import argparse
 import json
-import time
 import random
+import sys
+import time
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 BOOSTED_FILE = BASE_DIR / "projects" / "reels_boosted.json"
 BOOSTED_FILE.parent.mkdir(parents=True, exist_ok=True)
+IST = timezone(timedelta(hours=5, minutes=30))
 
 HOOK_COMMENTS = [
-    "Rate this animation from 1 to 10! 👇🔥",
-    "Which part caught you off guard? Let me know below! 💀🎬",
-    "Can you survive this scenario? Tell me your plan in the comments! 👇",
-    "Next stickman scenario dropping tomorrow! Comment what challenge we should do next! 🚀🔥",
-    "Watch till the end... would you make the same choice? 🤔👇"
+    "Which line hit the hardest? Drop it below! 🖤✨",
+    "Tag someone who needs to see this edit tonight 🥀💫",
+    "Which song should we animate next? Comment your track! 🎧👇",
+    "Late-night feels hit different... rate this edit 1–10 🌙🔥",
+    "Save this Reel for your late-night playlist ✨🎧",
 ]
 
-CREATOR_COMMENT_REACTIONS = [
-    "❤️🔥", "🙌🎬", "Haha thanks! 🔥", "Appreciate you watching! ❤️", "🔥🔥"
-]
+
+def _is_restriction_error(exc: Exception) -> bool:
+    """Returns True when Instagram signals a login, challenge, or action block."""
+    name = type(exc).__name__.lower()
+    msg = str(exc).lower()
+    markers = (
+        "challengerequired",
+        "feedbackrequired",
+        "loginrequired",
+        "pleasewaitfewminutes",
+        "challenge_required",
+        "feedback_required",
+        "login_required",
+        "restrict",
+        "try again later",
+        "spam",
+        "checkpoint",
+    )
+    return any(m in name or m in msg for m in markers)
+
+
+def _media_age_hours(media) -> float | None:
+    """Returns the age of an Instagram media item in hours, or None if unavailable."""
+    taken_at = getattr(media, "taken_at", None)
+    if not isinstance(taken_at, datetime):
+        return None
+    if taken_at.tzinfo is None:
+        taken_at = taken_at.replace(tzinfo=timezone.utc)
+    return (datetime.now(timezone.utc) - taken_at.astimezone(timezone.utc)).total_seconds() / 3600.0
+
 
 class ReelsBooster:
-    def __init__(self):
+    """Manages one-time engagement hooks and throttled comment likes for @vynox_00000."""
+
+    def __init__(self, boosted_file: Path = BOOSTED_FILE):
+        self.boosted_file = boosted_file
         self.boosted = self.load_boosted()
 
-    def load_boosted(self) -> set:
-        if BOOSTED_FILE.exists():
+    def load_boosted(self) -> set[str]:
+        if self.boosted_file.exists():
             try:
-                with open(BOOSTED_FILE, "r") as f:
-                    return set(json.load(f))
+                with open(self.boosted_file, "r") as f:
+                    return {str(item) for item in json.load(f)}
             except Exception:
                 return set()
         return set()
 
     def save_boosted(self):
-        with open(BOOSTED_FILE, "w") as f:
-            json.dump(list(self.boosted)[-500:], f, indent=2)
+        self.boosted_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.boosted_file, "w") as f:
+            json.dump(sorted(self.boosted)[-500:], f, indent=2)
+            f.write("\n")
 
-    def boost_latest_reel(self, cl, dry_run=False):
+    def boost_latest_reel(self, cl, dry_run: bool = False, max_likes: int = 5, ignore_sleep: bool = False) -> bool:
         """
-        Inspects the latest Reel posted by the account and boosts early engagement.
+        Inspects the latest Reel on @vynox_00000, posts at most one pinned hook
+        for newly posted Reels (<24h), and likes up to `max_likes` fan comments.
+        Returns True if the check completed cleanly, False if aborted on restriction/error.
         """
+        now_ist = datetime.now(IST)
+        if not ignore_sleep and (3 <= now_ist.hour < 7):
+            print(f"🌙 [Reels-Booster] Sleep window ({now_ist.strftime('%H:%M')} IST). Skipping engagement.")
+            return True
+
         try:
             my_user_id = cl.user_id
-            medias = cl.user_medias(my_user_id, amount=3)
+            medias = cl.user_medias(my_user_id, amount=1)
             if not medias:
-                return
+                print("ℹ️ [Reels-Booster] No medias found on account.")
+                return True
 
             latest_media = medias[0]
             media_id = str(latest_media.pk)
+            age_hours = _media_age_hours(latest_media)
 
-            # 1. Check if first pinned hook needs to be dropped
+            # 1. Drop one pinned hook comment only if never boosted and posted within 24h
             if media_id not in self.boosted:
-                hook = random.choice(HOOK_COMMENTS)
-                print(f"🎬 [Reels-Booster] Dropping pinned engagement hook on Reel {media_id}: \"{hook}\"")
-                if not dry_run:
-                    try:
-                        comment = cl.media_comment(media_id, hook)
-                        time.sleep(random.uniform(2.0, 3.5))
-                        try:
-                            cl.comment_pin(comment.pk)
-                            print(f"📌 Pinned engagement comment {comment.pk} to top of Reel!")
-                        except Exception:
-                            pass
+                if age_hours is not None and age_hours > 24.0:
+                    print(f"⏭️ [Reels-Booster] Latest Reel {media_id} is {age_hours:.1f}h old (>24h); marking seen without commenting.")
+                    if not dry_run:
                         self.boosted.add(media_id)
                         self.save_boosted()
-                    except Exception as e:
-                        print(f"⚠️ Failed to post booster comment: {e}")
-
-            # 2. Sweep recent fan comments and engage
-            try:
-                comments = cl.media_comments(media_id, amount=10)
-                for c in comments:
-                    if str(c.user_id) == str(my_user_id):
-                        continue
-                    # Like fan comment if not already liked
-                    if not getattr(c, "has_liked_comment", False):
-                        if not dry_run:
+                else:
+                    hook = random.choice(HOOK_COMMENTS)
+                    print(f"🎬 [Reels-Booster] Dropping pinned engagement hook on Reel {media_id}: \"{hook}\"")
+                    if not dry_run:
+                        try:
+                            comment = cl.media_comment(media_id, hook)
+                            time.sleep(random.uniform(3.0, 6.0))
                             try:
-                                cl.comment_like(c.pk)
-                                print(f"   ❤️ Liked fan comment from @{c.user.username}")
-                                time.sleep(random.uniform(1.2, 2.5))
+                                cl.comment_pin(comment.pk)
+                                print(f"📌 Pinned engagement comment {comment.pk} to top of Reel!")
                             except Exception:
                                 pass
-            except Exception as e:
-                print(f"⚠️ Comment sweep error: {e}")
+                            self.boosted.add(media_id)
+                            self.save_boosted()
+                        except Exception as e:
+                            print(f"⚠️ Failed to post booster comment: {e}")
+                            if _is_restriction_error(e):
+                                print("🛑 [Reels-Booster] Stopping immediately due to account restriction/challenge signal.")
+                                return False
+            else:
+                print(f"✅ [Reels-Booster] Reel {media_id} already has a boosted hook.")
 
+            # 2. Sweep recent fan comments and like up to max_likes with conservative jitter
+            if max_likes <= 0:
+                return True
+
+            comments = cl.media_comments(media_id, amount=10)
+            likes_done = 0
+            for c in comments:
+                if likes_done >= max_likes:
+                    break
+                if str(c.user_id) == str(my_user_id):
+                    continue
+                if getattr(c, "has_liked_comment", False):
+                    continue
+                if dry_run:
+                    print(f"   [DRY-RUN] Would like comment from @{c.user.username}")
+                    likes_done += 1
+                    continue
+                try:
+                    cl.comment_like(c.pk)
+                    likes_done += 1
+                    print(f"   ❤️ Liked fan comment from @{c.user.username} ({likes_done}/{max_likes})")
+                    time.sleep(random.uniform(3.5, 7.5))
+                except Exception as e:
+                    print(f"⚠️ Comment like skipped: {e}")
+                    if _is_restriction_error(e):
+                        print("🛑 [Reels-Booster] Stopping comment sweep due to account restriction/challenge signal.")
+                        return False
+
+            return True
         except Exception as e:
             print(f"⚠️ Reels booster run error: {e}")
+            return not _is_restriction_error(e)
+
 
 reels_booster = ReelsBooster()
 
+
+def main():
+    parser = argparse.ArgumentParser(description="Standalone Vynox Reels Engagement Booster (@vynox_00000 only)")
+    parser.add_argument("--dry-run", action="store_true", help="Inspect without commenting or liking")
+    parser.add_argument("--max-likes", type=int, default=5, help="Max fan comments to like per run (default: 5)")
+    parser.add_argument("--ignore-sleep", action="store_true", help="Run even during 3 AM - 7 AM IST sleep hours")
+    args = parser.parse_args()
+
+    sys.path.insert(0, str(BASE_DIR / "scripts"))
+    import insta_local_post
+
+    cl = insta_local_post.get_client()
+    ok = reels_booster.boost_latest_reel(
+        cl,
+        dry_run=args.dry_run,
+        max_likes=max(0, args.max_likes),
+        ignore_sleep=args.ignore_sleep,
+    )
+    if not ok:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
