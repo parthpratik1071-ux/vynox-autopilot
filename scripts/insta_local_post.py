@@ -13,6 +13,7 @@ Usage:
 
 import sys
 import os
+import time
 import getpass
 import argparse
 from pathlib import Path
@@ -27,6 +28,26 @@ from instagrapi.exceptions import (
 
 SESSION_DIR = Path.home() / ".config" / "stickman_video_director"
 DEFAULT_SESSION_FILE = SESSION_DIR / "insta_session.json"
+
+
+def is_restriction_error(exc: Exception) -> bool:
+    """Returns True when Instagram signals a login, challenge, or action/restriction block."""
+    name = type(exc).__name__.lower()
+    msg = str(exc).lower()
+    markers = (
+        "challengerequired",
+        "feedbackrequired",
+        "loginrequired",
+        "pleasewaitfewminutes",
+        "challenge_required",
+        "feedback_required",
+        "login_required",
+        "restrict",
+        "try again later",
+        "spam",
+        "checkpoint",
+    )
+    return any(m in name or m in msg for m in markers)
 
 def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
     """
@@ -49,11 +70,16 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
         except LoginRequired:
             print("⚠️ Saved session is expired (LoginRequired). Re-authenticating...")
         except Exception as e:
-            if getattr(cl, "user_id", None):
+            if is_restriction_error(e):
+                if not sys.stdin.isatty():
+                    raise RuntimeError(f"❌ Instagram session blocked/challenged ({type(e).__name__}): {e}")
+                print(f"⚠️ Instagram challenge/restriction detected ({type(e).__name__}: {e}). Re-authenticating...")
+            elif getattr(cl, "user_id", None):
                 print(f"⚠️ Timeline check warning ({e}), but session User ID {cl.user_id} is present. Proceeding with saved session.")
                 session_loaded = True
                 return cl
-            print(f"⚠️ Saved session is expired or invalid ({e}). Re-authenticating...")
+            else:
+                print(f"⚠️ Saved session is expired or invalid ({e}). Re-authenticating...")
 
     # If session not loaded, authenticate with credentials
     uname = username or os.environ.get("INSTA_USERNAME")
@@ -75,10 +101,14 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None):
     try:
         cl.login(uname, pword)
     except TwoFactorRequired:
+        if not sys.stdin.isatty():
+            raise RuntimeError("❌ Two-Factor Authentication (2FA) required; cannot prompt in non-interactive mode.")
         print("🔐 Two-Factor Authentication (2FA) is enabled on this account.")
         code = input("Enter 2FA Code (from Authenticator App or SMS): ").strip()
         cl.login(uname, pword, verification_code=code)
     except ChallengeRequired:
+        if not sys.stdin.isatty():
+            raise RuntimeError("❌ Instagram security challenge required; resolve in official app and update INSTA_SESSION_JSON.")
         print("⚠️ Instagram requested a security challenge.")
         code = input("Enter the security code sent to your Email/SMS: ").strip()
         cl.login(uname, pword, verification_code=code)
@@ -127,6 +157,9 @@ def upload_reel(cl, video_path, caption="", thumbnail_path=None):
         except Exception as e:
             last_err = e
             print(f"⚠️ Upload attempt {attempt} failed: {e}")
+            if is_restriction_error(e):
+                print("🛑 Stopping upload retries immediately due to account restriction/challenge/login error.")
+                raise
             if attempt < max_retries:
                 wait_s = attempt * 10
                 print(f"⏳ Waiting {wait_s}s before retry...")

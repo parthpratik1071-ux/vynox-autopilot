@@ -20,6 +20,18 @@ BOOSTED_FILE = BASE_DIR / "projects" / "reels_boosted.json"
 BOOSTED_FILE.parent.mkdir(parents=True, exist_ok=True)
 IST = timezone(timedelta(hours=5, minutes=30))
 
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+try:
+    from scripts import insta_local_post
+except ImportError:
+    if str(BASE_DIR / "scripts") not in sys.path:
+        sys.path.insert(0, str(BASE_DIR / "scripts"))
+    import insta_local_post
+
+_is_restriction_error = insta_local_post.is_restriction_error
+
 HOOK_COMMENTS = [
     "Which line hit the hardest? Drop it below! 🖤✨",
     "Tag someone who needs to see this edit tonight 🥀💫",
@@ -29,24 +41,11 @@ HOOK_COMMENTS = [
 ]
 
 
-def _is_restriction_error(exc: Exception) -> bool:
-    """Returns True when Instagram signals a login, challenge, or action block."""
-    name = type(exc).__name__.lower()
-    msg = str(exc).lower()
-    markers = (
-        "challengerequired",
-        "feedbackrequired",
-        "loginrequired",
-        "pleasewaitfewminutes",
-        "challenge_required",
-        "feedback_required",
-        "login_required",
-        "restrict",
-        "try again later",
-        "spam",
-        "checkpoint",
-    )
-    return any(m in name or m in msg for m in markers)
+def _comment_author(comment) -> str:
+    """Safely extracts the comment author's username or falls back to user_id."""
+    user = getattr(comment, "user", None)
+    username = getattr(user, "username", None) if user is not None else None
+    return str(username or getattr(comment, "user_id", "unknown"))
 
 
 def _media_age_hours(media) -> float | None:
@@ -146,13 +145,13 @@ class ReelsBooster:
                 if getattr(c, "has_liked_comment", False):
                     continue
                 if dry_run:
-                    print(f"   [DRY-RUN] Would like comment from @{c.user.username}")
+                    print(f"   [DRY-RUN] Would like comment from @{_comment_author(c)}")
                     likes_done += 1
                     continue
                 try:
                     cl.comment_like(c.pk)
                     likes_done += 1
-                    print(f"   ❤️ Liked fan comment from @{c.user.username} ({likes_done}/{max_likes})")
+                    print(f"   ❤️ Liked fan comment from @{_comment_author(c)} ({likes_done}/{max_likes})")
                     time.sleep(random.uniform(3.5, 7.5))
                 except Exception as e:
                     print(f"⚠️ Comment like skipped: {e}")
@@ -175,9 +174,6 @@ def main():
     parser.add_argument("--max-likes", type=int, default=5, help="Max fan comments to like per run (default: 5)")
     parser.add_argument("--ignore-sleep", action="store_true", help="Run even during 3 AM - 7 AM IST sleep hours")
     args = parser.parse_args()
-
-    sys.path.insert(0, str(BASE_DIR / "scripts"))
-    import insta_local_post
 
     cl = insta_local_post.get_client()
     ok = reels_booster.boost_latest_reel(
