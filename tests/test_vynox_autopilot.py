@@ -362,5 +362,36 @@ class TestDailyDispatcherAndTrendProducer(unittest.TestCase):
             self.assertEqual(status_data["code"], "SESSION_EXPIRED")
 
 
+class TestYouTubeUploader(unittest.TestCase):
+    def test_youtube_build_ai_compliant_description(self):
+        import youtube_uploader
+        desc = youtube_uploader.build_ai_compliant_description(
+            song_title="Baarishein",
+            artist="Anuv Jain",
+            custom_desc="Aesthetic monsoon memories.",
+            tags=["#Monsoon", "#Romance"],
+        )
+        self.assertIn("TRANSPARENCY NOTICE", desc)
+        self.assertIn("YouTube Synthetic Content Compliance", desc)
+        self.assertIn("Vynox Autopilot Studio", desc)
+        self.assertIn("Baarishein", desc)
+        self.assertIn("Anuv Jain", desc)
+        self.assertIn("#Shorts", desc)
+        self.assertIn("#AIAnimation", desc)
+
+    def test_youtube_upload_dry_run(self):
+        import youtube_uploader
+        with tempfile.NamedTemporaryFile(suffix=".mp4") as tmp_vid:
+            result = youtube_uploader.upload_short(
+                video_path=tmp_vid.name,
+                title="Sahiba - Crimson Manga Edit",
+                song_title="Sahiba",
+                artist="Jasleen Royal",
+                dry_run=True,
+            )
+            self.assertEqual(result["status"], "dry_run")
+            self.assertIn("#Shorts", result["title"])
+
+
 if __name__ == "__main__":
     unittest.main()

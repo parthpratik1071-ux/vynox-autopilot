@@ -24,6 +24,7 @@ if str(BASE_DIR / "scripts") not in sys.path:
     sys.path.insert(0, str(BASE_DIR / "scripts"))
 import insta_local_post
 import duplicate_guard
+import youtube_uploader
 
 def log(msg):
     timestamp = datetime.datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S")
@@ -252,6 +253,27 @@ def dispatch_next(force=False):
     data["published_at"] = datetime.datetime.now(IST).isoformat()
     data["reel_url"] = reel_url
     data["media_id"] = media.pk
+
+    # Optional cross-post to YouTube Shorts if credentials are configured
+    try:
+        yt_ok, yt_code, yt_info = youtube_uploader.check_auth_health()
+        if yt_ok:
+            log(f"📺 Cross-posting to YouTube Shorts ({yt_info})...")
+            yt_res = youtube_uploader.upload_short(
+                video_path=video_path,
+                title=data.get("title", ""),
+                song_title=data.get("song_title", ""),
+                artist=data.get("artist", ""),
+                description=caption,
+                privacy_status="public",
+            )
+            data["youtube_short_id"] = yt_res.get("id")
+            data["youtube_short_url"] = f"https://youtube.com/shorts/{yt_res.get('id')}"
+            log(f"✅ YouTube Short published: {data['youtube_short_url']}")
+        else:
+            log(f"ℹ️ YouTube Shorts cross-posting skipped ({yt_code})")
+    except Exception as yt_err:
+        log(f"⚠️ YouTube cross-posting warning: {yt_err}")
 
     # Move to archive
     archive_dest = ARCHIVE_DIR / f"{now.date().isoformat()}_{next_file.name}"
