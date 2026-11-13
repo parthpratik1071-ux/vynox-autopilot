@@ -122,3 +122,11 @@
 [2026-11-14 02:12:55] ✅ YouTube Short published: https://youtube.com/shorts/5siMsZTTwvw
 [2026-11-14 02:12:55] 📁 Archived record to: 2026-11-14_04_romantic_baarishein.json
 [2026-11-14 02:12:55] 📊 Remaining queued items: 5
+[2026-11-14 03:30:02] 🤖 Scheduled GitHub Actions trigger detected (03:29 IST). Proceeding to dispatch next queued reel...
+[2026-11-14 03:30:02] 📦 Processing queue item: 04b_crimson_manga_sahiba.json
+[2026-11-14 03:30:02] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/series-romantic-animations/07-sahiba-crimson-manga/output/film_sahiba_crimson_manga.mp4
+[2026-11-14 03:30:59] ✅ Reel posted successfully: https://www.instagram.com/reel/Dfsp1wez7Ek/
+[2026-11-14 03:31:00] 📺 Cross-posting to YouTube Shorts (_void_X (4 subscribers))...
+[2026-11-14 03:31:02] ✅ YouTube Short published: https://youtube.com/shorts/gRjxgqxwdOM
+[2026-11-14 03:31:02] 📁 Archived record to: 2026-11-14_04b_crimson_manga_sahiba.json
+[2026-11-14 03:31:02] 📊 Remaining queued items: 4
