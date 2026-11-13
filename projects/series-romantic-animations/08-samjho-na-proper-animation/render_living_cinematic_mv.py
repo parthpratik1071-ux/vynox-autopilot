@@ -37,23 +37,26 @@ TOTAL_FRAMES = int(DURATION * FPS)
 print(f"🎬 Initializing 4-Shot Living 2D Anime MV Engine ({TOTAL_FRAMES} frames @ {FPS} fps)...")
 
 # -------------------------------------------------------------
-# 1. LOAD & PREPARE 4 CANVASES (1080x1920)
+# 1. LOAD & PREPARE 4 CANVASES (1080x1920) in NATIVE BGR
 # -------------------------------------------------------------
 def load_canvas(path):
-    img = Image.open(path).convert("RGBA")
-    scale = max(WIDTH / img.width, HEIGHT / img.height)
-    nw, nh = int(img.width * scale), int(img.height * scale)
-    resized = img.resize((nw, nh), Image.Resampling.LANCZOS)
-    ox = (nw - WIDTH) // 2
-    oy = (nh - HEIGHT) // 2
-    return np.array(resized.crop((ox, oy, ox + WIDTH, oy + HEIGHT)))
+    img = cv2.imread(str(path))
+    if img is None:
+        raise FileNotFoundError(f"Cannot read image: {path}")
+    ih, iw = img.shape[:2]
+    scale = max(WIDTH / iw, HEIGHT / ih)
+    nw, nh = int(iw * scale), int(ih * scale)
+    resized = cv2.resize(img, (nw, nh), interpolation=cv2.INTER_LANCZOS4)
+    ox = max(0, (nw - WIDTH) // 2)
+    oy = max(0, (nh - HEIGHT) // 2)
+    return resized[oy:oy + HEIGHT, ox:ox + WIDTH].copy()
 
 canvas_s1 = load_canvas(ASSETS_DIR / "scene-1.jpg")
 canvas_s2 = load_canvas(ASSETS_DIR / "scene-2.jpg")
 canvas_s3 = load_canvas(ASSETS_DIR / "scene-3.jpg")
 canvas_s4 = load_canvas(ASSETS_DIR / "scene-4.jpg")
 
-print("✅ Loaded all 4 scene canvases.")
+print("✅ Loaded all 4 scene canvases in native BGR.")
 
 # -------------------------------------------------------------
 # 2. WRITE MASTER ASS SUBTITLES (Lato-Bold, MarginV=540)
@@ -118,7 +121,7 @@ for _ in range(50):
         "radius": random.uniform(1.5, 4.0),
         "base_alpha": random.uniform(140, 240),
         "phase": random.uniform(0, math.pi * 2),
-        "color": random.choice([(255, 230, 170), (255, 245, 200), (220, 240, 255), (255, 210, 130)])
+        "color": random.choice([(80, 210, 255), (100, 230, 255), (120, 240, 255), (70, 190, 255)]) # Warm amber/golden fireflies in BGR
     })
 
 # -------------------------------------------------------------
@@ -159,22 +162,22 @@ def render_shot1(t, f_idx):
     if dt_blink < 0.10:
         b_phase = 1.0 - (dt_blink / 0.10)
         ey_cx, ey_cy = 489, 783
-        skin_bgr = (185, 190, 220)
+        skin_bgr = tuple(int(c) for c in canvas_s1[780:800, 480:500].mean(axis=(0,1)))
         cv2.ellipse(frame, (ey_cx, ey_cy), (7, int(5 * b_phase)), 0, 0, 360, skin_bgr, -1)
-        cv2.line(frame, (ey_cx - 8, ey_cy), (ey_cx + 8, ey_cy), (45, 30, 40), 2)
+        cv2.line(frame, (ey_cx - 8, ey_cy), (ey_cx + 8, ey_cy), (35, 20, 25), 2)
     
     # Twinkling stars
     for sx, sy, r, phase in stars_s1:
         tw = (math.sin(t * 4.0 + phase) + 1.0) * 0.5
         cv2.circle(frame, (int(sx), int(sy)), int(r + tw * 1.5), (255, 250, 220), -1)
     
-    # Fairy light radial bloom
+    # Fairy light radial bloom (warm golden amber in BGR)
     overlay = frame.copy()
     for fx, fy in fairy_lights:
         pulse = (math.sin(t * 3.0 + fx * 0.05) + 1.0) * 0.5
         rad = int(12 + pulse * 8)
-        cv2.circle(overlay, (fx, fy), rad, (150, 215, 255), -1)
-        cv2.circle(frame, (fx, fy), 4, (255, 255, 240), -1)
+        cv2.circle(overlay, (fx, fy), rad, (60, 190, 255), -1)
+        cv2.circle(frame, (fx, fy), 4, (240, 255, 255), -1)
     cv2.addWeighted(overlay, 0.28, frame, 0.72, 0, frame)
     
     # Shooting star at t=4.2s (t=4.0..4.6)
@@ -222,8 +225,9 @@ def render_shot2(t, f_idx):
     if dt_blink < 0.10:
         b_phase = 1.0 - (dt_blink / 0.10)
         ey_cx, ey_cy = 442, 802
-        cv2.ellipse(frame, (ey_cx, ey_cy), (6, int(4 * b_phase)), 0, 0, 360, (170, 175, 205), -1)
-        cv2.line(frame, (ey_cx - 7, ey_cy), (ey_cx + 7, ey_cy), (40, 25, 30), 2)
+        skin_bgr = tuple(int(c) for c in canvas_s2[790:810, 430:450].mean(axis=(0,1)))
+        cv2.ellipse(frame, (ey_cx, ey_cy), (6, int(4 * b_phase)), 0, 0, 360, skin_bgr, -1)
+        cv2.line(frame, (ey_cx - 7, ey_cy), (ey_cx + 7, ey_cy), (30, 20, 25), 2)
         
     # Ambient city light shimmer (bottom Y: 1200..1800)
     shimmer = (math.sin(rel_t * 4.5) + 1.0) * 0.04
@@ -273,10 +277,11 @@ def render_shot4(t, f_idx):
     dt_blink = abs(rel_t - 2.20)
     if dt_blink < 0.11:
         b_phase = 1.0 - (dt_blink / 0.11)
+        skin_bgr = tuple(int(c) for c in canvas_s4[630:650, 500:520].mean(axis=(0,1)))
         # Left eye: (467, 631), Right eye: (571, 634)
         for ex, ey in [(467, 631), (571, 634)]:
-            cv2.ellipse(frame, (ex, ey), (8, int(6 * b_phase)), 0, 0, 360, (200, 195, 225), -1)
-            cv2.line(frame, (ex - 10, ey), (ex + 10, ey), (40, 25, 35), 2)
+            cv2.ellipse(frame, (ex, ey), (8, int(6 * b_phase)), 0, 0, 360, skin_bgr, -1)
+            cv2.line(frame, (ex - 10, ey), (ex + 10, ey), (35, 20, 25), 2)
             
     # Subtle smiling micro-movement (corners of lips relaxing upwards)
     smile_amp = (math.sin(rel_t * 1.5) + 1.0) * 0.5  # 0 to 1

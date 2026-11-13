@@ -35,22 +35,25 @@ TOTAL_FRAMES = int(DURATION * FPS)
 
 print(f"🎬 Initializing Waqt Ki Baatein Living 2D Anime MV ({TOTAL_FRAMES} frames @ {FPS} fps)...")
 
-# 1. LOAD & PREPARE 4 CANVASES (1080x1920)
+# 1. LOAD & PREPARE 4 CANVASES (1080x1920) in NATIVE BGR
 def load_canvas(path):
-    img = Image.open(path).convert("RGBA")
-    scale = max(WIDTH / img.width, HEIGHT / img.height)
-    nw, nh = int(img.width * scale), int(img.height * scale)
-    resized = img.resize((nw, nh), Image.Resampling.LANCZOS)
+    img = cv2.imread(str(path))
+    if img is None:
+        raise FileNotFoundError(f"Cannot read image: {path}")
+    ih, iw = img.shape[:2]
+    scale = max(WIDTH / iw, HEIGHT / ih)
+    nw, nh = int(iw * scale), int(ih * scale)
+    resized = cv2.resize(img, (nw, nh), interpolation=cv2.INTER_LANCZOS4)
     ox = max(0, (nw - WIDTH) // 2)
     oy = max(0, (nh - HEIGHT) // 2)
-    return np.array(resized.crop((ox, oy, ox + WIDTH, oy + HEIGHT)))
+    return resized[oy:oy + HEIGHT, ox:ox + WIDTH].copy()
 
 canvas_s1 = load_canvas(ASSETS_DIR / "scene-1.jpg")
 canvas_s2 = load_canvas(ASSETS_DIR / "scene-2.jpg")
 canvas_s3 = load_canvas(ASSETS_DIR / "scene-3.jpg")
 canvas_s4 = load_canvas(ASSETS_DIR / "scene-4.jpg")
 
-print("✅ Loaded all 4 scene canvases.")
+print("✅ Loaded all 4 scene canvases in native BGR.")
 
 # 2. WRITE MASTER ASS SUBTITLES
 ass_template = """[Script Info]
@@ -138,7 +141,8 @@ def render_shot1(t, f_idx):
     dt_blink = abs(t - 4.20)
     if dt_blink < 0.10:
         b_p = 1.0 - (dt_blink / 0.10)
-        cv2.ellipse(frame, (490, 775), (7, int(5 * b_p)), 0, 0, 360, (180, 185, 215), -1)
+        skin_bgr = tuple(int(c) for c in canvas_s1[765:785, 480:500].mean(axis=(0,1)))
+        cv2.ellipse(frame, (490, 775), (7, int(5 * b_p)), 0, 0, 360, skin_bgr, -1)
         cv2.line(frame, (482, 775), (498, 775), (35, 25, 30), 2)
         
     return apply_handheld_drift(frame, t)
@@ -167,7 +171,8 @@ def render_shot2(t, f_idx):
     dt_blink = abs(rel_t - 3.70)
     if dt_blink < 0.10:
         b_p = 1.0 - (dt_blink / 0.10)
-        cv2.ellipse(frame, (510, 755), (7, int(5 * b_p)), 0, 0, 360, (185, 190, 225), -1)
+        skin_bgr = tuple(int(c) for c in canvas_s2[745:765, 500:520].mean(axis=(0,1)))
+        cv2.ellipse(frame, (510, 755), (7, int(5 * b_p)), 0, 0, 360, skin_bgr, -1)
         cv2.line(frame, (502, 755), (518, 755), (40, 25, 35), 2)
         
     # Falling golden autumn leaves
@@ -205,7 +210,8 @@ def render_shot3(t, f_idx):
     dt_blink = abs(rel_t - 2.50)
     if dt_blink < 0.10:
         b_p = 1.0 - (dt_blink / 0.10)
-        cv2.ellipse(frame, (535, 765), (7, int(5 * b_p)), 0, 0, 360, (190, 195, 220), -1)
+        skin_bgr = tuple(int(c) for c in canvas_s3[755:775, 525:545].mean(axis=(0,1)))
+        cv2.ellipse(frame, (535, 765), (7, int(5 * b_p)), 0, 0, 360, skin_bgr, -1)
         cv2.line(frame, (527, 765), (543, 765), (45, 30, 35), 2)
         
     return apply_handheld_drift(frame, t)
@@ -226,8 +232,9 @@ def render_shot4(t, f_idx):
     dt_blink = abs(rel_t - 1.90)
     if dt_blink < 0.11:
         b_p = 1.0 - (dt_blink / 0.11)
+        skin_bgr = tuple(int(c) for c in canvas_s4[620:640, 500:520].mean(axis=(0,1)))
         for ex, ey in [(465, 630), (570, 635)]:
-            cv2.ellipse(frame, (ex, ey), (8, int(6 * b_p)), 0, 0, 360, (200, 195, 225), -1)
+            cv2.ellipse(frame, (ex, ey), (8, int(6 * b_p)), 0, 0, 360, skin_bgr, -1)
             cv2.line(frame, (ex - 10, ey), (ex + 10, ey), (40, 25, 35), 2)
             
     # Soft smile micro-expression
@@ -319,3 +326,4 @@ subprocess.run([
     "-frames:v", "1", "-q:v", "2", str(cover_path)
 ], check=True)
 print(f"📸 Cover thumbnail generated: {cover_path}")
+

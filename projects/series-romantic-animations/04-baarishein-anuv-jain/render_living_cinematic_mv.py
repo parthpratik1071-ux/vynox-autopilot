@@ -35,24 +35,27 @@ TOTAL_FRAMES = int(DURATION * FPS)
 
 print(f"🎬 Initializing Baarishein Living 2D Anime MV ({TOTAL_FRAMES} frames @ {FPS} fps)...")
 
-# 1. LOAD & PREPARE CANVASES
+# 1. LOAD & PREPARE CANVASES in NATIVE BGR
 def load_canvas(path, zoom_crop=False):
-    img = Image.open(path).convert("RGBA")
-    scale = max(WIDTH / img.width, HEIGHT / img.height)
+    img = cv2.imread(str(path))
+    if img is None:
+        raise FileNotFoundError(f"Cannot read image: {path}")
+    ih, iw = img.shape[:2]
+    scale = max(WIDTH / iw, HEIGHT / ih)
     if zoom_crop:
         scale *= 1.15
-    nw, nh = int(img.width * scale), int(img.height * scale)
-    resized = img.resize((nw, nh), Image.Resampling.LANCZOS)
+    nw, nh = int(iw * scale), int(ih * scale)
+    resized = cv2.resize(img, (nw, nh), interpolation=cv2.INTER_LANCZOS4)
     ox = max(0, (nw - WIDTH) // 2)
     oy = max(0, (nh - HEIGHT) // 2)
-    return np.array(resized.crop((ox, oy, ox + WIDTH, oy + HEIGHT)))
+    return resized[oy:oy + HEIGHT, ox:ox + WIDTH].copy()
 
 canvas_s1 = load_canvas(ASSETS_DIR / "scene-1.jpg")
 canvas_s1_close = load_canvas(ASSETS_DIR / "scene-1.jpg", zoom_crop=True)
 canvas_s2 = load_canvas(ASSETS_DIR / "scene-2.jpg")
 canvas_s2_close = load_canvas(ASSETS_DIR / "scene-2.jpg", zoom_crop=True)
 
-print("✅ Loaded all scene canvases.")
+print("✅ Loaded all scene canvases in native BGR.")
 
 # 2. WRITE MASTER ASS SUBTITLES
 ass_template = """[Script Info]
@@ -129,8 +132,9 @@ def render_shot1(t, f_idx):
     dt_blink = abs(t - 2.60)
     if dt_blink < 0.10:
         b_p = 1.0 - (dt_blink / 0.10)
-        cv2.ellipse(frame, (510, 750), (7, int(5 * b_p)), 0, 0, 360, (190, 195, 220), -1)
-        cv2.line(frame, (502, 750), (518, 750), (45, 30, 35), 2)
+        skin_bgr = tuple(int(c) for c in canvas_s1[740:760, 500:520].mean(axis=(0,1)))
+        cv2.ellipse(frame, (510, 750), (7, int(5 * b_p)), 0, 0, 360, skin_bgr, -1)
+        cv2.line(frame, (502, 750), (518, 750), (35, 20, 25), 2)
         
     # Cozy warm indoor ambient light pulse
     warmth = (math.sin(t * 2.0) + 1.0) * 0.04
@@ -155,8 +159,9 @@ def render_shot2(t, f_idx):
     dt_blink = abs(rel_t - 2.50)
     if dt_blink < 0.10:
         b_p = 1.0 - (dt_blink / 0.10)
-        cv2.ellipse(frame, (530, 710), (8, int(6 * b_p)), 0, 0, 360, (195, 200, 225), -1)
-        cv2.line(frame, (521, 710), (539, 710), (45, 30, 35), 2)
+        skin_bgr = tuple(int(c) for c in canvas_s1_close[700:720, 520:540].mean(axis=(0,1)))
+        cv2.ellipse(frame, (530, 710), (8, int(6 * b_p)), 0, 0, 360, skin_bgr, -1)
+        cv2.line(frame, (521, 710), (539, 710), (35, 20, 25), 2)
         
     # Micro-smile movement
     smile_amp = (math.sin(rel_t * 1.8) + 1.0) * 0.5
@@ -188,8 +193,9 @@ def render_shot3(t, f_idx):
     dt_blink = abs(rel_t - 2.70)
     if dt_blink < 0.10:
         b_p = 1.0 - (dt_blink / 0.10)
-        cv2.ellipse(frame, (475, 750), (7, int(5 * b_p)), 0, 0, 360, (185, 190, 220), -1)
-        cv2.line(frame, (467, 750), (483, 750), (40, 25, 30), 2)
+        skin_bgr = tuple(int(c) for c in canvas_s2[740:760, 465:485].mean(axis=(0,1)))
+        cv2.ellipse(frame, (475, 750), (7, int(5 * b_p)), 0, 0, 360, skin_bgr, -1)
+        cv2.line(frame, (467, 750), (483, 750), (30, 20, 25), 2)
         
     frame = apply_rain(frame)
     return apply_handheld_drift(frame, t)
@@ -210,9 +216,10 @@ def render_shot4(t, f_idx):
     dt_blink = abs(rel_t - 2.30)
     if dt_blink < 0.11:
         b_p = 1.0 - (dt_blink / 0.11)
+        skin_bgr = tuple(int(c) for c in canvas_s2_close[670:695, 510:530].mean(axis=(0,1)))
         for ex, ey in [(465, 680), (575, 685)]:
-            cv2.ellipse(frame, (ex, ey), (8, int(6 * b_p)), 0, 0, 360, (200, 195, 225), -1)
-            cv2.line(frame, (ex - 10, ey), (ex + 10, ey), (40, 25, 35), 2)
+            cv2.ellipse(frame, (ex, ey), (8, int(6 * b_p)), 0, 0, 360, skin_bgr, -1)
+            cv2.line(frame, (ex - 10, ey), (ex + 10, ey), (35, 20, 25), 2)
             
     # Soft smile micro-expression
     smile_amp = (math.sin(rel_t * 1.5) + 1.0) * 0.5
@@ -303,3 +310,4 @@ subprocess.run([
     "-frames:v", "1", "-q:v", "2", str(cover_path)
 ], check=True)
 print(f"📸 Cover thumbnail generated: {cover_path}")
+
