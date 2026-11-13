@@ -1,0 +1,20 @@
+[Script Info]
+Title: Samjho Na - Living 2D Animation Reel
+ScriptType: v4.00+
+WrapStyle: 0
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: SongBadge,Lato,34,&H00E8F4FF,&H00000000,&H00101010,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1
+Style: ModernLyric,Lato,60,&H00FFFFFF,&H000000FF,&H000A0A0A,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.0,2.0,2,60,60,540,1
+Style: DropTitle,Lato,48,&H00E8F4FF,&H00000000,&H000A0A0A,&H80000000,-1,0,0,0,100,100,3.5,0,1,2.0,2.0,2,40,40,540,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.50,0:00:05.00,SongBadge,,0,0,0,,{\fade(350,450)}ADITYA RIKHARI  |  SAMJHO NA
+Dialogue: 1,0:00:00.50,0:00:05.20,ModernLyric,,0,0,0,,{\fade(200,200)}Jaanan, {\c&H003CE0FF&}samjho na{\c&H00FFFFFF&}, dil kehta hai...
+Dialogue: 1,0:00:05.20,0:00:10.00,ModernLyric,,0,0,0,,{\fade(200,200)}Teri galiyon mein hi {\c&H003CE0FF&}rehta hai{\c&H00FFFFFF&}...
+Dialogue: 1,0:00:10.00,0:00:14.80,ModernLyric,,0,0,0,,{\fade(200,200)}Jaanan, {\c&H003CE0FF&}samjho na{\c&H00FFFFFF&}, dil kehta hai...
+Dialogue: 1,0:00:14.80,0:00:20.00,ModernLyric,,0,0,0,,{\fade(200,350)}Teri baahon mein jeena hai,\N{\c&H003CE0FF&}marna hai ishq mein tere{\c&H00FFFFFF&}...

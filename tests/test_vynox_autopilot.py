@@ -277,14 +277,16 @@ class TestDuplicateGuard(unittest.TestCase):
 
 
 class TestDailyDispatcherAndTrendProducer(unittest.TestCase):
-    def test_trend_producer_picks_samjho_na_next(self):
+    def test_trend_producer_skips_queued_duplicates_and_picks_next(self):
         with tempfile.TemporaryDirectory() as tmp:
             log_file = Path(tmp) / "trend.log"
             with mock.patch.object(daily_trend_producer, "LOG_FILE", log_file):
                 cand = daily_trend_producer.discover_next_trending()
             self.assertIsNotNone(cand)
-            self.assertEqual(cand["id"], "samjho_na")
-            self.assertIn("Samjho Na", log_file.read_text())
+            # Samjho Na is now produced and queued in projects/queue/09_romantic_samjho_na.json,
+            # so the duplicate guard correctly advances to Ishq by Faheem Abdullah.
+            self.assertEqual(cand["id"], "ishq_faheem")
+            self.assertIn("Ishq", log_file.read_text())
 
     def test_dispatcher_local_quota_and_duplicate_skip(self):
         with tempfile.TemporaryDirectory() as tmp:
