@@ -110,3 +110,6 @@
 [2026-11-12 19:00:05] 💥 Error during daily dispatch: ❌ Instagram session is invalid or missing, and no credentials were provided.
 👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update INSTA_SESSION_JSON in GitHub Secrets.
 [2026-11-13 11:22:45] ⏳ Current time (11:22) is before afternoon slot (14:00 IST). Waiting.
+[2026-11-13 13:23:44] ⏸️ AUTHENTICATION HEALTH CHECK FAILED: SESSION_EXPIRED
+[2026-11-13 13:23:44]    Reason: Saved session cookie is expired (LoginRequired) and no fallback credentials provided.
+[2026-11-13 13:23:44] 🛡️ PRESERVING QUEUE: All 5 queued Reels remain staged untouched (Next: 04_romantic_baarishein.json).
