@@ -66,9 +66,9 @@ def get_credentials(interactive: bool = False) -> Credentials | None:
             print(f"⚠️ Failed to load local YouTube token: {e}")
 
     if interactive and CLIENT_SECRET_FILE.exists():
-        print(f"🔑 Initiating interactive OAuth flow with {CLIENT_SECRET_FILE}...")
+        print(f"🔑 Initiating OAuth flow with {CLIENT_SECRET_FILE}...")
         flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRET_FILE), SCOPES)
-        creds = flow.run_local_server(port=0)
+        creds = flow.run_local_server(port=8080, prompt="consent", access_type="offline")
         CREDENTIALS_DIR.mkdir(parents=True, exist_ok=True)
         with open(LOCAL_TOKEN_FILE, "w") as f:
             f.write(creds.to_json())
@@ -259,31 +259,57 @@ def main():
     parser.add_argument("--privacy", choices=["public", "private", "unlisted"], default="public", help="Video visibility")
     parser.add_argument("--check-auth", action="store_true", help="Test YouTube authentication and exit")
     parser.add_argument("--auth-setup", action="store_true", help="Interactive OAuth setup to generate refresh token")
+    parser.add_argument("--auth-code", help="Complete OAuth flow by providing authorization code or full redirect URL")
     parser.add_argument("--dry-run", action="store_true", help="Validate metadata and video without uploading")
 
     args = parser.parse_args()
 
     if args.auth_setup:
-        print("\n" + "=" * 60)
-        print("🛠️ YOUTUBE OAUTH2 SETUP HELPER:")
-        print("=" * 60)
-        print("To allow Vynox Autopilot to upload to YouTube Shorts:")
-        print("1. Go to Google Cloud Console: https://console.cloud.google.com")
-        print("2. Create a project and enable 'YouTube Data API v3'")
-        print("3. Go to 'APIs & Services' -> 'Credentials' -> 'Create Credentials' -> 'OAuth client ID'")
-        print("4. Application type: 'Desktop app'")
-        print(f"5. Download the JSON file and save it as:\n   {CLIENT_SECRET_FILE}")
-        print("6. Run this command again: `python3 scripts/youtube_uploader.py --auth-setup`")
-        print("=" * 60 + "\n")
-
         if CLIENT_SECRET_FILE.exists():
-            creds = get_credentials(interactive=True)
-            if creds:
-                print("\n🎉 Authentication Successful!")
-                print("Copy these values for GitHub Actions Secrets:")
-                print(f"• YOUTUBE_CLIENT_ID: {creds.client_id}")
-                print(f"• YOUTUBE_CLIENT_SECRET: {creds.client_secret}")
-                print(f"• YOUTUBE_REFRESH_TOKEN: {creds.refresh_token}\n")
+            print("\n" + "=" * 60)
+            print("🔑 Opening browser for YouTube Channel authorization...")
+            print("=" * 60)
+            try:
+                creds = get_credentials(interactive=True)
+                if creds:
+                    print("\n🎉 Authentication Successful!")
+                    print("=" * 60)
+                    print("Copy these values for GitHub Actions Secrets:")
+                    print("=" * 60)
+                    print(f"• YOUTUBE_CLIENT_ID: {creds.client_id}")
+                    print(f"• YOUTUBE_CLIENT_SECRET: {creds.client_secret}")
+                    print(f"• YOUTUBE_REFRESH_TOKEN: {creds.refresh_token}")
+                    print("=" * 60 + "\n")
+                    return
+            except Exception as e:
+                print(f"⚠️ Automatic local server flow failed ({e}).")
+        else:
+            print(f"❌ Missing client secret file: {CLIENT_SECRET_FILE}")
+        return
+
+    if args.auth_code:
+        import urllib.parse
+        code = args.auth_code.strip()
+        if "code=" in code:
+            parsed = urllib.parse.urlparse(code)
+            params = urllib.parse.parse_qs(parsed.query or parsed.fragment)
+            code = params.get("code", [code])[0]
+
+        flow = InstalledAppFlow.from_client_secrets_file(
+            str(CLIENT_SECRET_FILE),
+            SCOPES,
+            redirect_uri="http://localhost:8080/",
+        )
+        flow.fetch_token(code=code)
+        creds = flow.credentials
+        CREDENTIALS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(LOCAL_TOKEN_FILE, "w") as f:
+            f.write(creds.to_json())
+        LOCAL_TOKEN_FILE.chmod(0o600)
+        print("\n🎉 Token Generated & Saved Successfully!")
+        print(f"• YOUTUBE_CLIENT_ID: {creds.client_id}")
+        print(f"• YOUTUBE_CLIENT_SECRET: {creds.client_secret}")
+        print(f"• YOUTUBE_REFRESH_TOKEN: {creds.refresh_token}\n")
         return
 
     if args.check_auth:
@@ -313,3 +339,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
