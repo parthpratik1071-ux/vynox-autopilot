@@ -151,26 +151,26 @@ def dispatch_next(force=False):
             except Exception:
                 pass
 
-        # Check slot fulfillment (Slot 1: Afternoon 2:00 PM IST | Slot 2: Evening 7:00 PM IST)
-        if now.hour >= 18:
+        # Check slot fulfillment (Audience-optimized: Slot 1: Evening 7:30 PM IST | Slot 2: Late-Night Peak 9:45 PM IST)
+        if now.hour >= 21:
+            late_night_posted = any(
+                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour >= 21)
+                for p in today_posts
+            )
+            if late_night_posted:
+                log(f"✅ Late-Night Peak Reel already published today ({today_str}). Daily quota fulfilled!")
+                return True
+        elif now.hour < 19:
+            log(f"⏳ Current time ({now.strftime('%H:%M')}) is before Evening slot (19:30 IST). Waiting.")
+            return False
+        else:
+            # Evening slot (19:00 - 21:00)
             evening_posted = any(
-                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour >= 18)
+                (parse_dt(p.get("published_at")) and 19 <= parse_dt(p.get("published_at")).hour < 21)
                 for p in today_posts
             )
             if evening_posted:
-                log(f"✅ Evening Reel already published today ({today_str}). Daily quota fulfilled!")
-                return True
-        elif now.hour < 13:
-            log(f"⏳ Current time ({now.strftime('%H:%M')}) is before afternoon slot (14:00 IST). Waiting.")
-            return False
-        else:
-            # Afternoon slot
-            afternoon_posted = any(
-                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour < 18)
-                for p in today_posts
-            )
-            if afternoon_posted:
-                log(f"✅ Afternoon Reel already published today ({today_str}). Next slot at 7:00 PM IST.")
+                log(f"✅ Evening Reel already published today ({today_str}). Next slot is Late-Night Viral Peak at 9:45 PM IST.")
                 return True
     elif is_ci:
         log(f"🤖 Scheduled GitHub Actions trigger detected ({now.strftime('%H:%M')} IST). Proceeding to dispatch next queued reel...")

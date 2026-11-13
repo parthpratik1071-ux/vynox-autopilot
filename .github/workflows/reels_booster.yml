@@ -2,9 +2,11 @@ name: Vynox Reels Booster
 
 on:
   schedule:
-    # Runs 3x/day during waking IST hours (~every 5-6 hours, zero DM polling):
-    # 04:00 UTC = 09:30 AM IST | 10:00 UTC = 03:30 PM IST | 15:00 UTC = 08:30 PM IST
-    - cron: '0 4,10,15 * * *'
+    # Optimized for 7:30 PM & 9:45 PM IST releases (+10:30 AM morning recap):
+    # 05:00 UTC = 10:30 AM IST (morning recap)
+    # 15:00 UTC = 08:30 PM IST (boosts 7:30 PM reel +1 hr)
+    # 17:00 UTC = 10:30 PM IST (boosts 9:45 PM viral reel +45 min)
+    - cron: '0 5,15,17 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

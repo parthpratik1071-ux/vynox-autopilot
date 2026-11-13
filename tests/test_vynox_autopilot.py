@@ -299,7 +299,7 @@ class TestDailyDispatcherAndTrendProducer(unittest.TestCase):
             qitem = qdir / "01_test.json"
             qitem.write_text(json.dumps({"title": "Test", "video_path": str(vid), "caption": "Hello world"}))
 
-            fixed_now = datetime(2026, 11, 12, 14, 30, tzinfo=daily_dispatcher.IST)
+            fixed_now = datetime(2026, 11, 12, 19, 30, tzinfo=daily_dispatcher.IST)
             fake_dt_cls = mock.MagicMock()
             fake_dt_cls.now.return_value = fixed_now
             fake_dt_cls.fromisoformat.side_effect = datetime.fromisoformat
