@@ -20,6 +20,11 @@ LOG_FILE = BASE_DIR / "projects" / "daily_dispatcher.log"
 
 IST = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
 
+if str(BASE_DIR / "scripts") not in sys.path:
+    sys.path.insert(0, str(BASE_DIR / "scripts"))
+import insta_local_post
+import duplicate_guard
+
 def log(msg):
     timestamp = datetime.datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S")
     formatted = f"[{timestamp}] {msg}"
@@ -86,6 +91,54 @@ def dispatch_next(force=False):
 
     is_ci = os.environ.get("GITHUB_ACTIONS") == "true"
 
+    # 2. Pre-Flight Authentication Health Check before touching queue
+    auth_ok, auth_code, client_or_err = insta_local_post.check_auth_health()
+    if not auth_ok:
+        log(f"⏸️ AUTHENTICATION HEALTH CHECK FAILED: {auth_code}")
+        log(f"   Reason: {client_or_err}")
+        log(f"🛡️ PRESERVING QUEUE: All {len(queue_files)} queued Reels remain staged untouched (Next: {queue_files[0].name}).")
+
+        insta_local_post.write_auth_status(
+            status="PAUSED_AUTH_REQUIRED",
+            code=auth_code,
+            detail=f"{client_or_err} (Queue preserved: {len(queue_files)} reels waiting)",
+        )
+
+        step_summary = os.environ.get("GITHUB_STEP_SUMMARY")
+        if step_summary:
+            try:
+                with open(step_summary, "a", encoding="utf-8") as f:
+                    f.write("\n### ⚠️ Vynox Autopilot: Instagram Authentication Required\n\n")
+                    f.write(f"- **Issue:** `{auth_code}`\n")
+                    f.write(f"- **Detail:** {client_or_err}\n")
+                    f.write(f"- **Queue Status:** 🛡️ **Preserved** ({len(queue_files)} Reels waiting, next: `{queue_files[0].name}`)\n")
+                    f.write("- **Publishing:** Automatically paused until fresh authentication is provided.\n\n")
+                    f.write("#### Quick Resolution Steps:\n")
+                    f.write("1. On your trusted local machine, run:\n")
+                    f.write("   ```bash\n   python3 scripts/vynox_update_bio_and_dispatch.py --bio-only\n   ```\n")
+                    f.write("2. Copy the exported session into GitHub Repository Secret **`INSTA_SESSION_JSON`**.\n")
+                    f.write("3. The queue will automatically resume publishing on the very next scheduled slot!\n")
+            except Exception:
+                pass
+
+        try:
+            from emergency_alerter import EmergencyAlerter
+            alerter = EmergencyAlerter()
+            if alerter.bot_token or alerter.webhook_url:
+                alerter.send_alert(
+                    "vynox_autopilot",
+                    f"Auth Required: {auth_code}",
+                    f"Session expired in GitHub Actions. 🛡️ Queue preserved ({len(queue_files)} reels waiting)."
+                )
+        except Exception:
+            pass
+
+        if not is_ci:
+            _sync_local_state_to_remote()
+        return False
+
+    cl = client_or_err
+
     if not force and not is_ci:
         # Check valid posts published today (ignoring deleted posts)
         today_posts = []
@@ -150,11 +203,6 @@ def dispatch_next(force=False):
         raise FileNotFoundError(f"Video file does not exist: {video_path}")
 
     log(f"🎬 Uploading video: {video_path}")
-    
-    # Import and run our local instagram poster
-    sys.path.insert(0, str(BASE_DIR / "scripts"))
-    import insta_local_post
-    import duplicate_guard
 
     # Zero-Repeat Check: Never re-publish an already posted video or caption headline
     is_dup, dup_reason = duplicate_guard.is_duplicate_video(video_path, caption)
@@ -168,7 +216,8 @@ def dispatch_next(force=False):
         next_file.unlink()
         return True
 
-    cl = insta_local_post.get_client()
+    if cl is None:
+        cl = insta_local_post.get_client()
 
     # Safety duplicate guard: Check if identical caption was already posted in latest medias
     if not force:
@@ -216,6 +265,7 @@ def dispatch_next(force=False):
         status="published_to_instagram"
     )
     next_file.unlink()
+    insta_local_post.write_auth_status("HEALTHY", auth_code, f"Published {media.code} successfully")
 
     log(f"📁 Archived record to: {archive_dest.name}")
     remaining = len(list(QUEUE_DIR.glob("*.json")))

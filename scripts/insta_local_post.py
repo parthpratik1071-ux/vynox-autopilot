@@ -37,6 +37,7 @@ from instagrapi.exceptions import (
 SESSION_DIR = Path.home() / ".config" / "stickman_video_director"
 DEFAULT_SESSION_FILE = SESSION_DIR / "insta_session.json"
 GRAPH_API_BASE = "https://graph.facebook.com/v21.0"
+AUTH_STATUS_FILE = Path(__file__).resolve().parent.parent / "projects" / "auth_status.json"
 
 
 def is_restriction_error(exc: Exception) -> bool:
@@ -212,6 +213,114 @@ class OfficialGraphClient:
         return SimpleNamespace(pk=media_id, code=m.group(1) if m else str(media_id))
 
 
+def check_auth_health(
+    session_file: Path = DEFAULT_SESSION_FILE,
+    username: str | None = None,
+    password: str | None = None,
+) -> tuple[bool, str, object | None]:
+    """
+    Non-destructive pre-flight authentication check.
+    Returns (is_healthy, status_code, client_or_error_message).
+    Never prompts interactively and never crashes.
+    """
+    # 1. Meta Official Instagram Graph API v21.0
+    graph_token = os.environ.get("INSTA_GRAPH_ACCESS_TOKEN", "").strip()
+    graph_uid = os.environ.get("INSTA_IG_USER_ID", "").strip()
+    if graph_token and graph_uid:
+        try:
+            client = OfficialGraphClient(graph_token, graph_uid)
+            client.account_info()
+            return True, "OFFICIAL_GRAPH_API_VALID", client
+        except Exception as e:
+            return False, "GRAPH_API_ERROR", f"Graph API request error: {e}"
+
+    # 2. Saved Session Check
+    sess_path = Path(session_file)
+    if sess_path.exists():
+        cl = Client()
+        cl.delay_range = [1, 3]
+        try:
+            cl.load_settings(sess_path)
+            cl.get_timeline_feed()
+            return True, "SESSION_VALID", cl
+        except LoginRequired:
+            pass  # Session expired; check if credentials are provided below
+        except Exception as e:
+            if is_restriction_error(e):
+                return False, "SESSION_RESTRICTED", f"Instagram restriction/challenge ({type(e).__name__}): {e}"
+            if getattr(cl, "user_id", None):
+                try:
+                    cl.user_info(cl.user_id)
+                    return True, "SESSION_VALID", cl
+                except Exception:
+                    pass
+
+    # 3. Environment Fallback Credentials Check
+    uname = username or os.environ.get("INSTA_USERNAME", "").strip()
+    pword = password or os.environ.get("INSTA_PASSWORD", "").strip()
+    if uname and pword:
+        cl = Client()
+        cl.delay_range = [1, 3]
+        try:
+            cl.login(uname, pword)
+            sess_path.parent.mkdir(parents=True, exist_ok=True)
+            cl.dump_settings(sess_path)
+            try:
+                sess_path.chmod(0o600)
+            except Exception:
+                pass
+            return True, "CREDENTIALS_LOGIN_VALID", cl
+        except TwoFactorRequired:
+            return False, "TWO_FACTOR_REQUIRED", "2FA challenge required; cannot prompt in non-interactive mode."
+        except ChallengeRequired:
+            return False, "CHALLENGE_REQUIRED", "Instagram security challenge required."
+        except Exception as e:
+            if is_restriction_error(e):
+                return False, "LOGIN_RESTRICTED", f"Account restricted/challenged ({type(e).__name__}): {e}"
+            return False, "LOGIN_FAILED", f"Login failed for @{uname}: {e}"
+
+    if sess_path.exists():
+        return False, "SESSION_EXPIRED", "Saved session cookie is expired (LoginRequired) and no fallback credentials provided."
+    return False, "MISSING_CREDENTIALS", "No saved session found and no credentials provided."
+
+
+def write_auth_status(
+    status: str,
+    code: str,
+    detail: str,
+    out_file: Path | None = None,
+) -> Path:
+    """Writes structured authentication status to projects/auth_status.json."""
+    target = Path(out_file) if out_file else AUTH_STATUS_FILE
+    target.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "status": status,
+        "code": code,
+        "detail": str(detail),
+        "timestamp": datetime.now().isoformat(),
+        "remediation": [
+            "Option A: Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` on trusted local machine.",
+            "Option B: Export fresh session with `python3 scripts/insta_local_post.py --export-session` and update GitHub Secret INSTA_SESSION_JSON.",
+            "Option C: Configure INSTA_GRAPH_ACCESS_TOKEN and INSTA_IG_USER_ID for zero-session Meta Graph API."
+        ]
+    }
+    with open(target, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+    return target
+
+
+def export_session_base64(session_file: Path = DEFAULT_SESSION_FILE) -> str:
+    """Exports session JSON as clean single-line Base64 for GitHub Secrets."""
+    import base64
+    sess_path = Path(session_file)
+    if not sess_path.exists():
+        raise FileNotFoundError(f"Session file not found: {sess_path}")
+    raw = sess_path.read_bytes()
+    # Validate JSON
+    json.loads(raw.decode("utf-8"))
+    return base64.b64encode(raw).decode("utf-8").strip()
+
+
 def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None, interactive: bool = True):
     """
     Initializes and authenticates the Instagram client.
@@ -225,6 +334,19 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None, 
         print("🏛️ Using Official Meta Instagram Graph API v21.0 (Zero-Ban Engine)!")
         return OfficialGraphClient(graph_token, graph_uid)
     SESSION_DIR.mkdir(parents=True, exist_ok=True)
+
+    if not allow_prompt:
+        ok, code, client_or_err = check_auth_health(session_file=session_file, username=username, password=password)
+        if ok and client_or_err:
+            write_auth_status("HEALTHY", code, "Authenticated successfully")
+            return client_or_err
+        write_auth_status("PAUSED_AUTH_REQUIRED", code, str(client_or_err))
+        raise RuntimeError(
+            f"❌ Instagram session is invalid or missing ({code}): {client_or_err}\n"
+            "👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, "
+            "set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update INSTA_SESSION_JSON in GitHub Secrets."
+        )
+
     cl = Client()
     # Emulate modern mobile device settings
     cl.delay_range = [1, 3]
@@ -237,17 +359,17 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None, 
             cl.get_timeline_feed()  # test if session cookie is still valid
             print("✅ Successfully authenticated using saved session!")
             session_loaded = True
+            write_auth_status("HEALTHY", "SESSION_VALID", "Authenticated using saved session")
             return cl
         except LoginRequired:
             print("⚠️ Saved session is expired (LoginRequired). Re-authenticating...")
         except Exception as e:
             if is_restriction_error(e):
-                if not allow_prompt:
-                    raise RuntimeError(f"❌ Instagram session blocked/challenged ({type(e).__name__}): {e}")
                 print(f"⚠️ Instagram challenge/restriction detected ({type(e).__name__}: {e}). Re-authenticating...")
             elif getattr(cl, "user_id", None):
                 print(f"⚠️ Timeline check warning ({e}), but session User ID {cl.user_id} is present. Proceeding with saved session.")
                 session_loaded = True
+                write_auth_status("HEALTHY", "SESSION_VALID", "Authenticated using saved session with warnings")
                 return cl
             else:
                 print(f"⚠️ Saved session is expired or invalid ({e}). Re-authenticating...")
@@ -256,30 +378,19 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None, 
     uname = username or os.environ.get("INSTA_USERNAME")
     pword = password or os.environ.get("INSTA_PASSWORD")
 
-    if not session_loaded and not (uname and pword):
-        if not allow_prompt:
-            raise RuntimeError(
-                "❌ Instagram session is invalid or missing, and no credentials were provided.\n"
-                "👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, "
-                "set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update INSTA_SESSION_JSON in GitHub Secrets."
-            )
-        if not uname:
-            uname = input("Instagram Username: ").strip()
-        if not pword:
-            pword = getpass.getpass("Instagram Password (hidden): ")
+    if not uname:
+        uname = input("Instagram Username: ").strip()
+    if not pword:
+        pword = getpass.getpass("Instagram Password (hidden): ")
 
     print(f"🔄 Logging in as @{uname}...")
     try:
         cl.login(uname, pword)
     except TwoFactorRequired:
-        if not allow_prompt:
-            raise RuntimeError("❌ Two-Factor Authentication (2FA) required; cannot prompt in non-interactive mode.")
         print("🔐 Two-Factor Authentication (2FA) is enabled on this account.")
         code = input("Enter 2FA Code (from Authenticator App or SMS): ").strip()
         cl.login(uname, pword, verification_code=code)
     except ChallengeRequired:
-        if not allow_prompt:
-            raise RuntimeError("❌ Instagram security challenge required; resolve in official app and update INSTA_SESSION_JSON.")
         print("⚠️ Instagram requested a security challenge.")
         code = input("Enter the security code sent to your Email/SMS: ").strip()
         cl.login(uname, pword, verification_code=code)
@@ -289,6 +400,7 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None, 
     os.chmod(session_file, 0o600)
     print(f"💾 Session successfully saved to {session_file}!")
     print("✨ Future daily uploads will use this session automatically without asking for your password.")
+    write_auth_status("HEALTHY", "CREDENTIALS_LOGIN_VALID", f"Logged in as @{uname} and saved session")
     return cl
 
 def upload_reel(cl, video_path, caption="", thumbnail_path=None):
@@ -354,12 +466,61 @@ def main():
     parser.add_argument("--thumbnail", "-t", default=None, help="Path to custom cover image")
     parser.add_argument("--session", default=str(DEFAULT_SESSION_FILE), help="Path to session JSON")
     parser.add_argument("--login-only", action="store_true", help="Only perform login and save session")
+    parser.add_argument("--check-auth", action="store_true", help="Non-destructive pre-flight check of Instagram authentication")
+    parser.add_argument("--export-session", action="store_true", help="Export clean Base64-encoded session for GitHub Secret INSTA_SESSION_JSON")
     parser.add_argument("--username", "-u", default=None, help="Instagram username")
     parser.add_argument("--password", "-p", default=None, help="Instagram password")
 
     args = parser.parse_args()
 
     session_path = Path(args.session)
+
+    if args.export_session:
+        try:
+            b64_str = export_session_base64(session_file=session_path)
+            print("\n" + "=" * 60)
+            print("🔐 BASE64 ENCODED INSTAGRAM SESSION (Copy everything below):")
+            print("=" * 60)
+            print(b64_str)
+            print("=" * 60)
+            print("👉 Paste into GitHub -> Settings -> Secrets and variables -> Actions -> INSTA_SESSION_JSON\n")
+            sys.exit(0)
+        except Exception as e:
+            print(f"❌ Failed to export session from {session_path}: {e}")
+            sys.exit(1)
+
+    if args.check_auth:
+        ok, code, client_or_err = check_auth_health(
+            session_file=session_path,
+            username=args.username,
+            password=args.password,
+        )
+        detail = "Authenticated successfully" if ok else str(client_or_err)
+        status_str = "HEALTHY" if ok else "PAUSED_AUTH_REQUIRED"
+        write_auth_status(status_str, code, detail)
+
+        step_summary = os.environ.get("GITHUB_STEP_SUMMARY")
+        if step_summary:
+            try:
+                with open(step_summary, "a", encoding="utf-8") as f:
+                    icon = "✅" if ok else "⚠️"
+                    f.write(f"\n### {icon} Instagram Authentication Health: `{code}`\n\n")
+                    f.write(f"- **Status:** `{status_str}`\n")
+                    f.write(f"- **Detail:** {detail}\n\n")
+                    if not ok:
+                        f.write("#### Recommended Remediation:\n")
+                        f.write("1. Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` locally.\n")
+                        f.write("2. Update `INSTA_SESSION_JSON` in GitHub Secrets.\n")
+            except Exception:
+                pass
+
+        if ok:
+            print(f"✅ Authentication HEALTHY (mode: {code})")
+            sys.exit(0)
+        else:
+            print(f"⚠️ Authentication REQUIRED (code: {code}): {detail}")
+            sys.exit(2)
+
     cl = get_client(session_file=session_path, username=args.username, password=args.password)
 
     if args.login_only:

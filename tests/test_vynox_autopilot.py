@@ -79,6 +79,59 @@ class TestInstaLocalPost(unittest.TestCase):
         self.assertEqual(medias[0].like_count, 42)
         self.assertEqual(medias[0].comment_count, 7)
 
+    def test_check_auth_health_detects_expired_session(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sess = Path(tmp) / "insta_session.json"
+            sess.write_text("{}")
+            fake_client = mock.MagicMock()
+            fake_client.get_timeline_feed.side_effect = insta_local_post.LoginRequired("expired")
+
+            with mock.patch.object(insta_local_post, "Client", return_value=fake_client), mock.patch.dict(
+                os.environ, {}, clear=True
+            ):
+                ok, code, detail = insta_local_post.check_auth_health(session_file=sess)
+            self.assertFalse(ok)
+            self.assertEqual(code, "SESSION_EXPIRED")
+            self.assertIn("LoginRequired", str(detail))
+
+    def test_check_auth_health_detects_valid_session(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sess = Path(tmp) / "insta_session.json"
+            sess.write_text("{}")
+            fake_client = mock.MagicMock()
+            fake_client.get_timeline_feed.return_value = {"feed_items": []}
+
+            with mock.patch.object(insta_local_post, "Client", return_value=fake_client), mock.patch.dict(
+                os.environ, {}, clear=True
+            ):
+                ok, code, client = insta_local_post.check_auth_health(session_file=sess)
+            self.assertTrue(ok)
+            self.assertEqual(code, "SESSION_VALID")
+            self.assertEqual(client, fake_client)
+
+    def test_check_auth_health_detects_graph_api(self):
+        with mock.patch.dict(
+            os.environ,
+            {"INSTA_GRAPH_ACCESS_TOKEN": "token_xyz", "INSTA_IG_USER_ID": "17841400002"},
+            clear=False,
+        ):
+            with mock.patch.object(
+                insta_local_post.OfficialGraphClient, "account_info", return_value=SimpleNamespace(username="vynox")
+            ):
+                ok, code, client = insta_local_post.check_auth_health()
+            self.assertTrue(ok)
+            self.assertEqual(code, "OFFICIAL_GRAPH_API_VALID")
+            self.assertIsInstance(client, insta_local_post.OfficialGraphClient)
+
+    def test_export_session_base64_roundtrip(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sess = Path(tmp) / "insta_session.json"
+            sess.write_text(json.dumps({"test_key": "test_val"}))
+            b64_str = insta_local_post.export_session_base64(session_file=sess)
+            import base64
+            decoded = json.loads(base64.b64decode(b64_str.encode()).decode())
+            self.assertEqual(decoded.get("test_key"), "test_val")
+
     def test_official_graph_client_selected_by_env(self):
         with mock.patch.dict(
             os.environ,
@@ -255,6 +308,8 @@ class TestDailyDispatcherAndTrendProducer(unittest.TestCase):
                 daily_dispatcher, "ARCHIVE_DIR", adir
             ), mock.patch.object(daily_dispatcher, "LOG_FILE", log_file), mock.patch.object(
                 daily_dispatcher.datetime, "datetime", fake_dt_cls
+            ), mock.patch.object(
+                insta_local_post, "check_auth_health", return_value=(True, "SESSION_VALID", mock.MagicMock())
             ), mock.patch.dict(
                 os.environ, {"GITHUB_ACTIONS": ""}, clear=False
             ), mock.patch(
@@ -269,6 +324,42 @@ class TestDailyDispatcherAndTrendProducer(unittest.TestCase):
             archived = list(adir.glob("*.json"))
             self.assertEqual(len(archived), 1)
             self.assertEqual(json.loads(archived[0].read_text())["status"], "skipped_duplicate")
+
+    def test_dispatcher_pauses_and_preserves_queue_on_auth_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            qdir = root / "queue"
+            adir = root / "archive"
+            qdir.mkdir()
+            adir.mkdir()
+            log_file = root / "dispatcher.log"
+            auth_status_file = root / "auth_status.json"
+            vid = root / "reel.mp4"
+            vid.write_bytes(b"fake")
+            qitem = qdir / "04_romantic_baarishein.json"
+            qitem.write_text(json.dumps({"title": "Baarishein", "video_path": str(vid), "caption": "Hello"}))
+
+            with mock.patch.object(daily_dispatcher, "QUEUE_DIR", qdir), mock.patch.object(
+                daily_dispatcher, "ARCHIVE_DIR", adir
+            ), mock.patch.object(daily_dispatcher, "LOG_FILE", log_file), mock.patch.object(
+                insta_local_post, "AUTH_STATUS_FILE", auth_status_file
+            ), mock.patch.dict(
+                os.environ, {"GITHUB_ACTIONS": "true"}, clear=False
+            ), mock.patch.object(
+                insta_local_post, "check_auth_health", return_value=(False, "SESSION_EXPIRED", "LoginRequired")
+            ):
+                ok = daily_dispatcher.dispatch_next(force=False)
+
+            # Assert graceful pause and 100% queue preservation
+            self.assertFalse(ok)
+            self.assertTrue(qitem.exists(), "Queued reel MUST NOT be deleted on auth failure")
+            self.assertEqual(len(list(adir.glob("*.json"))), 0, "No archive files should be created")
+            self.assertIn("AUTHENTICATION HEALTH CHECK FAILED", log_file.read_text())
+            self.assertIn("PRESERVING QUEUE", log_file.read_text())
+            self.assertTrue(auth_status_file.exists())
+            status_data = json.loads(auth_status_file.read_text())
+            self.assertEqual(status_data["status"], "PAUSED_AUTH_REQUIRED")
+            self.assertEqual(status_data["code"], "SESSION_EXPIRED")
 
 
 if __name__ == "__main__":

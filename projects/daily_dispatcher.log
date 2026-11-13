@@ -97,3 +97,16 @@
 [2026-11-11 21:46:43] ✅ Reel posted successfully: https://www.instagram.com/reel/Dfm45ffyYwr/
 [2026-11-11 21:46:43] 📁 Archived record to: 2026-11-11_03_romantic_husn.json
 [2026-11-11 21:46:43] 📊 Remaining queued items: 2
+[2026-11-12 13:00:05] 📦 Processing queue item: 04_romantic_baarishein.json
+[2026-11-12 13:00:05] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/series-romantic-animations/04-baarishein-anuv-jain/output/film_baarishein_romantic.mp4
+[2026-11-12 13:00:10] 💥 Error during daily dispatch: ❌ Instagram session is invalid or missing, and no credentials were provided.
+👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update INSTA_SESSION_JSON in GitHub Secrets.
+[2026-11-12 18:15:06] 📦 Processing queue item: 04_romantic_baarishein.json
+[2026-11-12 18:15:06] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/series-romantic-animations/04-baarishein-anuv-jain/output/film_baarishein_romantic.mp4
+[2026-11-12 18:15:10] 💥 Error during daily dispatch: ❌ Instagram session is invalid or missing, and no credentials were provided.
+👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update INSTA_SESSION_JSON in GitHub Secrets.
+[2026-11-12 19:00:01] 📦 Processing queue item: 04_romantic_baarishein.json
+[2026-11-12 19:00:01] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/series-romantic-animations/04-baarishein-anuv-jain/output/film_baarishein_romantic.mp4
+[2026-11-12 19:00:05] 💥 Error during daily dispatch: ❌ Instagram session is invalid or missing, and no credentials were provided.
+👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update INSTA_SESSION_JSON in GitHub Secrets.
+[2026-11-13 11:22:45] ⏳ Current time (11:22) is before afternoon slot (14:00 IST). Waiting.
