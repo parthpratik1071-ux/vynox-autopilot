@@ -37,25 +37,31 @@ ass_lines = [
     "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    "Style: TitleBadge,DejaVu Sans,30,&H00C0E8FF,&H00000000,&H00101010,&H80000000,-1,0,0,0,100,100,2,0,1,2,1,8,40,40,180,1",
-    "Style: ModernLyric,DejaVu Sans,68,&H00FFFFFF,&H000000FF,&H00080808,&H90000000,-1,0,0,0,100,100,2,0,1,3.5,4,2,50,50,400,1",
+    "Style: SongBadge,Lato,34,&H00E8F4FF,&H00000000,&H00101010,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1",
+    "Style: ModernLyric,Lato,58,&H00FFFFFF,&H000000FF,&H000A0A0A,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.0,2.0,2,60,60,530,1",
     "",
     "[Events]",
     "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-    # Top Song Badge
-    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(23.5)},TitleBadge,,0,0,0,,{{\\fade(400,400)}}♫  ANUV JAIN  •  ALAG AASMAAN",
+    # Top Song Badge (Intro only: 0.5s to 5.2s)
+    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(5.2)},SongBadge,,0,0,0,,{{\\fade(350,450)}}ANUV JAIN  |  ALAG AASMAAN",
     
-    # Line 1: Dil ko mere yeh hai pata (00.5s - 05.5s)
-    f"Dialogue: 1,{sec_to_ass(0.5)},{sec_to_ass(5.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}{{\\c&H003CE0FF&}}Dil ko mere{{\\c&H00FFFFFF&}} yeh hai pata...",
+    # Line 1: Dil ko mere ye hai pata (00.5s - 03.8s)
+    f"Dialogue: 1,{sec_to_ass(0.5)},{sec_to_ass(3.8)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Dil ko mere {{\\c&H003CE0FF&}}ye hai pata{{\\c&H00FFFFFF&}}...",
     
-    # Line 2: Ke milon ka yeh faasla hai (05.5s - 12.0s)
-    f"Dialogue: 1,{sec_to_ass(5.5)},{sec_to_ass(12.0)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Ke milon ka yeh {{\\c&H00FFB040&}}faasla hai{{\\c&H00FFFFFF&}}...",
+    # Line 2: Ke milon ka ye faasla hai (03.8s - 07.5s)
+    f"Dialogue: 1,{sec_to_ass(3.8)},{sec_to_ass(7.5)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Ke milon ka ye {{\\c&H003CE0FF&}}faasla hai{{\\c&H00FFFFFF&}}...",
     
-    # Line 3: Alag aasmaan bhi hai toh kya? (12.0s - 18.0s)
-    f"Dialogue: 1,{sec_to_ass(12.0)},{sec_to_ass(18.0)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}{{\\c&H003CE0FF&}}Alag aasmaan bhi hai{{\\c&H00FFFFFF&}} toh kya?...",
+    # Line 3: Alag aasmaan bhi hai toh kya? (07.5s - 11.5s)
+    f"Dialogue: 1,{sec_to_ass(7.5)},{sec_to_ass(11.5)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}{{\\c&H003CE0FF&}}Alag aasmaan bhi hai{{\\c&H00FFFFFF&}} toh kya?",
     
-    # Line 4: Yeh dil na maane (18.0s - 23.5s)
-    f"Dialogue: 1,{sec_to_ass(18.0)},{sec_to_ass(23.5)},ModernLyric,,0,0,0,,{{\\fade(250,450)}}Yeh dil {{\\c&H0055EEFF&}}na maane{{\\c&H00FFFFFF&}}..."
+    # Line 4: Yeh dil na maane (11.5s - 15.0s)
+    f"Dialogue: 1,{sec_to_ass(11.5)},{sec_to_ass(15.0)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Yeh dil {{\\c&H003CE0FF&}}na maane{{\\c&H00FFFFFF&}}...",
+    
+    # Line 5: Yeh gaadiyon ki aisi daudh sa (15.0s - 19.5s)
+    f"Dialogue: 1,{sec_to_ass(15.0)},{sec_to_ass(19.5)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Yeh gaadiyon ki aisi daudh sa...",
+    
+    # Line 6: Tera bhi dil daudhta hai (19.5s - 23.8s)
+    f"Dialogue: 1,{sec_to_ass(19.5)},{sec_to_ass(23.8)},ModernLyric,,0,0,0,,{{\\fade(200,450)}}{{\\c&H003CE0FF&}}Tera bhi dil{{\\c&H00FFFFFF&}} daudhta hai..."
 ]
 
 ass_file = OUT_DIR / "alag_subtitles.ass"

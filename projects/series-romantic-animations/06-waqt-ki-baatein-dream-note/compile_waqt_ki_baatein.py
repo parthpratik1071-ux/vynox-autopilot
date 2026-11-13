@@ -37,25 +37,29 @@ ass_lines = [
     "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    "Style: TitleBadge,DejaVu Sans,30,&H00C0E8FF,&H00000000,&H00101010,&H80000000,-1,0,0,0,100,100,2,0,1,2,1,8,40,40,180,1",
-    "Style: ModernLyric,DejaVu Sans,68,&H00FFFFFF,&H000000FF,&H00080808,&H90000000,-1,0,0,0,100,100,2,0,1,3.5,4,2,50,50,400,1",
+    "Style: SongBadge,Lato,34,&H00E8F4FF,&H00000000,&H00101010,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1",
+    "Style: ModernLyric,Lato,58,&H00FFFFFF,&H000000FF,&H000A0A0A,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.0,2.0,2,60,60,530,1",
+    "Style: DropTitle,Lato,48,&H00E8F4FF,&H00000000,&H000A0A0A,&H80000000,-1,0,0,0,100,100,3.5,0,1,2.0,2.0,2,40,40,530,1",
     "",
     "[Events]",
     "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-    # Top Song Badge
-    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(24.5)},TitleBadge,,0,0,0,,{{\\fade(400,400)}}♫  DREAM NOTE  •  WAQT KI BAATEIN",
+    # Top Song Badge (Intro only: 0.5s to 5.2s)
+    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(5.2)},SongBadge,,0,0,0,,{{\\fade(350,450)}}DREAM NOTE  |  WAQT KI BAATEIN",
     
-    # Line 1: Kabhi toh mil hi jaayega tujhko humsafar (00.5s - 07.5s)
-    f"Dialogue: 1,{sec_to_ass(0.5)},{sec_to_ass(7.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Kabhi toh mil hi jaayega {{\\c&H003CE0FF&}}tujhko humsafar{{\\c&H00FFFFFF&}}...",
+    # Line 1: Maana dil dara-dara hai (02.5s - 05.8s)
+    f"Dialogue: 1,{sec_to_ass(2.5)},{sec_to_ass(5.8)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Maana dil {{\\c&H003CE0FF&}}dara-dara hai{{\\c&H00FFFFFF&}}...",
     
-    # Line 2: Tujhme na kami koi hai, bas tera ye din bura hai (07.5s - 15.5s)
-    f"Dialogue: 1,{sec_to_ass(7.5)},{sec_to_ass(15.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Tujhme na kami koi hai, {{\\c&H00FFB040&}}bas tera ye din bura hai{{\\c&H00FFFFFF&}}...",
+    # Line 2: Toota ye zara-zara hai (05.8s - 09.8s)
+    f"Dialogue: 1,{sec_to_ass(5.8)},{sec_to_ass(9.8)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Toota ye {{\\c&H003CE0FF&}}zara-zara hai{{\\c&H00FFFFFF&}}...",
     
-    # Line 3: Waqt ki ye baatein hain (15.5s - 20.5s)
-    f"Dialogue: 1,{sec_to_ass(15.5)},{sec_to_ass(20.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Waqt ki ye {{\\c&H003CE0FF&}}baatein hain...{{\\c&H00FFFFFF&}}",
+    # Line 3: Dil ke is bawandar ko thehar jaane do (09.8s - 15.5s)
+    f"Dialogue: 1,{sec_to_ass(9.8)},{sec_to_ass(15.5)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Dil ke is bawandar ko\\N{{\\c&H003CE0FF&}}thehar jaane do{{\\c&H00FFFFFF&}}...",
     
-    # Line 4: Ise gujar jaane do (20.5s - 24.5s)
-    f"Dialogue: 1,{sec_to_ass(20.5)},{sec_to_ass(24.5)},ModernLyric,,0,0,0,,{{\\fade(250,450)}}{{\\c&H0055EEFF&}}Ise gujar jaane do...{{\\c&H00FFFFFF&}}"
+    # Line 4: Thehar jaane do... ho oooo... (15.5s - 21.0s)
+    f"Dialogue: 1,{sec_to_ass(15.5)},{sec_to_ass(21.0)},ModernLyric,,0,0,0,,{{\\fade(200,400)}}{{\\c&H003CE0FF&}}Thehar jaane do{{\\c&H00FFFFFF&}}... ho oooo...",
+    
+    # Line 5: Climax Title Outro (21.0s - 24.8s)
+    f"Dialogue: 2,{sec_to_ass(21.0)},{sec_to_ass(24.8)},DropTitle,,0,0,0,,{{\\fade(250,450)}}WAQT KI BAATEIN  |  DREAM NOTE"
 ]
 
 ass_file = OUT_DIR / "waqt_subtitles.ass"

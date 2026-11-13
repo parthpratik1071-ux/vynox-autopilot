@@ -37,25 +37,28 @@ ass_lines = [
     "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-    "Style: TitleBadge,DejaVu Sans,30,&H00C0E8FF,&H00000000,&H00101010,&H80000000,-1,0,0,0,100,100,2,0,1,2,1,8,40,40,180,1",
-    "Style: ModernLyric,DejaVu Sans,68,&H00FFFFFF,&H000000FF,&H00080808,&H90000000,-1,0,0,0,100,100,2,0,1,3.5,4,2,50,50,400,1",
+    "Style: SongBadge,Lato,34,&H00E8F4FF,&H00000000,&H00101010,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1",
+    "Style: ModernLyric,Lato,60,&H00FFFFFF,&H000000FF,&H000A0A0A,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.0,2.0,2,60,60,530,1",
     "",
     "[Events]",
     "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-    # Top Song Badge
-    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(20.5)},TitleBadge,,0,0,0,,{{\\fade(400,400)}}♫  ANUV JAIN  •  BAARISHEIN",
+    # Top Song Badge (Intro only: 0.5s to 5.2s)
+    f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(5.2)},SongBadge,,0,0,0,,{{\\fade(350,450)}}ANUV JAIN  |  BAARISHEIN",
     
-    # Line 1: Tum sun zara mere paas aa (00.5s - 05.5s)
-    f"Dialogue: 1,{sec_to_ass(0.5)},{sec_to_ass(5.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}{{\\c&H003CE0FF&}}Tum sun zara{{\\c&H00FFFFFF&}} mere paas aa...",
+    # Line 1: Tum sun zara mere paas aa (00.5s - 03.5s)
+    f"Dialogue: 1,{sec_to_ass(0.5)},{sec_to_ass(3.5)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}{{\\c&H003CE0FF&}}Tum sun zara,{{\\c&H00FFFFFF&}} mere paas aa...",
     
-    # Line 2: Ab baithe hain hum bhi yahan (05.5s - 10.5s)
-    f"Dialogue: 1,{sec_to_ass(5.5)},{sec_to_ass(10.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Ab baithe hain hum bhi {{\\c&H00FFB040&}}yahan{{\\c&H00FFFFFF&}}...",
+    # Line 2: Ab baithe hain hum bhi yahan (03.5s - 07.2s)
+    f"Dialogue: 1,{sec_to_ass(3.5)},{sec_to_ass(7.2)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Ab baithe hain hum bhi {{\\c&H003CE0FF&}}yahan{{\\c&H00FFFFFF&}}...",
     
-    # Line 3: Dil ke darmiyan baarishein hain, baarishein hain (10.5s - 15.5s)
-    f"Dialogue: 1,{sec_to_ass(10.5)},{sec_to_ass(15.5)},ModernLyric,,0,0,0,,{{\\fade(250,250)}}Dil ke darmiyan {{\\c&H003CE0FF&}}baarishein hain...{{\\c&H00FFFFFF&}}",
+    # Line 3: Dil ke darmiyan baarishein hain, baarishein hain (07.2s - 13.0s)
+    f"Dialogue: 1,{sec_to_ass(7.2)},{sec_to_ass(13.0)},ModernLyric,,0,0,0,,{{\\fade(200,200)}}Dil ke darmiyan {{\\c&H003CE0FF&}}baarishein hain...{{\\c&H00FFFFFF&}}",
     
-    # Line 4: Teri hi baaton pe maine saja li hai duniya yahan (15.5s - 20.8s)
-    f"Dialogue: 1,{sec_to_ass(15.5)},{sec_to_ass(20.8)},ModernLyric,,0,0,0,,{{\\fade(250,450)}}Teri baaton pe {{\\c&H0055EEFF&}}saja li hai duniya yahan{{\\c&H00FFFFFF&}}..."
+    # Line 4: Teri hi baaton pe maine saja li hai duniya yahan (13.0s - 19.5s)
+    f"Dialogue: 1,{sec_to_ass(13.0)},{sec_to_ass(19.5)},ModernLyric,,0,0,0,,{{\\fade(200,350)}}Teri hi baaton pe maine\\N{{\\c&H003CE0FF&}}saja li hai duniya yahan{{\\c&H00FFFFFF&}}...",
+    
+    # Climax Outro: Dil ke darmiyan baarishein (19.5s - 20.8s)
+    f"Dialogue: 1,{sec_to_ass(19.5)},{sec_to_ass(20.8)},ModernLyric,,0,0,0,,{{\\fade(150,400)}}{{\\c&H003CE0FF&}}Baarishein hain...{{\\c&H00FFFFFF&}}"
 ]
 
 ass_file = OUT_DIR / "baarishein_subtitles.ass"
@@ -146,8 +149,10 @@ subprocess.run([
     "-i", str(concat_mp4),
     "-i", str(audio_file),
     "-vf", f"ass={ass_file.resolve()}",
+    "-af", "volume=2.0dB,alimiter=limit=0.95:attack=5:release=60",
     "-c:v", "libx264", "-preset", "slow", "-crf", "17",
     "-c:a", "aac", "-b:a", "256k",
+    "-movflags", "+faststart",
     "-shortest",
     str(final_mp4)
 ], check=True)
