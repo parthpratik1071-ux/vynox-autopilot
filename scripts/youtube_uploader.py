@@ -68,7 +68,7 @@ def get_credentials(interactive: bool = False) -> Credentials | None:
     if interactive and CLIENT_SECRET_FILE.exists():
         print(f"🔑 Initiating OAuth flow with {CLIENT_SECRET_FILE}...")
         flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRET_FILE), SCOPES)
-        creds = flow.run_local_server(port=8080, prompt="consent", access_type="offline")
+        creds = flow.run_local_server(port=8080, prompt="consent", access_type="offline", open_browser=False)
         CREDENTIALS_DIR.mkdir(parents=True, exist_ok=True)
         with open(LOCAL_TOKEN_FILE, "w") as f:
             f.write(creds.to_json())
