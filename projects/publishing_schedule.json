@@ -1,0 +1,98 @@
+{
+  "schedule_version": "2.0.0",
+  "timezone": "Asia/Kolkata (IST)",
+  "daily_slots": [
+    {
+      "slot_name": "Evening Wind-Down",
+      "ist_time": "19:30 IST",
+      "utc_time": "14:00 UTC",
+      "cron": "0 14 * * *"
+    },
+    {
+      "slot_name": "Late-Night Viral Peak",
+      "ist_time": "21:45 IST",
+      "utc_time": "16:15 UTC",
+      "cron": "15 16 * * *"
+    }
+  ],
+  "upcoming_releases": [
+    {
+      "order": 1,
+      "date": "2026-11-13 (Tonight)",
+      "target_time": "19:30 IST / 21:45 IST",
+      "song": "Baarishein",
+      "artist": "Anuv Jain",
+      "format": "Living 4-Shot 2D Anime MV",
+      "visuals": "Monsoon rain streaks, window moisture droplets, breathing physics, eye blinks, cozy coffee steam",
+      "queue_file": "projects/queue/04_romantic_baarishein.json",
+      "video_path": "projects/series-romantic-animations/04-baarishein-anuv-jain/output/film_baarishein_romantic.mp4",
+      "cover_path": "projects/series-romantic-animations/04-baarishein-anuv-jain/output/cover.jpg",
+      "story_card_path": "projects/series-romantic-animations/04-baarishein-anuv-jain/output/story_card.jpg"
+    },
+    {
+      "order": 2,
+      "date": "2026-11-14 (Saturday)",
+      "target_time": "19:30 IST / 21:45 IST",
+      "song": "Sahiba",
+      "artist": "Jasleen Royal",
+      "format": "Crimson Manga High-Contrast Edit",
+      "visuals": "Monochrome black-and-white manga ink with vivid scarlet crimson highlights & dynamic pacing",
+      "queue_file": "projects/queue/04b_crimson_manga_sahiba.json",
+      "video_path": "projects/series-romantic-animations/07-sahiba-crimson-manga/output/film_sahiba_crimson_manga.mp4",
+      "cover_path": "projects/series-romantic-animations/07-sahiba-crimson-manga/output/cover.jpg",
+      "story_card_path": "projects/series-romantic-animations/07-sahiba-crimson-manga/output/story_card.jpg"
+    },
+    {
+      "order": 3,
+      "date": "2026-11-15 (Sunday)",
+      "target_time": "19:30 IST / 21:45 IST",
+      "song": "Alag Aasmaan",
+      "artist": "Anuv Jain",
+      "format": "Living 4-Shot 2D Anime MV",
+      "visuals": "Rooftop twilight moon, boy across city lights, celestial stardust shooting star, close-up blush",
+      "queue_file": "projects/queue/06_romantic_alag_aasmaan.json",
+      "video_path": "projects/series-romantic-animations/05-alag-aasmaan-anuv-jain/output/film_alag_aasmaan_romantic.mp4",
+      "cover_path": "projects/series-romantic-animations/05-alag-aasmaan-anuv-jain/output/cover.jpg",
+      "story_card_path": "projects/series-romantic-animations/05-alag-aasmaan-anuv-jain/output/story_card.jpg"
+    },
+    {
+      "order": 4,
+      "date": "2026-11-16 (Monday)",
+      "target_time": "19:30 IST / 21:45 IST",
+      "song": "Waqt Ki Baatein",
+      "artist": "Dream Note",
+      "format": "Living 4-Shot 2D Anime MV",
+      "visuals": "Train window sunset vibration, 35 fluttering golden maple leaves, warm scarf steam, soft smiling close-up",
+      "queue_file": "projects/queue/07_romantic_waqt_ki_baatein.json",
+      "video_path": "projects/series-romantic-animations/06-waqt-ki-baatein-dream-note/output/film_waqt_ki_baatein_romantic.mp4",
+      "cover_path": "projects/series-romantic-animations/06-waqt-ki-baatein-dream-note/output/cover.jpg",
+      "story_card_path": "projects/series-romantic-animations/06-waqt-ki-baatein-dream-note/output/story_card.jpg"
+    },
+    {
+      "order": 5,
+      "date": "2026-11-17 (Tuesday)",
+      "target_time": "19:30 IST / 21:45 IST",
+      "song": "Samjho Na",
+      "artist": "Aditya Rikhari",
+      "format": "Living 4-Shot 2D Anime MV",
+      "visuals": "Twilight rooftop, boy looking across city lights, shooting star nebula, dual eye blink & golden rim lighting",
+      "queue_file": "projects/queue/09_romantic_samjho_na.json",
+      "video_path": "projects/series-romantic-animations/08-samjho-na-proper-animation/output/film_samjho_na_animation.mp4",
+      "cover_path": "projects/series-romantic-animations/08-samjho-na-proper-animation/output/cover.jpg",
+      "story_card_path": "projects/series-romantic-animations/08-samjho-na-proper-animation/output/story_card.jpg"
+    },
+    {
+      "order": 6,
+      "date": "2026-11-18 (Wednesday)",
+      "target_time": "19:30 IST / 21:45 IST",
+      "song": "Ancient Ujjain Astronomy",
+      "artist": "Vynox Knowledge Studio",
+      "format": "Educational 2D Stickman Animation",
+      "visuals": "Prime Meridian of Indian astronomy, astronomical stone instruments, planetary alignments",
+      "queue_file": "projects/queue/08_ancient_ujjain_astronomy.json",
+      "video_path": "projects/series-knowledge-shorts/01-ujjain-astronomy/output/film_ujjain_educational.mp4",
+      "cover_path": "projects/series-knowledge-shorts/01-ujjain-astronomy/output/cover.jpg",
+      "story_card_path": "projects/series-knowledge-shorts/01-ujjain-astronomy/output/story_card.jpg"
+    }
+  ]
+}

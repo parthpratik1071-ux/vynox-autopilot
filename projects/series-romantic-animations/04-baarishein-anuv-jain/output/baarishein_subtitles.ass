@@ -1,20 +1,22 @@
 [Script Info]
-Title: Baarishein - Romantic 2D Animation Reel
+Title: Baarishein - Living 2D Cinematic MV
 ScriptType: v4.00+
 WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
 PlayResX: 1080
 PlayResY: 1920
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: SongBadge,Lato,34,&H00E8F4FF,&H00000000,&H00101010,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1
-Style: ModernLyric,Lato,60,&H00FFFFFF,&H000000FF,&H000A0A0A,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.0,2.0,2,60,60,530,1
+Style: TitleBadge,Lato,38,&H00FFFFFF,&H000000FF,&H90000000,&H60000000,-1,0,0,0,100,100,2,0,1,2.0,1.0,8,60,60,180,1
+Style: LyricGold,Lato,60,&H00FFFFFF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,3.5,2.0,2,80,80,540,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:00.50,0:00:05.20,SongBadge,,0,0,0,,{\fade(350,450)}ANUV JAIN  |  BAARISHEIN
-Dialogue: 1,0:00:00.50,0:00:03.50,ModernLyric,,0,0,0,,{\fade(200,200)}{\c&H003CE0FF&}Tum sun zara,{\c&H00FFFFFF&} mere paas aa...
-Dialogue: 1,0:00:03.50,0:00:07.20,ModernLyric,,0,0,0,,{\fade(200,200)}Ab baithe hain hum bhi {\c&H003CE0FF&}yahan{\c&H00FFFFFF&}...
-Dialogue: 1,0:00:07.20,0:00:13.00,ModernLyric,,0,0,0,,{\fade(200,200)}Dil ke darmiyan {\c&H003CE0FF&}baarishein hain...{\c&H00FFFFFF&}
-Dialogue: 1,0:00:13.00,0:00:19.50,ModernLyric,,0,0,0,,{\fade(200,350)}Teri hi baaton pe maine\N{\c&H003CE0FF&}saja li hai duniya yahan{\c&H00FFFFFF&}...
-Dialogue: 1,0:00:19.50,0:00:20.80,ModernLyric,,0,0,0,,{\fade(150,400)}{\c&H003CE0FF&}Baarishein hain...{\c&H00FFFFFF&}
+Dialogue: 0,0:00:00.50,0:00:04.80,TitleBadge,,0,0,180,,{\fad(350,450)}ANUV JAIN  |  {\c&H003CE0FF&}BAARISHEIN
+Dialogue: 1,0:00:00.50,0:00:03.50,LyricGold,,0,0,540,,{\fad(200,200)}{\c&H003CE0FF&}Tum sun zara,{\c&H00FFFFFF&} mere paas aa...
+Dialogue: 1,0:00:03.50,0:00:07.20,LyricGold,,0,0,540,,{\fad(200,200)}Ab baithe hain hum bhi {\c&H003CE0FF&}yahan{\c&H00FFFFFF&}...
+Dialogue: 1,0:00:07.20,0:00:13.00,LyricGold,,0,0,540,,{\fad(200,200)}Dil ke darmiyan {\c&H003CE0FF&}baarishein hain{\c&H00FFFFFF&}...
+Dialogue: 1,0:00:13.00,0:00:19.50,LyricGold,,0,0,540,,{\fad(200,300)}Teri hi baaton pe maine\N{\c&H00FFB040&}saja li hai duniya yahan{\c&H00FFFFFF&}...
+Dialogue: 1,0:00:19.50,0:00:20.80,LyricGold,,0,0,540,,{\fad(200,350)}{\c&H00FFD700&}Dil ke darmiyan baarishein{\c&H00FFFFFF&}...
