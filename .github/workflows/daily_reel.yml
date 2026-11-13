@@ -73,8 +73,14 @@ jobs:
           INSTA_PASSWORD: ${{ secrets.INSTA_PASSWORD }}
           INSTA_GRAPH_ACCESS_TOKEN: ${{ secrets.INSTA_GRAPH_ACCESS_TOKEN }}
           INSTA_IG_USER_ID: ${{ secrets.INSTA_IG_USER_ID }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
         run: |
+          echo "🔍 Checking Instagram Authentication Health..."
           python3 scripts/insta_local_post.py --check-auth || true
+          echo "🔍 Checking YouTube Shorts Authentication Health..."
+          python3 scripts/youtube_uploader.py --check-auth || true
 
       - name: Dispatch Queued Reel
         env:
