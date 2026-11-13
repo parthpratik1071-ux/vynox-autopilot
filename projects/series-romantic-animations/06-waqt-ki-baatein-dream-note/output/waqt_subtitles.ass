@@ -7,13 +7,15 @@ PlayResY: 1920
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: TitleBadge,DejaVu Sans,30,&H00C0E8FF,&H00000000,&H00101010,&H80000000,-1,0,0,0,100,100,2,0,1,2,1,8,40,40,180,1
-Style: ModernLyric,DejaVu Sans,68,&H00FFFFFF,&H000000FF,&H00080808,&H90000000,-1,0,0,0,100,100,2,0,1,3.5,4,2,50,50,400,1
+Style: SongBadge,Lato,34,&H00E8F4FF,&H00000000,&H00101010,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1
+Style: ModernLyric,Lato,58,&H00FFFFFF,&H000000FF,&H000A0A0A,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.0,2.0,2,60,60,530,1
+Style: DropTitle,Lato,48,&H00E8F4FF,&H00000000,&H000A0A0A,&H80000000,-1,0,0,0,100,100,3.5,0,1,2.0,2.0,2,40,40,530,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:00.50,0:00:24.50,TitleBadge,,0,0,0,,{\fade(400,400)}♫  DREAM NOTE  •  WAQT KI BAATEIN
-Dialogue: 1,0:00:00.50,0:00:07.50,ModernLyric,,0,0,0,,{\fade(250,250)}Kabhi toh mil hi jaayega {\c&H003CE0FF&}tujhko humsafar{\c&H00FFFFFF&}...
-Dialogue: 1,0:00:07.50,0:00:15.50,ModernLyric,,0,0,0,,{\fade(250,250)}Tujhme na kami koi hai, {\c&H00FFB040&}bas tera ye din bura hai{\c&H00FFFFFF&}...
-Dialogue: 1,0:00:15.50,0:00:20.50,ModernLyric,,0,0,0,,{\fade(250,250)}Waqt ki ye {\c&H003CE0FF&}baatein hain...{\c&H00FFFFFF&}
-Dialogue: 1,0:00:20.50,0:00:24.50,ModernLyric,,0,0,0,,{\fade(250,450)}{\c&H0055EEFF&}Ise gujar jaane do...{\c&H00FFFFFF&}
+Dialogue: 0,0:00:00.50,0:00:05.20,SongBadge,,0,0,0,,{\fade(350,450)}DREAM NOTE  |  WAQT KI BAATEIN
+Dialogue: 1,0:00:02.50,0:00:05.80,ModernLyric,,0,0,0,,{\fade(200,200)}Maana dil {\c&H003CE0FF&}dara-dara hai{\c&H00FFFFFF&}...
+Dialogue: 1,0:00:05.80,0:00:09.80,ModernLyric,,0,0,0,,{\fade(200,200)}Toota ye {\c&H003CE0FF&}zara-zara hai{\c&H00FFFFFF&}...
+Dialogue: 1,0:00:09.80,0:00:15.50,ModernLyric,,0,0,0,,{\fade(200,200)}Dil ke is bawandar ko\N{\c&H003CE0FF&}thehar jaane do{\c&H00FFFFFF&}...
+Dialogue: 1,0:00:15.50,0:00:21.00,ModernLyric,,0,0,0,,{\fade(200,400)}{\c&H003CE0FF&}Thehar jaane do{\c&H00FFFFFF&}... ho oooo...
+Dialogue: 2,0:00:21.00,0:00:24.80,DropTitle,,0,0,0,,{\fade(250,450)}WAQT KI BAATEIN  |  DREAM NOTE

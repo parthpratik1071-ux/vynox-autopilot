@@ -58,30 +58,30 @@ def build_ass_subtitles() -> Path:
             "ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
             "Alignment, MarginL, MarginR, MarginV, Encoding"
         ),
-        "Style: BrandHeader,DejaVu Sans,30,&H00C8D4FF,&H00000000,&H00080406,&H80000000,-1,0,0,0,100,100,3,0,1,2,2,8,40,40,170,1",
-        "Style: CornerLeft,DejaVu Sans,78,&H005858FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2,0,1,4.5,4,7,75,75,430,1",
-        "Style: CornerRight,DejaVu Sans,68,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2,0,1,4.5,4,3,75,75,450,1",
-        "Style: CinemaGold,DejaVu Sans,74,&H002AD4FF,&H00000000,&H00000000,&H00000000,-1,0,0,0,100,100,2,0,1,3,3,8,50,50,590,1",
-        "Style: MainLyric,DejaVu Sans,70,&H00FFFFFF,&H000000FF,&H00060204,&H90000000,-1,0,0,0,100,100,2,0,1,4,4,2,60,60,390,1",
-        "Style: DropTitle,DejaVu Sans,54,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,5,0,1,3,3,2,40,40,390,1",
+        "Style: BrandHeader,Lato,32,&H00E8F4FF,&H00000000,&H00080406,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1",
+        "Style: CornerLeft,Lato,66,&H00FFFFFF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,7,80,80,530,1",
+        "Style: CornerRight,Lato,62,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,3,80,80,540,1",
+        "Style: CinemaGold,Lato,64,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,8,50,50,560,1",
+        "Style: MainLyric,Lato,60,&H00FFFFFF,&H000000FF,&H00060204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,2,60,60,530,1",
+        "Style: DropTitle,Lato,48,&H00E8F4FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,3.5,0,1,2.0,2.0,2,40,40,530,1",
         "",
         "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-        # Subtle Persistent Watermark Header
-        f"Dialogue: 0,{sec_to_ass(0.3)},{sec_to_ass(22.2)},BrandHeader,,0,0,0,,{{\\fade(300,300)}}SAHIBA  •  @vynox_00000",
+        # Clean Header (Intro: 0.5s to 5.2s)
+        f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(5.2)},BrandHeader,,0,0,0,,{{\\fade(350,450)}}ADITYA RIKHARI  |  SAHIBA",
         # Beat 1 (Scene 1: Bindi Gaze Card) 0.0 - 6.8s
-        f"Dialogue: 1,{sec_to_ass(0.1)},{sec_to_ass(2.4)},CornerLeft,,0,0,0,,{{\\fade(150,200)}}Saahiba...",
+        f"Dialogue: 1,{sec_to_ass(0.2)},{sec_to_ass(2.4)},CornerLeft,,0,0,0,,{{\\fade(150,200)}}Saahiba...",
         f"Dialogue: 1,{sec_to_ass(2.4)},{sec_to_ass(4.6)},CornerRight,,0,0,0,,{{\\fade(150,200)}}{{\\c&H00FFFFFF&}}aaye ghar {{\\c&H003CE0FF&}}kaahe na...",
         f"Dialogue: 1,{sec_to_ass(4.6)},{sec_to_ass(6.8)},MainLyric,,0,0,0,,{{\\fade(150,150)}}aise toh {{\\c&H005858FF&}}sataaye na...",
         # Beat 2 (Scene 2: Pitch-Black Anamorphic Cinema Cut) 6.8 - 10.5s
         f"Dialogue: 2,{sec_to_ass(6.8)},{sec_to_ass(10.5)},CinemaGold,,0,0,0,,{{\\fade(120,180)}}Dekhoon tujhko...\\N{{\\c&H00FFFFFF&}}chain aata hai",
         # Beat 3 (Scene 3: Payal Full Crimson) 10.5 - 16.5s
         f"Dialogue: 1,{sec_to_ass(10.5)},{sec_to_ass(12.5)},CornerLeft,,0,0,0,,{{\\fade(120,180)}}Saahiba...",
-        f"Dialogue: 1,{sec_to_ass(12.5)},{sec_to_ass(14.5)},CornerRight,,0,0,0,,{{\\fade(120,180)}}neend aaye na...",
-        f"Dialogue: 1,{sec_to_ass(14.5)},{sec_to_ass(16.5)},MainLyric,,0,0,0,,{{\\fade(120,150)}}raatein kaati {{\\c&H003CE0FF&}}jaaye na...",
+        f"Dialogue: 1,{sec_to_ass(12.5)},{sec_to_ass(14.8)},CornerRight,,0,0,0,,{{\\fade(120,180)}}neendein-veendein {{\\c&H003CE0FF&}}aayein na{{\\c&H00FFFFFF&}}...",
+        f"Dialogue: 1,{sec_to_ass(14.8)},{sec_to_ass(17.2)},MainLyric,,0,0,0,,{{\\fade(120,150)}}raatein kaati {{\\c&H003CE0FF&}}jaayein na{{\\c&H00FFFFFF&}}...",
         # Beat 4 (Scene 4: Gajra Embrace + 20.0s Beat Drop Climax) 16.5 - 22.5s
-        f"Dialogue: 1,{sec_to_ass(16.5)},{sec_to_ass(20.0)},MainLyric,,0,0,0,,{{\\fade(150,150)}}tera hi khayal {{\\c&H003CE0FF&}}din-rain aata hai...",
-        f"Dialogue: 2,{sec_to_ass(20.0)},{sec_to_ass(22.4)},DropTitle,,0,0,0,,{{\\fade(100,450)}}SAHIBA  •  ADITYA RIKHARI",
+        f"Dialogue: 1,{sec_to_ass(17.2)},{sec_to_ass(20.8)},MainLyric,,0,0,0,,{{\\fade(150,150)}}tera hi khayal\\N{{\\c&H003CE0FF&}}din-rain aata hai{{\\c&H00FFFFFF&}}...",
+        f"Dialogue: 2,{sec_to_ass(20.8)},{sec_to_ass(22.4)},DropTitle,,0,0,0,,{{\\fade(150,450)}}SAHIBA  |  ADITYA RIKHARI",
     ]
     ass_path = OUT_DIR / "sahiba_subtitles.ass"
     ass_path.write_text("\n".join(ass_lines), encoding="utf-8")
