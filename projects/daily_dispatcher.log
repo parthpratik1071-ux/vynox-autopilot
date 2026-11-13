@@ -114,3 +114,11 @@
 [2026-11-13 13:23:44]    Reason: Saved session cookie is expired (LoginRequired) and no fallback credentials provided.
 [2026-11-13 13:23:44] 🛡️ PRESERVING QUEUE: All 5 queued Reels remain staged untouched (Next: 04_romantic_baarishein.json).
 [2026-11-13 13:23:52] ☁️ Synced queue and archive state to origin/main.
+[2026-11-14 02:12:17] 🤖 Scheduled GitHub Actions trigger detected (02:12 IST). Proceeding to dispatch next queued reel...
+[2026-11-14 02:12:17] 📦 Processing queue item: 04_romantic_baarishein.json
+[2026-11-14 02:12:17] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/series-romantic-animations/04-baarishein-anuv-jain/output/film_baarishein_romantic.mp4
+[2026-11-14 02:12:52] ✅ Reel posted successfully: https://www.instagram.com/reel/Dfsg8pNz5XQ/
+[2026-11-14 02:12:52] 📺 Cross-posting to YouTube Shorts (_void_X (4 subscribers))...
+[2026-11-14 02:12:55] ✅ YouTube Short published: https://youtube.com/shorts/5siMsZTTwvw
+[2026-11-14 02:12:55] 📁 Archived record to: 2026-11-14_04_romantic_baarishein.json
+[2026-11-14 02:12:55] 📊 Remaining queued items: 5
