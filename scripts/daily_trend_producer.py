@@ -74,7 +74,7 @@ CURATED_TRENDING_CANDIDATES = [
             {"start": 11.0, "end": 16.5, "text": "{\\c&H003CE0FF&}Khwabon mein aake{\\c&H00FFFFFF&} rukte ho kyun?..."},
             {"start": 16.5, "end": 21.5, "text": "Bas itna hume {\\c&H0055EEFF&}samjha do na{\\c&H00FFFFFF&}..."}
         ],
-        "caption": "Samjho na kuchh toh samjho na... kyun dil mera tumse juda? 🎸🌅✨\n\nGolden sunset, rooftop acoustic guitar, and feelings that can't stay hidden. ❤️\n\nArt & Animation: @vynox_00000\nSong: Samjho Na • Aditya Rikhari\n\n#adityarikhari #samjhona #indieacoustic #romance #couplelove #2danimation #watercolor #aestheticreels #reelsindia #viralreels #explorepage"
+        "caption": "Samjho na kuchh toh samjho na... kyun dil mera tumse juda? 🎸🌅✨\n\nGolden rooftop sunset, gentle guitar chords, and words you were too shy to say out loud. Tag that one person who never needs an explanation. ❤️✨\n\nArt & Animation: @vynox_00000\nSong: Samjho Na • Aditya Rikhari\n\n#adityarikhari #samjhona #indieacoustic #coupleromance #2danimation #indieindia #watercolorart #aestheticreels #reelsindia #viralreels #explorepage"
     },
     {
         "id": "ishq_faheem",
@@ -90,7 +90,7 @@ CURATED_TRENDING_CANDIDATES = [
             {"start": 12.0, "end": 18.0, "text": "Ek aag ka {\\c&H003CE0FF&}dariya hai{\\c&H00FFFFFF&}..."},
             {"start": 18.0, "end": 23.5, "text": "Aur {\\c&H0055EEFF&}doob ke jaana hai{\\c&H00FFFFFF&}..."}
         ],
-        "caption": "Misty mountain breeze, glowing lantern light, and a love deeper than the valley. 🏔️❄️☕\n\nArt & Animation: @vynox_00000\nSong: Ishq • Faheem Abdullah & Rauhan Malik\n\n#faheemabdullah #ishq #kashmir #aestheticvideo #2danimation #winterromance #watercolorart #viralreels #reelsindia #explorepage"
+        "caption": "Ye ishq nahi aasan... ek aag ka dariya hai aur doob ke jaana hai. 🏔️❄️☕\n\nMisty pine valleys, quiet winter snowfall, and a love that weathers every cold storm. Send this to the one who makes your world warm. 🤍✨\n\nArt & Animation: @vynox_00000\nSong: Ishq • Faheem Abdullah & Rauhan Malik\n\n#faheemabdullah #ishq #kashmir #winterromance #2danimation #indieindia #lofiindia #watercolorart #hearttouching #viralreels #reelsindia #explorepage"
     },
     {
         "id": "kasoor",
@@ -106,7 +106,7 @@ CURATED_TRENDING_CANDIDATES = [
             {"start": 11.0, "end": 16.5, "text": "{\\c&H003CE0FF&}Kyun teri yaadein{\\c&H00FFFFFF&} aati hain?..."},
             {"start": 16.5, "end": 21.5, "text": "Aur {\\c&H0055EEFF&}muskura jaati hain{\\c&H00FFFFFF&}..."}
         ],
-        "caption": "Kyun teri yaadein aati hain, aur muskura jaati hain... 📸✨💛\n\nPolaroid smiles and memories that never fade. Tag your person. 🌻\n\nArt & Animation: @vynox_00000\nSong: Kasoor • Prateek Kuhad\n\n#prateekkuhad #kasoor #acousticlove #2danimation #aestheticreels #watercolor #lovesongs #reelsindia #explorepage"
+        "caption": "Kyun teri yaadein aati hain, aur muskura jaati hain... 📸✨💛\n\nWarm bedroom fairy lights, Polaroid smiles, and moments that stay preserved forever in time. Tag your favorite memory. 🌻🤍\n\nArt & Animation: @vynox_00000\nSong: Kasoor • Prateek Kuhad\n\n#prateekkuhad #kasoor #acousticromance #2danimation #indieindia #aestheticlyrics #watercolorart #comfortreel #reelsindia #viralreels #explorepage"
     }
 ]
 
