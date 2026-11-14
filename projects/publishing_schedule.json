@@ -90,9 +90,9 @@
       "format": "Educational 2D Stickman Animation",
       "visuals": "Prime Meridian of Indian astronomy, astronomical stone instruments, planetary alignments",
       "queue_file": "projects/queue/08_ancient_ujjain_astronomy.json",
-      "video_path": "projects/series-knowledge-shorts/01-ujjain-astronomy/output/film_ujjain_educational.mp4",
-      "cover_path": "projects/series-knowledge-shorts/01-ujjain-astronomy/output/cover.jpg",
-      "story_card_path": "projects/series-knowledge-shorts/01-ujjain-astronomy/output/story_card.jpg"
+      "video_path": "projects/ancient-ujjain-astronomy/output/film_ancient_ujjain.mp4",
+      "cover_path": "projects/ancient-ujjain-astronomy/output/cover.jpg",
+      "story_card_path": "projects/ancient-ujjain-astronomy/output/cover.jpg"
     }
   ]
 }

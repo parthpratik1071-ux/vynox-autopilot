@@ -1,8 +1,8 @@
 {
-  "status": "HEALTHY",
-  "code": "SESSION_VALID",
-  "detail": "Published Dfsp1wez7Ek successfully",
-  "timestamp": "2026-11-14T03:31:02.070308",
+  "status": "PAUSED_AUTH_REQUIRED",
+  "code": "SESSION_EXPIRED",
+  "detail": "Saved session cookie is expired (LoginRequired) and no fallback credentials provided.",
+  "timestamp": "2026-11-14T14:29:02.079542",
   "remediation": [
     "Option A: Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` on trusted local machine.",
     "Option B: Export fresh session with `python3 scripts/insta_local_post.py --export-session` and update GitHub Secret INSTA_SESSION_JSON.",
