@@ -212,6 +212,31 @@ class OfficialGraphClient:
         m = re.search(r"/(?:reel|p)/([^/]+)/", meta.get("permalink", ""))
         return SimpleNamespace(pk=media_id, code=m.group(1) if m else str(media_id))
 
+    def photo_upload_to_story(self, path: Path, caption: str = ""):
+        image_url = _derive_public_media_url(Path(path))
+        if not image_url:
+            raise RuntimeError("Official Graph API story upload requires a repo-tracked file or PUBLIC_MEDIA_BASE_URL.")
+        container_params = {
+            "media_type": "STORIES",
+            "image_url": image_url,
+        }
+        container = self._request(f"{self.user_id}/media", container_params, method="POST")
+        cid = container["id"]
+        status = None
+        for _ in range(20):
+            status = self._request(cid, {"fields": "status_code,status"}).get("status_code")
+            if status == "FINISHED":
+                break
+            if status in ("ERROR", "EXPIRED"):
+                raise RuntimeError(f"Graph API story container {cid} failed with status={status}")
+            time.sleep(3)
+        if status != "FINISHED":
+            raise RuntimeError(f"Graph API story container {cid} timed out with status={status}")
+
+        pub = self._request(f"{self.user_id}/media_publish", {"creation_id": cid}, method="POST")
+        media_id = pub["id"]
+        return SimpleNamespace(pk=media_id, code=str(media_id))
+
 
 def check_auth_health(
     session_file: Path = DEFAULT_SESSION_FILE,
@@ -458,6 +483,20 @@ def upload_reel(cl, video_path, caption="", thumbnail_path=None):
     print(f"🆔 Media ID: {media.pk}")
     print("="*50 + "\n")
     return media
+
+def upload_story(cl, photo_path, caption=""):
+    """
+    Uploads a photo to Instagram Stories.
+    """
+    photo_p = Path(photo_path).resolve()
+    if not photo_p.exists():
+        raise FileNotFoundError(f"Story photo file does not exist: {photo_p}")
+
+    print(f"\n📸 Uploading Instagram Story Promo Card: {photo_p.name} ({photo_p.stat().st_size / 1024:.1f} KB)...")
+    story = cl.photo_upload_to_story(path=photo_p, caption=caption)
+    story_pk = getattr(story, "pk", str(story))
+    print(f"🎉 STORY PROMO CARD PUBLISHED SUCCESSFULLY! (Media ID: {story_pk})")
+    return story
 
 def main():
     parser = argparse.ArgumentParser(description="Direct Local Instagram Reel Publisher (No Facebook Required)")

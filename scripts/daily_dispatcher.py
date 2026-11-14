@@ -264,6 +264,32 @@ def dispatch_next(force=False):
     data["reel_url"] = reel_url
     data["media_id"] = media.pk
 
+    # Companion Instagram Story Promo Card Dispatch (First 60-Minute Velocity Booster)
+    try:
+        story_card_path = None
+        # Check if project already has a pre-rendered story_card.jpg
+        if cover_path and (cover_path.parent / "story_card.jpg").exists():
+            story_card_path = cover_path.parent / "story_card.jpg"
+        elif cover_path and cover_path.exists():
+            import reels_booster
+            log(f"🎨 Rendering dynamic Story Promo Card for '{data.get('title', '')}'...")
+            story_card_path = reels_booster.generate_story_card(
+                cover_path=cover_path,
+                title=data.get("title", ""),
+                handle="@vynox_00000"
+            )
+
+        if story_card_path and story_card_path.exists():
+            log(f"📸 Publishing companion Story Promo Card ({story_card_path.name}) to Instagram Stories...")
+            story_res = insta_local_post.upload_story(cl, story_card_path)
+            data["story_published"] = True
+            data["story_media_id"] = str(getattr(story_res, "pk", ""))
+            log(f"✅ Story Promo Card live on Instagram Stories! (ID: {data['story_media_id']})")
+        else:
+            log("ℹ️ Story Promo Card skipped (no cover image or card available).")
+    except Exception as story_err:
+        log(f"⚠️ Story Promo Card dispatch warning: {story_err}")
+
     # Optional cross-post to YouTube Shorts if credentials are configured
     try:
         yt_ok, yt_code, yt_info = youtube_uploader.check_auth_health()

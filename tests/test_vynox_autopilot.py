@@ -327,6 +327,64 @@ class TestDailyDispatcherAndTrendProducer(unittest.TestCase):
             self.assertEqual(len(archived), 1)
             self.assertEqual(json.loads(archived[0].read_text())["status"], "skipped_duplicate")
 
+    def test_dispatcher_publishes_reel_and_companion_story_card(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            qdir = root / "queue"
+            adir = root / "archive"
+            qdir.mkdir()
+            adir.mkdir()
+            log_file = root / "dispatcher.log"
+            vid = root / "reel.mp4"
+            vid.write_bytes(b"fake_video_data")
+            cover = root / "cover.jpg"
+            Image.new("RGB", (1080, 1920), (20, 20, 40)).save(cover)
+            qitem = qdir / "01_test.json"
+            qitem.write_text(json.dumps({
+                "title": "Samjho Na Test",
+                "video_path": str(vid),
+                "cover_path": str(cover),
+                "caption": "Lovely aesthetic animation"
+            }))
+
+            fake_client = mock.MagicMock()
+            fake_media = SimpleNamespace(code="C12345", pk="777001")
+            fake_story = SimpleNamespace(pk="999001")
+
+            with mock.patch.object(daily_dispatcher, "QUEUE_DIR", qdir), mock.patch.object(
+                daily_dispatcher, "ARCHIVE_DIR", adir
+            ), mock.patch.object(daily_dispatcher, "LOG_FILE", log_file), mock.patch.object(
+                insta_local_post, "check_auth_health", return_value=(True, "SESSION_VALID", fake_client)
+            ), mock.patch.object(
+                insta_local_post, "upload_reel", return_value=fake_media
+            ) as mock_upload_reel, mock.patch.object(
+                insta_local_post, "upload_story", return_value=fake_story
+            ) as mock_upload_story, mock.patch(
+                "duplicate_guard.is_duplicate_video", return_value=(False, "")
+            ), mock.patch(
+                "duplicate_guard.register_video"
+            ), mock.patch.object(
+                fake_client, "user_medias", return_value=[]
+            ), mock.patch(
+                "youtube_uploader.check_auth_health", return_value=(False, "NO_CREDS", "")
+            ), mock.patch.dict(
+                os.environ, {"GITHUB_ACTIONS": ""}, clear=False
+            ), mock.patch(
+                "subprocess.run"
+            ):
+                ok = daily_dispatcher.dispatch_next(force=True)
+
+            self.assertTrue(ok)
+            mock_upload_reel.assert_called_once()
+            mock_upload_story.assert_called_once()
+            archived = list(adir.glob("*.json"))
+            self.assertEqual(len(archived), 1)
+            arch_data = json.loads(archived[0].read_text())
+            self.assertEqual(arch_data["reel_url"], "https://www.instagram.com/reel/C12345/")
+            self.assertTrue(arch_data.get("story_published"))
+            self.assertEqual(arch_data.get("story_media_id"), "999001")
+            self.assertIn("Story Promo Card live on Instagram Stories", log_file.read_text())
+
     def test_dispatcher_pauses_and_preserves_queue_on_auth_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
