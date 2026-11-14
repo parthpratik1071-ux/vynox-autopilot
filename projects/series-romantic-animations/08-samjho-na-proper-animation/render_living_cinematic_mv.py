@@ -262,23 +262,22 @@ def render_shot4(t, f_idx):
     M_c = np.float32([[1, 0, 0], [0, 1, breath * 0.4]])
     frame[900:1400, 200:880] = cv2.warpAffine(chest, M_c, (cw, ch), borderMode=cv2.BORDER_REFLECT)
     
-    # Dual synchronized eye blink at t=17.0s (rel_t = 2.2s)
-    dt_blink = abs(rel_t - 2.20)
+    # Dual synchronized gentle eye blink at t=17.2s (rel_t = 2.4s)
+    dt_blink = abs(rel_t - 2.40)
     if dt_blink < 0.11:
         b_phase = 1.0 - (dt_blink / 0.11)
-        skin_bgr = tuple(int(c) for c in canvas_s4[630:650, 500:520].mean(axis=(0,1)))
-        # Left eye: (467, 631), Right eye: (571, 634)
-        for ex, ey in [(467, 631), (571, 634)]:
+        skin_bgr = tuple(int(c) for c in canvas_s4[700:750, 450:520].mean(axis=(0,1)))
+        for ex, ey in [(465, 710), (590, 715)]:
             cv2.ellipse(frame, (ex, ey), (8, int(6 * b_phase)), 0, 0, 360, skin_bgr, -1)
             cv2.line(frame, (ex - 10, ey), (ex + 10, ey), (35, 20, 25), 2)
             
     # Subtle smiling micro-movement (corners of lips relaxing upwards)
     smile_amp = (math.sin(rel_t * 1.5) + 1.0) * 0.5  # 0 to 1
-    mouth_region = frame[670:740, 460:540]
+    mouth_region = frame[750:830, 460:550]
     mh, mw = mouth_region.shape[:2]
     M_m = np.float32([[1, 0, 0], [0, 1, -smile_amp * 1.4]])
     warped_mouth = cv2.warpAffine(mouth_region, M_m, (mw, mh), borderMode=cv2.BORDER_REFLECT)
-    frame[670:740, 460:540] = cv2.addWeighted(frame[670:740, 460:540], 0.35, warped_mouth, 0.65, 0)
+    frame[750:830, 460:550] = cv2.addWeighted(mouth_region, 0.35, warped_mouth, 0.65, 0)
     
     # Hair breeze wave (Y: 450..850, X: 250..800)
     hair_c = frame[450:850, 250:800]
