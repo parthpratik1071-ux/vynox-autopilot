@@ -140,7 +140,7 @@ def dispatch_next(force=False):
 
     cl = client_or_err
 
-    if not force and not is_ci:
+    if not force:
         # Check valid posts published today (ignoring deleted posts)
         today_posts = []
         for p in ARCHIVE_DIR.glob(f"{today_str}*.json"):
@@ -152,29 +152,39 @@ def dispatch_next(force=False):
             except Exception:
                 pass
 
-        # Check slot fulfillment (Audience-optimized: Slot 1: Evening 7:30 PM IST | Slot 2: Late-Night Peak 9:45 PM IST)
-        if now.hour >= 21:
-            late_night_posted = any(
-                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour >= 21)
-                for p in today_posts
-            )
-            if late_night_posted:
-                log(f"✅ Late-Night Peak Reel already published today ({today_str}). Daily quota fulfilled!")
-                return True
-        elif now.hour < 19:
-            log(f"⏳ Current time ({now.strftime('%H:%M')}) is before Evening slot (19:30 IST). Waiting.")
-            return False
-        else:
-            # Evening slot (19:00 - 21:00)
-            evening_posted = any(
+        # Calculate time in minutes from midnight (IST)
+        mins_now = now.hour * 60 + now.minute
+        slot1_start = 19 * 60 + 15   # 19:15 IST (7:15 PM)
+        slot1_end = 20 * 60 + 45     # 20:45 IST (8:45 PM)
+        slot2_start = 21 * 60 + 30   # 21:30 IST (9:30 PM)
+        slot2_end = 23 * 60 + 15     # 23:15 IST (11:15 PM)
+
+        if slot1_start <= mins_now <= slot1_end:
+            # Slot 1: Evening Wind-Down
+            slot1_posted = any(
                 (parse_dt(p.get("published_at")) and 19 <= parse_dt(p.get("published_at")).hour < 21)
                 for p in today_posts
             )
-            if evening_posted:
-                log(f"✅ Evening Reel already published today ({today_str}). Next slot is Late-Night Viral Peak at 9:45 PM IST.")
+            if slot1_posted:
+                log(f"✅ Evening Slot 1 Reel already published today ({today_str}). Next slot is Late-Night Peak at 9:45 PM IST.")
                 return True
-    elif is_ci:
-        log(f"🤖 Scheduled GitHub Actions trigger detected ({now.strftime('%H:%M')} IST). Proceeding to dispatch next queued reel...")
+            log(f"🎯 Slot 1 (Evening 7:30 PM IST Window) active ({now.strftime('%H:%M')} IST). Proceeding to dispatch...")
+        elif slot2_start <= mins_now <= slot2_end:
+            # Slot 2: Late-Night Viral Peak
+            slot2_posted = any(
+                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour >= 21)
+                for p in today_posts
+            )
+            if slot2_posted:
+                log(f"✅ Late-Night Slot 2 Reel already published today ({today_str}). Daily quota fulfilled!")
+                return True
+            log(f"🎯 Slot 2 (Late-Night 9:45 PM IST Peak Window) active ({now.strftime('%H:%M')} IST). Proceeding to dispatch...")
+        else:
+            log(
+                f"⏳ Current time ({now.strftime('%H:%M')} IST) is outside peak audience publishing windows "
+                f"(Slot 1: 19:15–20:45 IST | Slot 2: 21:30–23:15 IST). Aborting off-hours dispatch to protect organic reach."
+            )
+            return False
 
     next_file = queue_files[0]
     log(f"📦 Processing queue item: {next_file.name}")

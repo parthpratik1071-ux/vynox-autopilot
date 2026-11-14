@@ -2,11 +2,15 @@ name: Daily Instagram Reel Publisher
 
 on:
   schedule:
-    # Audience-optimized peak slots based on historical account performance (Late-night aesthetic niche):
-    # 14:00 UTC = 7:30 PM IST (Evening Wind-Down Slot)
+    # High-reliability multi-check cron during peak hours (bypasses GitHub queue delays and guarantees on-time release):
+    # Slot 1 Window (Evening 7:15 - 8:15 PM IST):
+    - cron: '45 13 * * *'
     - cron: '0 14 * * *'
-    # 16:15 UTC = 9:45 PM IST (Late-Night Viral Peak Slot - Highest Historic Engagement)
+    - cron: '15 14 * * *'
+    # Slot 2 Window (Late-Night 9:30 - 10:30 PM IST):
+    - cron: '0 16 * * *'
     - cron: '15 16 * * *'
+    - cron: '30 16 * * *'
   workflow_dispatch:
     inputs:
       force:

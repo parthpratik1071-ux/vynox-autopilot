@@ -192,7 +192,7 @@ def render_shot1(t, f_idx):
         
     return apply_handheld_drift(frame, t)
 
-# --- SHOT 2: Medium Shot of Boy (5.2s - 10.0s) ---
+# --- SHOT 2: Atmospheric Alleyway - Gali (5.2s - 10.0s) ---
 def render_shot2(t, f_idx):
     rel_t = max(0.0, t - 5.20)
     frame = canvas_s2[:, :, :3].copy()
@@ -205,61 +205,50 @@ def render_shot2(t, f_idx):
     oy = max(0, (nh - HEIGHT) // 2)
     frame = scaled[oy:oy+HEIGHT, ox:ox+WIDTH].copy()
     
-    # Breathing physics on boy (Y: 820..1180, X: 350..650)
-    breath = math.sin(rel_t * (2.0 * math.pi / 2.8)) * 3.2
-    torso = frame[820:1180, 350:650]
-    th, tw = torso.shape[:2]
-    M_b = np.float32([[1, 0, 0], [0, 1, breath * 0.4]])
-    frame[820:1180, 350:650] = cv2.warpAffine(torso, M_b, (tw, th), borderMode=cv2.BORDER_REFLECT)
+    # Breeze waving her dupatta / scarf
+    scarf = frame[750:1050, 400:680]
+    sh, sw = scarf.shape[:2]
+    w_wave = math.sin(rel_t * 3.5) * 3.0
+    M_s = np.float32([[1, 0, w_wave], [0, 1, 0]])
+    frame[750:1050, 400:680] = cv2.addWeighted(scarf, 0.25, cv2.warpAffine(scarf, M_s, (sw, sh), borderMode=cv2.BORDER_REFLECT), 0.75, 0)
     
-    # Wind in boy's hair (Y: 650..820, X: 360..540)
-    hair = frame[650:820, 360:540]
-    hh, hw = hair.shape[:2]
-    w_wave = math.sin(rel_t * 3.2) * 2.8
-    M_hw = np.float32([[1, 0, w_wave], [0, 1, 0]])
-    warped_hair = cv2.warpAffine(hair, M_hw, (hw, hh), borderMode=cv2.BORDER_REFLECT)
-    frame[650:820, 360:540] = cv2.addWeighted(frame[650:820, 360:540], 0.25, warped_hair, 0.75, 0)
-    
-    # Eye blink at t=7.4s (rel_t = 2.2s)
-    dt_blink = abs(rel_t - 2.20)
-    if dt_blink < 0.10:
-        b_phase = 1.0 - (dt_blink / 0.10)
-        ey_cx, ey_cy = 442, 802
-        skin_bgr = tuple(int(c) for c in canvas_s2[790:810, 430:450].mean(axis=(0,1)))
-        cv2.ellipse(frame, (ey_cx, ey_cy), (6, int(4 * b_phase)), 0, 0, 360, skin_bgr, -1)
-        cv2.line(frame, (ey_cx - 7, ey_cy), (ey_cx + 7, ey_cy), (30, 20, 25), 2)
-        
-    # Ambient city light shimmer (bottom Y: 1200..1800)
-    shimmer = (math.sin(rel_t * 4.5) + 1.0) * 0.04
-    frame[1200:1800, :] = cv2.addWeighted(frame[1200:1800, :], 1.0 - shimmer, np.full_like(frame[1200:1800, :], (40, 60, 90)), shimmer, 0)
+    # Ambient string lights shimmer in alleyway
+    shimmer = (math.sin(rel_t * 3.8) + 1.0) * 0.03
+    frame = cv2.addWeighted(frame, 1.0, np.full_like(frame, (25, 50, 80)), shimmer, 0)
     
     return apply_handheld_drift(frame, t, amp_x=2.5, amp_y=2.0)
 
-# --- SHOT 3: Celestial Stardust Connection (10.0s - 14.8s) ---
+# --- SHOT 3: Steaming Chai Kulhads & Lyrics Notebook (10.0s - 14.8s) ---
 def render_shot3(t, f_idx):
     rel_t = max(0.0, t - 10.00)
     frame = canvas_s3[:, :, :3].copy()
     
-    # Slow cosmic rotational pan
-    rot_angle = math.sin(rel_t * 0.3) * 0.8
-    M_rot = cv2.getRotationMatrix2D((WIDTH//2, HEIGHT//2), rot_angle, 1.02)
-    frame = cv2.warpAffine(frame, M_rot, (WIDTH, HEIGHT), borderMode=cv2.BORDER_REFLECT)
+    # Slow cinematic push-in
+    zoom = 1.0 + 0.03 * min(1.0, rel_t / 4.8)
+    nh, nw = int(HEIGHT * zoom), int(WIDTH * zoom)
+    scaled = cv2.resize(frame, (nw, nh))
+    ox = max(0, (nw - WIDTH) // 2)
+    oy = max(0, (nh - HEIGHT) // 2)
+    frame = scaled[oy:oy+HEIGHT, ox:ox+WIDTH].copy()
     
-    # Pulsing nebula brightness
-    nebula_pulse = (math.sin(rel_t * 2.5) + 1.0) * 0.08
-    frame = cv2.addWeighted(frame, 1.0 + nebula_pulse, np.zeros_like(frame), 0, 0)
+    # Warm golden bokeh pulse in background
+    bokeh_pulse = (math.sin(rel_t * 2.5) + 1.0) * 0.05
+    frame = cv2.addWeighted(frame, 1.0 + bokeh_pulse, np.zeros_like(frame), 0, 0)
     
-    # Dynamic shooting star streak at t=12.2s (rel_t = 2.2..2.8)
-    if 2.0 <= rel_t <= 2.8:
-        p_star = (rel_t - 2.0) / 0.8
-        st_x1 = int(180 + p_star * 680)
-        st_y1 = int(220 + p_star * 350)
-        st_x0 = int(st_x1 - 140)
-        st_y0 = int(st_y1 - 70)
-        cv2.line(frame, (st_x0, st_y0), (st_x1, st_y1), (255, 230, 180), 3)
-        cv2.circle(frame, (st_x1, st_y1), 5, (255, 255, 255), -1)
-        
-    return apply_handheld_drift(frame, t, amp_x=3.5, amp_y=2.8)
+    # Rising steam curls from the two chai kulhads
+    for k_idx, k_cx in enumerate([460, 620]):
+        for s_idx in range(4):
+            s_t = rel_t + s_idx * 0.45 + k_idx * 0.25
+            sy = int(820 - (s_t * 55) % 180)
+            sway = math.sin(s_t * 3.5 + k_idx) * 14
+            sx = int(k_cx + sway)
+            rad = int(8 + ((820 - sy) / 180) * 12)
+            alpha = max(0.0, 1.0 - (820 - sy) / 180) * 0.45
+            overlay = frame.copy()
+            cv2.circle(overlay, (sx, sy), rad, (225, 235, 245), -1)
+            frame = cv2.addWeighted(overlay, alpha, frame, 1.0 - alpha, 0)
+            
+    return apply_handheld_drift(frame, t, amp_x=2.5, amp_y=1.8)
 
 # --- SHOT 4: Emotional Climax Close-up (14.8s - 20.5s) ---
 def render_shot4(t, f_idx):
