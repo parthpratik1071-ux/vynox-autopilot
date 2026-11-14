@@ -432,3 +432,4 @@ subprocess.run([
     "-frames:v", "1", "-q:v", "2", str(cover_path)
 ], check=True)
 print(f"📸 Cover thumbnail generated: {cover_path}")
+

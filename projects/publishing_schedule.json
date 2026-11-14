@@ -76,23 +76,36 @@
       "artist": "Aditya Rikhari",
       "format": "Living 4-Shot 2D Anime MV",
       "visuals": "Twilight rooftop, boy looking across city lights, shooting star nebula, dual eye blink & golden rim lighting",
-      "queue_file": "projects/queue/09_romantic_samjho_na.json",
+      "queue_file": "projects/queue/08_romantic_samjho_na.json",
       "video_path": "projects/series-romantic-animations/08-samjho-na-proper-animation/output/film_samjho_na_animation.mp4",
       "cover_path": "projects/series-romantic-animations/08-samjho-na-proper-animation/output/cover.jpg",
       "story_card_path": "projects/series-romantic-animations/08-samjho-na-proper-animation/output/story_card.jpg"
     },
     {
       "order": 6,
-      "date": "2026-11-18 (Wednesday)",
-      "target_time": "19:30 IST / 21:45 IST",
+      "date": "2026-11-16 (Monday)",
+      "target_time": "19:30 IST",
       "song": "Ancient Ujjain Astronomy",
       "artist": "Vynox Knowledge Studio",
       "format": "Educational 2D Stickman Animation",
       "visuals": "Prime Meridian of Indian astronomy, astronomical stone instruments, planetary alignments",
-      "queue_file": "projects/queue/08_ancient_ujjain_astronomy.json",
+      "queue_file": "projects/queue/09_ancient_ujjain_astronomy.json",
       "video_path": "projects/ancient-ujjain-astronomy/output/film_ancient_ujjain.mp4",
       "cover_path": "projects/ancient-ujjain-astronomy/output/cover.jpg",
       "story_card_path": "projects/ancient-ujjain-astronomy/output/cover.jpg"
+    },
+    {
+      "order": 7,
+      "date": "2026-11-16 (Monday)",
+      "target_time": "21:45 IST",
+      "song": "Ishq",
+      "artist": "Faheem Abdullah & Rauhan Malik",
+      "format": "Living 4-Shot 2D Anime MV",
+      "visuals": "Drifting Himalayan snowfall physics, swinging lantern light, rising Kahwa steam, romantic eye blinks",
+      "queue_file": "projects/queue/10_romantic_ishq.json",
+      "video_path": "projects/series-romantic-animations/09-ishq-faheem/output/film_ishq.mp4",
+      "cover_path": "projects/series-romantic-animations/09-ishq-faheem/output/cover.jpg",
+      "story_card_path": "projects/series-romantic-animations/09-ishq-faheem/output/story_card.jpg"
     }
   ]
 }
