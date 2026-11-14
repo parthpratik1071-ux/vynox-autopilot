@@ -1,8 +1,8 @@
 {
-  "status": "PAUSED_AUTH_REQUIRED",
-  "code": "SESSION_RESTRICTED",
-  "detail": "Instagram restriction/challenge (ChallengeRequired): Manual verification required via Instagram native challenge flow. This checkpoint is not handled by challenge_code_handler or change_password_handler; complete it in the official Instagram app or web flow on a trusted device. Retry with the same saved client settings, device identifiers, and proxy/IP.",
-  "timestamp": "2026-11-14T17:02:54.540396",
+  "status": "HEALTHY",
+  "code": "SESSION_VALID",
+  "detail": "Published DfuqjwtztXD successfully",
+  "timestamp": "2026-11-14T22:16:05.433951",
   "remediation": [
     "Option A: Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` on trusted local machine.",
     "Option B: Export fresh session with `python3 scripts/insta_local_post.py --export-session` and update GitHub Secret INSTA_SESSION_JSON.",
