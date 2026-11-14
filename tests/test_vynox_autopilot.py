@@ -283,10 +283,10 @@ class TestDailyDispatcherAndTrendProducer(unittest.TestCase):
             with mock.patch.object(daily_trend_producer, "LOG_FILE", log_file):
                 cand = daily_trend_producer.discover_next_trending()
             self.assertIsNotNone(cand)
-            # Samjho Na is now produced and queued in projects/queue/09_romantic_samjho_na.json,
-            # so the duplicate guard correctly advances to Ishq by Faheem Abdullah.
-            self.assertEqual(cand["id"], "ishq_faheem")
-            self.assertIn("Ishq", log_file.read_text())
+            # Samjho Na and Ishq are now produced and queued in projects/queue/,
+            # so the duplicate guard correctly advances to Kasoor by Prateek Kuhad.
+            self.assertEqual(cand["id"], "kasoor")
+            self.assertIn("Kasoor", log_file.read_text())
 
     def test_dispatcher_local_quota_and_duplicate_skip(self):
         with tempfile.TemporaryDirectory() as tmp:
