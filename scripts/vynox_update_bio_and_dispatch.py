@@ -16,10 +16,11 @@ import daily_dispatcher
 import insta_local_post
 
 DEFAULT_USERNAME = "vynox_00000"
+NEW_FULL_NAME = "Vynox ✦ 2D Anime & Visual Stories"
 NEW_BIO = (
-    "🌙 2D Anime & Lofi Lyric Stories\n"
-    "🎧 Indie Songs • Late-Night Feels • Visual Art\n"
-    "✨ New Aesthetic Reels Daily"
+    "✦ Independent Animation & Visual Stories 🎨\n"
+    "🎬 Living 2D Anime • Deep Lore • Indie Music\n"
+    "🎧 Headphones on | Drop song/story ideas 👇"
 )
 
 
@@ -63,22 +64,40 @@ def sync_queue_to_remote() -> None:
         print("⚠️ Could not push to origin/main automatically; please run 'git push origin main'.")
 
 
-def update_bio(cl, biography: str) -> None:
-    """Updates @vynox_00000 biography using Instagram's dedicated set_biography endpoint."""
+def update_profile(cl, full_name: str | None = None, biography: str | None = None) -> None:
+    """Updates @vynox_00000 display name and biography for a cohesive, attractive studio identity."""
     account = cl.account_info()
     print(f"👤 Connected Account: @{account.username} (ID: {account.pk})")
+    print(f"📝 Current Full Name: {account.full_name}")
     print(f"📝 Current Bio:\n{account.biography}\n")
 
-    if account.biography.strip() == biography.strip():
-        print("✅ Bio is already up to date.")
-        return
+    # 1. Update Name if requested
+    if full_name and account.full_name != full_name:
+        try:
+            cl.account_edit(full_name=full_name)
+            print(f"✨ Full name updated to: '{full_name}'")
+        except Exception as e:
+            print(f"ℹ️ Name update skipped or restricted: {e}")
 
-    ok = cl.account_set_biography(biography)
-    if not ok:
-        raise RuntimeError("Instagram returned non-ok status when updating biography.")
+    # 2. Update Bio if requested
+    if biography and account.biography.strip() != biography.strip():
+        ok = cl.account_set_biography(biography)
+        if ok:
+            print(f"✨ Bio updated to:\n{biography}")
+        else:
+            print("⚠️ Instagram returned non-ok status for biography update.")
 
     refreshed = cl.account_info()
-    print(f"✅ Bio successfully updated to:\n{refreshed.biography}\n")
+    print("\n" + "=" * 50)
+    print("🎉 PROFILE SUCCESSFULLY UPDATED!")
+    print(f"👤 Name: {refreshed.full_name}")
+    print(f"📜 Bio:\n{refreshed.biography}")
+    print("=" * 50 + "\n")
+
+
+def update_bio(cl, biography: str) -> None:
+    """Backwards-compatible wrapper for updating biography."""
+    update_profile(cl, biography=biography)
 
 
 def main() -> int:
@@ -99,7 +118,7 @@ def main() -> int:
     args = parser.parse_args()
 
     cl = insta_local_post.get_client(username=args.username)
-    update_bio(cl, NEW_BIO)
+    update_profile(cl, full_name=NEW_FULL_NAME, biography=NEW_BIO)
 
     if not args.bio_only:
         print("🚀 Dispatching next queued reel via daily_dispatcher...")
