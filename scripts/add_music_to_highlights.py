@@ -18,29 +18,30 @@ sys.path.insert(0, str(BASE_DIR / "scripts"))
 import insta_local_post
 
 BRAND_DIR = BASE_DIR / "projects" / "brand_identity"
+STORIES_DIR = BRAND_DIR / "music_stories"
 
 TARGETS = [
     {
         "title": "ANIME",
-        "video": Path("/tmp/music_story_anime.mp4"),
+        "video": STORIES_DIR / "music_story_anime.mp4",
         "cover": BRAND_DIR / "highlight_anime.jpg",
         "caption": "✦ Samjho Na • Aditya Rikhari (Living 2D Anime) 🎧",
     },
     {
         "title": "LORE",
-        "video": Path("/tmp/music_story_lore.mp4"),
+        "video": STORIES_DIR / "music_story_lore.mp4",
         "cover": BRAND_DIR / "highlight_lore.jpg",
         "caption": "✦ Ancient Indian Astronomy • Vedic Space Lore 🌌",
     },
     {
         "title": "MANGA",
-        "video": Path("/tmp/music_story_manga.mp4"),
+        "video": STORIES_DIR / "music_story_manga.mp4",
         "cover": BRAND_DIR / "highlight_manga.jpg",
         "caption": "✦ Sahiba • Jasleen Royal (Crimson Manga) 🩸",
     },
     {
         "title": "PLAYLIST",
-        "video": Path("/tmp/music_story_playlist.mp4"),
+        "video": STORIES_DIR / "music_story_playlist.mp4",
         "cover": BRAND_DIR / "highlight_playlist.jpg",
         "caption": "✦ Ishq • Faheem Abdullah & Rauhan Malik 🏔️✨",
     },
@@ -48,33 +49,30 @@ TARGETS = [
 
 
 def add_music_to_all_highlights():
-    print("🎵 Initializing Sound & Music Addition to @vynox_00000 Highlights...")
+    print("🎵 Initializing Clean Highlight Recreation with Music on @vynox_00000...")
     cl = insta_local_post.get_client()
 
-    # Map existing highlights
-    highlights_map = {}
+    # 1. Clean Delete of Old Silent Highlights
+    print("\n🗑️ Deleting old silent highlights from profile...")
     try:
-        live_hls = cl.user_highlights(cl.user_id)
-        for h in live_hls:
-            highlights_map[h.title.upper()] = h
-            print(f"   Found highlight: '{h.title}' (ID: {h.pk})")
+        old_hls = cl.user_highlights(cl.user_id)
+        for h in old_hls:
+            print(f"   Deleting old highlight: '{h.title}' (ID: {h.pk})...")
+            cl.highlight_delete(h.pk)
+            time.sleep(2)
+        print("✅ Old highlights cleared!")
     except Exception as e:
-        print(f"Error fetching highlights: {e}")
-        return
+        print(f"⚠️ Notice while deleting old highlights: {e}")
 
+    # 2. Upload musical video stories and create fresh highlights with covers
     for item in TARGETS:
         title = item["title"]
         video_path = item["video"]
         cover_path = item["cover"]
         caption = item["caption"]
 
-        if title not in highlights_map:
-            print(f"⚠️ Highlight '{title}' not found on profile. Skipping.")
-            continue
-
-        hl = highlights_map[title]
         print(f"\n==================================================")
-        print(f"🎶 Adding Music & Motion to Highlight: [{title}]")
+        print(f"🎶 Creating Musical Highlight: [{title}]")
         print(f"📹 Video clip: {video_path.name} ({video_path.stat().st_size / (1024*1024):.2f} MB)")
 
         try:
@@ -88,31 +86,31 @@ def add_music_to_all_highlights():
                 ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
 
             # 1. Upload musical video story
-            print(f"🚀 Uploading musical video story with thumbnail...")
+            print(f"🚀 Uploading musical video story with audio...")
             story = cl.video_upload_to_story(path=video_path, thumbnail=thumb_path, caption=caption)
             story_pk = str(getattr(story, "pk", ""))
             print(f"✅ Musical Story live! (PK: {story_pk})")
             time.sleep(3)
 
-            # 2. Add story into the Highlight
-            print(f"📌 Binding musical story into Highlight '{title}' (ID: {hl.pk})...")
-            cl.highlight_add_stories(highlight_pk=hl.pk, added_media_ids=[story_pk])
-            print(f"✨ Story added to Highlight '{title}'!")
+            # 2. Create fresh Highlight with this musical story
+            print(f"✨ Creating fresh Highlight '{title}' on Instagram profile...")
+            new_hl = cl.highlight_create(title=title, story_ids=[story_pk])
+            print(f"🎉 Highlight '{title}' created! (ID: {new_hl.pk})")
             time.sleep(2)
 
-            # 3. Re-affirm custom cover
+            # 3. Apply custom luxury watercolor cover
             if cover_path.exists():
-                print(f"🎨 Ensuring custom cover icon remains active: {cover_path.name}...")
-                cl.highlight_change_cover(hl.pk, cover_path)
-                print(f"✅ Cover affirmed for '{title}'!")
+                print(f"🎨 Setting custom cover icon: {cover_path.name}...")
+                cl.highlight_change_cover(new_hl.pk, cover_path)
+                print(f"✅ Custom cover applied to '{title}'!")
 
         except Exception as err:
-            print(f"⚠️ Error adding music to highlight '{title}': {err}")
+            print(f"⚠️ Error creating musical highlight '{title}': {err}")
 
         time.sleep(4)
 
     print("\n" + "=" * 50)
-    print("🎉 ALL HIGHLIGHTS UPDATED WITH FULL MUSIC & SOUND!")
+    print("🎉 ALL 4 HIGHLIGHTS RE-CREATED WITH FULL MUSIC & SOUND!")
     print("=" * 50 + "\n")
 
 

@@ -370,6 +370,11 @@ class ReelsBooster:
         try:
             my_user_id = str(cl.user_id)
             medias = cl.user_medias(my_user_id, amount=1)
+            if not medias and hasattr(cl, "user_clips"):
+                try:
+                    medias = cl.user_clips(my_user_id, amount=1)
+                except Exception:
+                    pass
             if not medias:
                 print("ℹ️ [Reels-Booster] No medias found on account.")
                 return True
