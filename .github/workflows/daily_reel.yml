@@ -109,11 +109,13 @@ jobs:
         run: |
           git config --global user.name "Vynox Bot"
           git config --global user.email "bot@vynox.ai"
-          git add projects/queue/ projects/archive/ projects/daily_dispatcher.log projects/duplicate_registry.json projects/auth_status.json
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
+          # Only stage queue and archive modifications (actual releases)
+          git add projects/queue/ projects/archive/ projects/duplicate_registry.json
+          if ! git diff --cached --quiet; then
+            git add projects/daily_dispatcher.log projects/auth_status.json
             git commit -m "Automated daily Reel dispatched & auth synced [skip ci]"
             git pull --rebase --autostash origin main || true
             git push origin HEAD:main
+          else
+            echo "No queue or archive changes (no Reel dispatched); skipping empty commit."
           fi
