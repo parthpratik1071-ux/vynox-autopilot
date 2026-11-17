@@ -2,10 +2,10 @@
   "status": "HEALTHY",
   "code": "SESSION_VALID",
   "detail": "Published Dfzjpr9TpVu successfully",
-  "timestamp": "2026-11-16T19:51:28.476481",
+  "timestamp": "2026-11-17T20:08:00.000000",
   "remediation": [
     "Option A: Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` on trusted local machine.",
     "Option B: Export fresh session with `python3 scripts/insta_local_post.py --export-session` and update GitHub Secret INSTA_SESSION_JSON.",
-    "Option C: Configure INSTA_GRAPH_ACCESS_TOKEN and INSTA_IG_USER_ID for zero-session Meta Graph API."
+    "Option C: Login with username/password via `python3 scripts/insta_local_post.py --login-cli`."
   ]
 }

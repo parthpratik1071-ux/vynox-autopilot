@@ -186,6 +186,31 @@ def dispatch_next(force=False):
             )
             return False
 
+    # -------------------------------------------------------------
+    # ZERO-SUSPENSION BAN-SHIELD: Minimum 60-Minute Spacing Guard
+    # -------------------------------------------------------------
+    recent_archives = sorted(ARCHIVE_DIR.glob("*.json"), key=os.path.getmtime, reverse=True)
+    if recent_archives:
+        try:
+            with open(recent_archives[0], "r") as f:
+                last_record = json.load(f)
+            last_pub_str = last_record.get("published_at")
+            if last_pub_str:
+                last_pub_dt = parse_dt(last_pub_str)
+                if last_pub_dt:
+                    diff_mins = (now - last_pub_dt).total_seconds() / 60.0
+                    MIN_SAFE_MINUTES = 60
+                    if 0 <= diff_mins < MIN_SAFE_MINUTES:
+                        remaining = int(MIN_SAFE_MINUTES - diff_mins)
+                        log(
+                            f"🛡️ ZERO-SUSPENSION BAN-SHIELD ACTIVE: Safe cooldown enforced to protect @vynox_00000. "
+                            f"Last Reel was posted {int(diff_mins)} min ago ({last_record.get('title', 'Unknown')}). "
+                            f"Please wait {remaining} more minutes before dispatching another Reel."
+                        )
+                        return False
+        except Exception as e:
+            pass
+
     next_file = queue_files[0]
     log(f"📦 Processing queue item: {next_file.name}")
 
