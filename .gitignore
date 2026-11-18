@@ -29,5 +29,21 @@ projects/brand_identity/music_stories/
 # Local raw downloads & temporary experimental assets
 projects/batman-realistic-edit/raw/
 projects/batman-sajan-sajan-edit/
+projects/joker-aur-ho-edit/raw/
+projects/joker-aur-ho-edit/audio/
+projects/joker-aur-ho-edit/output/thumbs/
+projects/joker-aur-ho-edit/output/frame_*.jpg
+projects/joker-aur-ho-edit/output/check_*.jpg
+projects/joker-aur-ho-edit/output/hospital_*.jpg
+projects/joker-aur-ho-edit/output/interrogation_*.jpg
+projects/joker-aur-ho-edit/output/jail_*.jpg
+projects/joker-aur-ho-edit/output/police_car_*.jpg
+projects/joker-aur-ho-edit/output/test_text_aur_ho.png
+projects/joker-aur-ho-edit/output/scene_cuts.txt
+projects/joker-aur-ho-edit/output/all_scenes_contact_sheet.jpg
+projects/joker-aur-ho-edit/output/joker_cuts_grid.jpg
+projects/joker-aur-ho-edit/output/joker_key_scenes_sheet.jpg
+projects/joker-aur-ho-edit/output/joker_scenepack_overview.jpg
+projects/joker-aur-ho-edit/output/graded_scenes_test.jpg
 gta6-clipper/
 
