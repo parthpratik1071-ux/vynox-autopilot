@@ -45,5 +45,17 @@ projects/joker-aur-ho-edit/output/joker_cuts_grid.jpg
 projects/joker-aur-ho-edit/output/joker_key_scenes_sheet.jpg
 projects/joker-aur-ho-edit/output/joker_scenepack_overview.jpg
 projects/joker-aur-ho-edit/output/graded_scenes_test.jpg
+projects/ryan-gosling-blade-runner-edit/raw/
+projects/ryan-gosling-blade-runner-edit/audio/
+projects/ryan-gosling-blade-runner-edit/output/check_*.jpg
+projects/ryan-gosling-blade-runner-edit/output/sample_*.jpg
+projects/ryan-gosling-blade-runner-edit/output/scene_*.jpg
+projects/ryan-gosling-blade-runner-edit/output/test_*.jpg
+projects/ryan-gosling-blade-runner-edit/output/comp_*.jpg
+projects/ryan-gosling-blade-runner-edit/output/joi_*.jpg
+projects/ryan-gosling-blade-runner-edit/output/*_grid.jpg
+projects/ryan-gosling-blade-runner-edit/output/graded_test_*.jpg
+projects/ryan-gosling-blade-runner-edit/output/blade_runner_overview.jpg
+projects/ryan-gosling-blade-runner-edit/output/rendered_t*.jpg
 gta6-clipper/
 
