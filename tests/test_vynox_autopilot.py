@@ -492,6 +492,82 @@ class TestYouTubeUploader(unittest.TestCase):
             self.assertEqual(result["status"], "dry_run")
             self.assertIn("#Shorts", result["title"])
 
+    def test_youtube_upload_longform_dry_run(self):
+        import youtube_uploader
+        with tempfile.NamedTemporaryFile(suffix=".mp4") as tmp_vid:
+            result = youtube_uploader.upload_longform_video(
+                video_path=tmp_vid.name,
+                title="Late Night Drive 🌙 | Hindi Indie Slowed + Reverb",
+                description="Chill mix with chapters",
+                dry_run=True,
+            )
+            self.assertEqual(result["status"], "dry_run")
+            self.assertIn("Late Night Drive", result["title"])
+            self.assertNotIn("#Shorts", result["title"])
+
+
+class TestDMAutoReplyAndCompilation(unittest.TestCase):
+    def test_match_intent(self):
+        import dm_auto_reply
+        keywords = {
+            "wallpaper": ["wallpaper", "wall", "4k photo"],
+            "preset": ["preset", "cc", "lut"],
+            "music_collab": ["collab", "promote", "promo"],
+        }
+        self.assertEqual(dm_auto_reply.match_intent("bhai wallpaper bhejo please", keywords), "wallpaper")
+        self.assertEqual(dm_auto_reply.match_intent("which CC did you use? drop preset", keywords), "preset")
+        self.assertEqual(dm_auto_reply.match_intent("want to collaborate for song promo", keywords), "music_collab")
+        self.assertIsNone(dm_auto_reply.match_intent("random unrelated hello", keywords))
+
+    def test_format_response(self):
+        import dm_auto_reply
+        template = "Here is wallpaper: {wallpaper_link} and email: {music_collab_email}"
+        links = {
+            "wallpaper_link": "https://drive.google.com/test",
+            "music_collab_email": "vynox@test.com"
+        }
+        formatted = dm_auto_reply.format_response(template, links)
+        self.assertIn("https://drive.google.com/test", formatted)
+        self.assertIn("vynox@test.com", formatted)
+
+    def test_sweep_funnel_comments_mock(self):
+        import dm_auto_reply
+        cl = mock.MagicMock()
+        cl.user_id = "12345"
+        cl.user_clips.return_value = [
+            SimpleNamespace(
+                pk="clip_1",
+                code="Cl1pA",
+                caption_text="Comment WALLPAPER for 4K art 📲"
+            )
+        ]
+        cl.media_comments.return_value = [
+            SimpleNamespace(
+                pk="101",
+                text="WALLPAPER please bro!!",
+                user=SimpleNamespace(pk="99988", username="art_lover"),
+            )
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_seen = Path(tmp) / "seen_comments.json"
+            with mock.patch("dm_auto_reply.PROCESSED_COMMENTS_FILE", tmp_seen), \
+                 mock.patch("dm_auto_reply.time.sleep", return_value=None):
+                actions = dm_auto_reply.sweep_funnel_comments(cl=cl, dry_run=False, max_actions=2)
+
+        self.assertEqual(actions, 1)
+        cl.comment_like.assert_called_once_with(101)
+        cl.media_comment.assert_called_once()
+        cl.direct_send.assert_called_once()
+        call_args = cl.direct_send.call_args
+        self.assertEqual(call_args.kwargs.get("user_ids"), [99988])
+
+    def test_compilation_builder_format_timestamp(self):
+        import youtube_compilation_builder
+        self.assertEqual(youtube_compilation_builder.format_timestamp(0), "00:00")
+        self.assertEqual(youtube_compilation_builder.format_timestamp(75), "01:15")
+        self.assertEqual(youtube_compilation_builder.format_timestamp(3665), "01:01:05")
+
 
 if __name__ == "__main__":
     unittest.main()

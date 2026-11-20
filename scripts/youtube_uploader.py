@@ -249,6 +249,96 @@ def upload_short(
     return response
 
 
+def upload_longform_video(
+    video_path: str | Path,
+    title: str,
+    description: str = "",
+    tags: list[str] | None = None,
+    thumbnail_path: str | Path | None = None,
+    category_id: str = "10",  # 10 = Music, 1 = Film & Animation
+    privacy_status: str = "public",
+    dry_run: bool = False,
+) -> dict:
+    """
+    Uploads a long-form landscape or compilation video to YouTube with custom metadata and thumbnail.
+    Ideal for watch-hour accumulation and monetization qualification.
+    """
+    vid_file = Path(video_path).resolve()
+    if not vid_file.exists():
+        raise FileNotFoundError(f"Video file not found: {vid_file}")
+
+    if tags is None:
+        tags = [
+            "Lofi", "Hindi Indie", "Slowed Reverb", "2D Anime",
+            "Late Night Drive", "Vynox Studio", "Aesthetic Animation",
+            "Chill Lofi Songs", "Bollywood Slowed Reverb"
+        ]
+
+    body = {
+        "snippet": {
+            "title": title[:100].strip(),
+            "description": description,
+            "tags": tags,
+            "categoryId": category_id,
+            "defaultLanguage": "en",
+        },
+        "status": {
+            "privacyStatus": privacy_status,
+            "selfDeclaredMadeForKids": False,
+            "embeddable": True,
+            "license": "youtube",
+        },
+    }
+
+    if dry_run:
+        print("\n🧪 [DRY RUN] YouTube Long-Form Metadata Prepared:")
+        print(f"Title: {body['snippet']['title']}")
+        print(f"Privacy: {body['status']['privacyStatus']}")
+        print(f"Tags: {', '.join(body['snippet']['tags'])}")
+        print(f"Video File: {vid_file} ({vid_file.stat().st_size / (1024*1024):.2f} MB)")
+        print("\nDescription Preview:\n" + body["snippet"]["description"][:300] + "...\n")
+        return {"id": "dry_run_id", "title": title, "status": "dry_run"}
+
+    service = get_youtube_service()
+    media = MediaFileUpload(
+        str(vid_file),
+        mimetype="video/mp4",
+        chunksize=1024 * 1024 * 5,  # 5MB chunks
+        resumable=True,
+    )
+
+    print(f"🚀 Uploading YouTube Long-Form: {title} ({vid_file.name})...")
+    request = service.videos().insert(
+        part="snippet,status",
+        body=body,
+        media_body=media,
+    )
+
+    response = None
+    while response is None:
+        status, response = request.next_chunk()
+        if status:
+            print(f"⏳ Upload progress: {int(status.progress() * 100)}%")
+
+    video_id = response.get("id")
+    watch_url = f"https://youtube.com/watch?v={video_id}"
+    print(f"✅ Successfully published YouTube Video!")
+    print(f"🔗 Video URL: {watch_url}")
+
+    if thumbnail_path and Path(thumbnail_path).exists():
+        try:
+            thumb_media = MediaFileUpload(str(thumbnail_path), mimetype="image/jpeg")
+            service.thumbnails().set(
+                videoId=video_id,
+                media_body=thumb_media,
+            ).execute()
+            print(f"📸 Custom thumbnail set: {thumbnail_path}")
+        except Exception as e:
+            print(f"⚠️ Thumbnail upload warning: {e}")
+
+    return response
+
+
 def main():
     parser = argparse.ArgumentParser(description="Official YouTube Shorts Uploader with AI Disclosure")
     parser.add_argument("video", nargs="?", help="Path to the MP4 video to upload")

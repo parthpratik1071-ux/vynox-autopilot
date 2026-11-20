@@ -330,6 +330,19 @@ class AccountManager:
                 )
                 intent_label = reel_data.get("intent", "conversational_text") if reel_data else "conversational_text"
 
+                # 🎨 Vynox Studio Human Creator & Comment-to-DM Funnel Override
+                if "vynox" in (self.username or "").lower():
+                    try:
+                        import dm_auto_reply
+                        cfg = dm_auto_reply.load_config()
+                        matched = dm_auto_reply.match_intent(reply_text_content, cfg.get("keywords", {}))
+                        if matched and matched in cfg.get("dm_responses", {}):
+                            tpl = random.choice(cfg["dm_responses"][matched])
+                            reply_text = dm_auto_reply.format_response(tpl, cfg.get("links", {}))
+                            intent_label = f"vynox_funnel_{matched}"
+                    except Exception as e:
+                        print(f"⚠️ Vynox funnel matching warning: {e}")
+
             print(f"   🧠 [NexoraAI Intent]: {intent_label} -> Response: \"{reply_text}\"")
 
             # 👁️ Sentinel AI Pre-Send Inspection Gatekeeper
@@ -390,6 +403,11 @@ class AccountManager:
         # Brand account algorithm booster check (e.g. @vynox_00000)
         if "vynox" in self.username.lower():
             reels_booster.boost_latest_reel(self.cl, dry_run=dry_run)
+            try:
+                import dm_auto_reply
+                dm_auto_reply.sweep_funnel_comments(cl=self.cl, dry_run=dry_run, max_actions=3)
+            except Exception as e:
+                print(f"⚠️ [Comment-Funnel] Sweep warning: {e}")
 
         if not dry_run and processed_conversations > 0:
             self.save_seen(seen_ids)

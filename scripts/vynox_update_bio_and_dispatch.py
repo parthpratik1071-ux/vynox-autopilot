@@ -18,9 +18,10 @@ import insta_local_post
 DEFAULT_USERNAME = "vynox_00000"
 NEW_FULL_NAME = "Vynox ✦ 2D Anime & Visual Stories"
 NEW_BIO = (
-    "✦ Independent Animation & Visual Stories 🎨\n"
-    "🎬 Living 2D Anime • Deep Lore • Indie Music\n"
-    "🎧 Headphones on | Drop song/story ideas 👇"
+    "✦ 2D Anime & Visual Stories 🎨\n"
+    "🎬 Living Animation • Deep Lore • Indie Music\n"
+    "💬 Comment 'WALLPAPER' for free 4K art 📲\n"
+    "📩 Music promo / collabs: DM us"
 )
 
 
