@@ -70,5 +70,11 @@ projects/interstellar-kyun-main-jaagoon-edit/output/graded_test_*.jpg
 projects/interstellar-kyun-main-jaagoon-edit/output/*_grid.jpg
 projects/interstellar-kyun-main-jaagoon-edit/output/rendered_t*.jpg
 projects/interstellar-kyun-main-jaagoon-edit/output/interstellar_overview.jpg
+projects/garden-of-words-mere-nishaan/raw/
+projects/garden-of-words-mere-nishaan/cut_previews/
+projects/garden-of-words-mere-nishaan/frames/
+projects/garden-of-words-mere-nishaan/raw_frames/
+projects/garden-of-words-mere-nishaan/temp/
+projects/garden-of-words-mere-nishaan/test_*.jpg
 gta6-clipper/
 
