@@ -178,7 +178,7 @@ class OfficialGraphClient:
     def comment_like(self, comment_pk: str):
         return None
 
-    def clip_upload(self, path: Path, caption: str, thumbnail: Path | None = None):
+    def clip_upload(self, path: Path, caption: str, thumbnail: Path | None = None, **kwargs):
         video_url = _derive_public_media_url(Path(path))
         if not video_url:
             raise RuntimeError("Official Graph API upload requires a repo-tracked file or PUBLIC_MEDIA_BASE_URL.")
@@ -428,9 +428,10 @@ def get_client(session_file=DEFAULT_SESSION_FILE, username=None, password=None, 
     write_auth_status("HEALTHY", "CREDENTIALS_LOGIN_VALID", f"Logged in as @{uname} and saved session")
     return cl
 
-def upload_reel(cl, video_path, caption="", thumbnail_path=None):
+def upload_reel(cl, video_path, caption="", thumbnail_path=None, music_query: str | None = None):
     """
     Uploads video as an Instagram Reel and prints the live post link.
+    Supports official Instagram Music indexing via music_query.
     """
     video_p = Path(video_path).resolve()
     if not video_p.exists():
@@ -447,6 +448,35 @@ def upload_reel(cl, video_path, caption="", thumbnail_path=None):
             "#whatif #survival #animation #scifi #viralreels #cartoon #reels"
         )
 
+    # Attach official Instagram music metadata if available (Multiplies Explore & Audio page reach)
+    extra_data = {}
+    if music_query and hasattr(cl, "search_music") and hasattr(cl, "clip_music_extra_data"):
+        try:
+            # Clean search query (strip parentheticals like '(Slowed + Reverb)', '(Official Audio)')
+            clean_q = re.sub(r"\(.*?\)", "", music_query).strip()
+            clean_q = re.sub(r"\[.*?\]", "", clean_q).strip()
+            clean_q = clean_q.split("•")[0].strip()
+            if not clean_q:
+                clean_q = music_query.strip()
+
+            print(f"🎵 Searching official Instagram music catalogue for: '{clean_q}'...")
+            tracks = cl.search_music(clean_q)
+            if tracks:
+                track = tracks[0]
+                track_title = getattr(track, "title", getattr(track, "track_name", "Unknown"))
+                artist_name = getattr(track, "display_artist", getattr(track, "artist_name", ""))
+                print(f"✅ Found official Instagram track match: '{track_title}' by {artist_name}")
+                extra_data = cl.clip_music_extra_data(
+                    track=track,
+                    original_volume=1.0,  # Keep our mastered cinema audio at full volume
+                    music_volume=0.0      # Mute catalogue track so it attaches metadata without overlapping audio
+                )
+                print("🎯 Official Instagram Music metadata successfully attached! Reel will index in explore & music search.")
+            else:
+                print(f"ℹ️ No exact track match found on Instagram for '{clean_q}'. Uploading with original audio.")
+        except Exception as music_err:
+            print(f"⚠️ Music search/attachment warning (falling back to standard audio): {music_err}")
+
     max_retries = 3
     media = None
     last_err = None
@@ -455,11 +485,19 @@ def upload_reel(cl, video_path, caption="", thumbnail_path=None):
         try:
             print(f"\n🚀 Uploading Reel (Attempt {attempt}/{max_retries}): {video_p.name} ({video_p.stat().st_size / (1024*1024):.2f} MB)...")
             print("⏳ Processing and optimizing on Instagram servers (this takes 15-40 seconds)...")
-            media = cl.clip_upload(
-                path=video_p,
-                caption=caption,
-                thumbnail=thumb_p
-            )
+            if getattr(cl, "is_official_graph", False) is True:
+                media = cl.clip_upload(
+                    path=video_p,
+                    caption=caption,
+                    thumbnail=thumb_p
+                )
+            else:
+                media = cl.clip_upload(
+                    path=video_p,
+                    caption=caption,
+                    thumbnail=thumb_p,
+                    extra_data=extra_data
+                )
             if media:
                 break
         except Exception as e:

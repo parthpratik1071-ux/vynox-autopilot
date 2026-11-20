@@ -275,11 +275,17 @@ def dispatch_next(force=False):
         except Exception as e:
             log(f"⚠️ Duplicate check warning: {e}")
 
+    # Determine music query for official Instagram audio indexing
+    music_query = data.get("song_title") or data.get("title") or ""
+    if not music_query and " - " in data.get("title", ""):
+        music_query = data.get("title", "").split(" - ")[-1]
+
     media = insta_local_post.upload_reel(
         cl,
         video_path=video_path,
         caption=caption,
-        thumbnail_path=cover_path
+        thumbnail_path=cover_path,
+        music_query=music_query
     )
 
     reel_url = f"https://www.instagram.com/reel/{media.code}/"

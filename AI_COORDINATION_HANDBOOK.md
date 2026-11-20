@@ -98,7 +98,35 @@ python3 scripts/trending_radar.py --scan
 # 3. Test queue dispatcher (dry-run/simulation)
 python3 scripts/daily_dispatcher.py
 
-# 4. Run automated test suite (must pass 19/19 tests)
+# 4. Run automated test suite (must pass all tests)
 python3 -m unittest discover -s tests -v
 ```
+
+---
+
+## 7. The Golden Channel Rules ("Old Rules" Winning Formula)
+
+Every Reel produced and dispatched for `@vynox_00000` must strictly satisfy all core channel rules:
+
+1. **Visual Medium & Subject:**
+   - 100% authentic live-action Hollywood cinema masterpieces (*The Batman*, *The Dark Knight*, *Blade Runner 2049*, *Interstellar*) or pristine high-fidelity 2D anime romance (*Choo Lo*, *Samjho Na*, *Ishq*). Zero cheap cartoons or generic AI slop.
+2. **The 3-Second Retention Hook:**
+   - The opening frame (0.0s to 1.5s) MUST deliver an instant high-impact visual punch (dramatic character close-up, iconic silhouette, neon flare) paired with immediate vocal/audio attack. Never open on slow ambient footage.
+3. **Soundtrack & Audio Master:**
+   - Nostalgic, emotionally charged Slowed + Reverb Bollywood/Indie/Pakistani anthems (*Sajan Sajan*, *Kyun Main Jaagoon*, *Aur Ho*, *Tu Hai Kahan*).
+   - Loudness normalized to -12 dB with crisp high-end clarity.
+4. **Devanagari Glowing Typography:**
+   - Prominent centered stylized Devanagari lyrics with soft radial glow halos and smooth sine wave alpha fade transitions.
+5. **Instagram Explore & Audio Page Indexing:**
+   - Automatic metadata attachment via `cl.clip_music_extra_data(track, original_volume=1.0, music_volume=0.0)`. This indexes the video on the official song's page while preserving 100% of our custom cinema audio mix.
+6. **Publishing Cadence & Timing:**
+   - Maximum 2 posts per day strictly aligned with Indian peak engagement windows:
+     - **Slot 1 (Evening Commute/Leisure):** **7:15 PM – 8:45 PM IST**
+     - **Slot 2 (Late-Night Viral Peak):** **9:30 PM – 11:15 PM IST**
+   - No off-hours posting. Enforce minimum 60-minute spacing between uploads.
+7. **Omnichannel Velocity Boosters:**
+   - Automated Companion Instagram Story promo card dispatch.
+   - Dual-posting to YouTube Shorts with official AI synthetic content disclosure.
+   - Automated engagement comment pinning via `reels_booster.py`.
+
 

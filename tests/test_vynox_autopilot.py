@@ -142,6 +142,46 @@ class TestInstaLocalPost(unittest.TestCase):
         self.assertIsInstance(cl, insta_local_post.OfficialGraphClient)
         self.assertTrue(getattr(cl, "is_official_graph", False))
 
+    def test_upload_reel_attaches_official_music_metadata(self):
+        cl = mock.MagicMock()
+        cl.is_official_graph = False
+        fake_track = mock.MagicMock()
+        fake_track.title = "Kyun Main Jaagoon"
+        fake_track.display_artist = "Shafqat Amanat Ali"
+        cl.search_music.return_value = [fake_track]
+        cl.clip_music_extra_data.return_value = {
+            "clips_audio_metadata": {
+                "original": {"volume_level": 1.0},
+                "song": {"artist_name": "Shafqat Amanat Ali", "audio_asset_id": 12345}
+            }
+        }
+        fake_media = mock.MagicMock(code="XYZ123", pk="987654")
+        cl.clip_upload.return_value = fake_media
+
+        with tempfile.TemporaryDirectory() as tmp:
+            vid = Path(tmp) / "reel.mp4"
+            vid.write_bytes(b"dummy_video_bytes")
+            
+            res = insta_local_post.upload_reel(
+                cl,
+                video_path=vid,
+                caption="Test caption",
+                music_query="Kyun Main Jaagoon (Slowed + Reverb)"
+            )
+            
+            self.assertEqual(res.code, "XYZ123")
+            cl.search_music.assert_called_once_with("Kyun Main Jaagoon")
+            cl.clip_music_extra_data.assert_called_once_with(
+                track=fake_track,
+                original_volume=1.0,
+                music_volume=0.0
+            )
+            cl.clip_upload.assert_called_once()
+            _, kwargs = cl.clip_upload.call_args
+            self.assertIn("extra_data", kwargs)
+            self.assertIn("clips_audio_metadata", kwargs["extra_data"])
+
+
 
 class TestReelsBooster(unittest.TestCase):
     def _make_booster(self, tmp: Path) -> reels_booster.ReelsBooster:
