@@ -325,6 +325,82 @@ def render_dual_layer_typography(
     return res.convert("RGB")
 
 
+def render_cinema_single_caption(
+    pil_img,
+    text="",
+    center_xy=(540, 1480),
+    font_path=FONT_DEJAVU_BOLD,
+    font_size=58,
+    text_color=(255, 255, 255, 255),
+    tracking=2,
+    shadow_blur=12,
+    shadow_offset=(2, 4),
+    shadow_alpha=200
+):
+    """
+    Renders clean, single-layer cinema caption for 100% readability:
+    - Exactly ONE caption line on screen at a time (no double/dual clutter).
+    - Soft directional Gaussian drop shadow with no harsh subtitle boxes.
+    - Cached overlay for fast 60+ fps performance.
+    """
+    if not text:
+        return pil_img
+
+    width, height = pil_img.size
+    cache_key = (
+        "single", width, height, text, center_xy, font_path, font_size,
+        text_color, tracking, shadow_blur, shadow_offset, shadow_alpha
+    )
+
+    if cache_key in _TYPO_CACHE:
+        cached_layer = _TYPO_CACHE[cache_key]
+        res = pil_img.convert("RGBA")
+        res.alpha_composite(cached_layer)
+        return res.convert("RGB")
+
+    overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    shadow_layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+
+    font = get_font(font_path, font_size)
+    draw_overlay = ImageDraw.Draw(overlay)
+    draw_shadow = ImageDraw.Draw(shadow_layer)
+
+    chars = list(text)
+    char_widths = [draw_overlay.textbbox((0, 0), ch, font=font)[2] for ch in chars]
+    total_w = sum(char_widths) + (len(chars) - 1) * tracking
+    text_h = draw_overlay.textbbox((0, 0), text, font=font)[3]
+
+    cx, cy = center_xy
+    start_x = cx - total_w / 2.0
+    start_y = cy - text_h / 2.0
+
+    # Draw Shadow
+    curr_x = start_x + shadow_offset[0]
+    curr_y = start_y + shadow_offset[1]
+    for ch, cw in zip(chars, char_widths):
+        draw_shadow.text((curr_x, curr_y), ch, font=font, fill=(0, 0, 0, shadow_alpha))
+        curr_x += cw + tracking
+
+    # Draw Text
+    curr_x = start_x
+    curr_y = start_y
+    for ch, cw in zip(chars, char_widths):
+        draw_overlay.text((curr_x, curr_y), ch, font=font, fill=text_color)
+        curr_x += cw + tracking
+
+    if shadow_blur > 0:
+        shadow_layer = shadow_layer.filter(ImageFilter.GaussianBlur(shadow_blur))
+
+    combined = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    combined.alpha_composite(shadow_layer)
+    combined.alpha_composite(overlay)
+    _TYPO_CACHE[cache_key] = combined
+
+    res = pil_img.convert("RGBA")
+    res.alpha_composite(combined)
+    return res.convert("RGB")
+
+
 def create_ambient_cinema_canvas(frame_bgr, target_w=1080, target_h=1920, blur_radius=51, dark_overlay=0.38):
     """
     Creates high-end cinema 9:16 layout:

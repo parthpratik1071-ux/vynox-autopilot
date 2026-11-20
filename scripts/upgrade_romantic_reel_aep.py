@@ -26,7 +26,8 @@ from aep_cinema_engine import (
     apply_deep_glow,
     apply_cinema_grade,
     add_film_grain,
-    render_dual_layer_typography
+    render_dual_layer_typography,
+    render_cinema_single_caption
 )
 
 FPS = 30
@@ -49,11 +50,11 @@ PROJECT_CONFIGS = {
             ("scene-4.jpg", 21.0, 27.56)
         ],
         "lyrics": [
-            (0.2, 4.2, "CHUPKE CHUPKE", "Jab aise dekhti ho...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 64, 88, 1480),
-            (4.2, 8.5, "ACHCHI LAGTI HO", "Achchi lagti ho...", (255, 176, 64, 255), (255, 255, 255, 255), -4, 68, 96, 1480),
-            (11.8, 17.5, "KABHI ZULFON SE", "Jab khelti ho...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 64, 88, 1480),
-            (17.5, 22.0, "ACHCHI LAGTI HO", "Achchi lagti ho...", (255, 176, 64, 255), (255, 255, 255, 255), -4, 68, 96, 1480),
-            (22.2, 27.5, "KUCH NAA KAHO", "Udit Narayan & Kavita K", (255, 255, 255, 255), (255, 213, 79, 255), 0, 68, 84, 1480)
+            (0.2, 4.2, "Chupke chupke jab aise dekhti ho...", (0, 229, 255, 255), 54, 1480),
+            (4.2, 8.5, "Achchi lagti ho...", (255, 176, 64, 255), 62, 1480),
+            (11.8, 17.5, "Kabhi zulfon se jab khelti ho...", (0, 229, 255, 255), 54, 1480),
+            (17.5, 22.0, "Achchi lagti ho...", (255, 176, 64, 255), 62, 1480),
+            (22.2, 27.5, "Kuch Naa Kaho • Udit Narayan", (255, 255, 255, 255), 52, 1480)
         ]
     },
     "jeene_laga_hoon": {
@@ -71,10 +72,10 @@ PROJECT_CONFIGS = {
             ("scene-4.jpg", 21.0, 27.56)
         ],
         "lyrics": [
-            (0.2, 6.5, "JEENE LAGA HOON", "Pehle se zyada...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 66, 92, 1480),
-            (7.0, 13.5, "PEHLE SE ZYADA", "Tum pe marne laga...", (255, 176, 64, 255), (255, 255, 255, 255), -4, 64, 90, 1480),
-            (14.0, 20.5, "MAIN MERA DIL", "Tere hawale...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 64, 88, 1480),
-            (21.0, 27.5, "RAMAIYA VASTAVAIYA", "Atif Aslam & Shreya Ghoshal", (255, 255, 255, 255), (255, 213, 79, 255), 0, 66, 84, 1480)
+            (0.2, 6.5, "Jeene laga hoon pehle se zyada...", (0, 229, 255, 255), 54, 1480),
+            (7.0, 13.5, "Pehle se zyada tum pe marne laga...", (255, 176, 64, 255), 54, 1480),
+            (14.0, 20.5, "Main mera dil tere hawale...", (0, 229, 255, 255), 56, 1480),
+            (21.0, 27.5, "Ramaiya Vastavaiya • Atif Aslam", (255, 255, 255, 255), 52, 1480)
         ]
     },
     "aankhon_se_batana": {
@@ -92,10 +93,10 @@ PROJECT_CONFIGS = {
             ("scene-4.jpg", 21.0, 27.56)
         ],
         "lyrics": [
-            (0.2, 6.5, "AANKHON SE BATANA", "Hum samajh jaayenge...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 64, 90, 1480),
-            (7.0, 13.5, "HALKI SI SHARMAANA", "Hum tere ho jaayenge...", (255, 176, 64, 255), (255, 255, 255, 255), -4, 64, 90, 1480),
-            (14.0, 20.5, "PAAS JO TU AAYE", "Saari duniya bhool...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 64, 88, 1480),
-            (21.0, 27.5, "AANKHON SE BATANA", "Dikshant (Acoustic Indie)", (255, 255, 255, 255), (255, 213, 79, 255), 0, 66, 84, 1480)
+            (0.2, 6.5, "Tum aankhon se batana hum samajh jaayenge...", (0, 229, 255, 255), 48, 1480),
+            (7.0, 13.5, "Tum halki si sharmaana hum tere ho jaayenge...", (255, 176, 64, 255), 48, 1480),
+            (14.0, 20.5, "Paas jo tu aaye saari duniya bhool...", (0, 229, 255, 255), 52, 1480),
+            (21.0, 27.5, "Aankhon Se Batana • Dikshant", (255, 255, 255, 255), 52, 1480)
         ]
     },
     "sahiba": {
@@ -113,14 +114,14 @@ PROJECT_CONFIGS = {
             ("scene-4.jpg", 16.5, 22.50)
         ],
         "lyrics": [
-            (0.0, 2.4, "", "Saahiba...", None, (255, 213, 79, 255), 0, 60, 96, 1480),
-            (2.4, 4.8, "AAYE GHAR", "Kaahe na...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 64, 90, 1480),
-            (4.8, 6.8, "AISE TOH", "Sataaye na...", (255, 176, 64, 255), (255, 255, 255, 255), -4, 64, 90, 1480),
-            (6.8, 10.5, "DEKHOON TUJHKO", "Chain aata hai...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 64, 88, 1480),
-            (10.5, 12.8, "", "Saahiba...", None, (255, 213, 79, 255), 0, 60, 96, 1480),
-            (12.8, 16.5, "NEENDEIN AAYEIN NA", "Raatein kaati...", (255, 176, 64, 255), (255, 255, 255, 255), -3, 62, 86, 1480),
-            (16.5, 20.4, "TERA HI KHAYAAL", "Din-rain aata hai...", (0, 229, 255, 255), (255, 255, 255, 255), -4, 64, 92, 1480),
-            (20.4, 22.5, "SAHIBA", "Aditya Rikhari", (255, 255, 255, 255), (255, 213, 79, 255), 0, 68, 84, 1480)
+            (0.0, 2.4, "Saahiba...", (255, 213, 79, 255), 62, 1480),
+            (2.4, 4.8, "Aaye ghar kaahe na...", (0, 229, 255, 255), 58, 1480),
+            (4.8, 6.8, "Aise toh sataaye na...", (255, 176, 64, 255), 58, 1480),
+            (6.8, 10.5, "Dekhoon tujhko toh chain aata hai...", (0, 229, 255, 255), 52, 1480),
+            (10.5, 12.8, "Saahiba...", (255, 213, 79, 255), 62, 1480),
+            (12.8, 16.5, "Neendein aayein na, raatein kaati...", (255, 176, 64, 255), 54, 1480),
+            (16.5, 20.4, "Tera hi khayaal din-rain aata hai...", (0, 229, 255, 255), 52, 1480),
+            (20.4, 22.5, "Sahiba • Aditya Rikhari", (255, 255, 255, 255), 52, 1480)
         ]
     }
 }
@@ -193,7 +194,7 @@ def upgrade_project(key):
         graded = apply_cinema_grade(flared, lift=12, contrast=1.12, warm_highlight=1.07, cool_shadow=1.03)
         grained = add_film_grain(graded, intensity=3.0, seed=frame_idx)
 
-        # 3. Dual-Layer Typography
+        # 3. Single-Layer Cinema Caption (Zero dual-caption clutter)
         active_lyric = None
         for lyr in cfg["lyrics"]:
             if lyr[0] <= t < lyr[1]:
@@ -202,17 +203,13 @@ def upgrade_project(key):
 
         if active_lyric:
             canvas_pil = Image.fromarray(cv2.cvtColor(grained, cv2.COLOR_BGR2RGB))
-            canvas_pil = render_dual_layer_typography(
+            canvas_pil = render_cinema_single_caption(
                 canvas_pil,
-                base_text=active_lyric[2],
-                script_text=active_lyric[3],
-                center_xy=(WIDTH // 2, active_lyric[9]),
-                base_font_size=active_lyric[7],
-                script_font_size=active_lyric[8],
-                base_color=active_lyric[4],
-                script_color=active_lyric[5],
-                script_offset=(0, -8),
-                script_angle=active_lyric[6],
+                text=active_lyric[2],
+                center_xy=(WIDTH // 2, active_lyric[5]),
+                font_size=active_lyric[4],
+                text_color=active_lyric[3],
+                tracking=2,
                 shadow_blur=12,
                 shadow_alpha=220
             )

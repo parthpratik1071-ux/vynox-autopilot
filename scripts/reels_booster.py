@@ -522,8 +522,8 @@ def generate_story_card(cover_path: Path, title: str, out_path: Path | None = No
     f_sub = _pick_font(34, bold=False)
     draw.text((W // 2, 1745), f"WATCH FULL EDIT  |  {handle.upper()}", fill=(225, 210, 220, 235), font=f_sub, anchor="mm")
 
-    dest = out_path or (cover_path.parent / "story_card.jpg")
-    bg.convert("RGB").save(dest, quality=94)
+    dest = Path(out_path) if out_path else (cover_path.parent / "story_card.jpg")
+    bg.convert("RGB").save(str(dest), format="JPEG", quality=94)
     return dest
 
 

@@ -25,7 +25,8 @@ from aep_cinema_engine import (
     apply_deep_glow,
     apply_cinema_grade,
     add_film_grain,
-    render_dual_layer_typography
+    render_dual_layer_typography,
+    render_cinema_single_caption
 )
 import reels_booster
 
@@ -59,9 +60,9 @@ SHOTS = [
 ]
 
 LYRICS = [
-    (0.1, 1.8, "THE BATMAN", "I am vengeance...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 68, 88, 920),
-    (2.0, 6.6, "SAJAN SAJAN", "Tujhko pukaare aaja...", (255, 60, 100, 255), (255, 255, 255, 255), -4, 76, 96, 910),
-    (6.8, 11.8, "TUJHKO PUKAARE", "Aaja aaja sajan...", (255, 60, 100, 255), (255, 255, 255, 255), -3, 72, 92, 920),
+    (0.1, 1.8, "THE BATMAN", (0, 229, 255, 255), 62, 920),
+    (2.0, 6.6, "Sajan sajan, tujhko pukaare aaja...", (255, 60, 100, 255), 44, 920),
+    (6.8, 11.8, "Aaja aaja sajan, hu main tere saath...", (255, 60, 100, 255), 44, 920),
 ]
 
 
@@ -154,7 +155,7 @@ def main():
             white_screen = np.full_like(grained, 255)
             grained = cv2.addWeighted(grained, 1.0 - strobe_intensity, white_screen, strobe_intensity, 0)
 
-        # 3. Dual-Layer Typography
+        # 3. Single-Layer Cinema Typography (Zero dual-caption clutter)
         active_lyric = None
         for lyr in LYRICS:
             if lyr[0] <= t < lyr[1]:
@@ -163,17 +164,13 @@ def main():
 
         if active_lyric:
             canvas_pil = Image.fromarray(cv2.cvtColor(grained, cv2.COLOR_BGR2RGB))
-            canvas_pil = render_dual_layer_typography(
+            canvas_pil = render_cinema_single_caption(
                 canvas_pil,
-                base_text=active_lyric[2],
-                script_text=active_lyric[3],
-                center_xy=(WIDTH // 2, active_lyric[9]),
-                base_font_size=active_lyric[7],
-                script_font_size=active_lyric[8],
-                base_color=active_lyric[4],
-                script_color=active_lyric[5],
-                script_offset=(0, -8),
-                script_angle=active_lyric[6],
+                text=active_lyric[2],
+                center_xy=(WIDTH // 2, active_lyric[5]),
+                font_size=active_lyric[4],
+                text_color=active_lyric[3],
+                tracking=2,
                 shadow_blur=12,
                 shadow_alpha=220
             )

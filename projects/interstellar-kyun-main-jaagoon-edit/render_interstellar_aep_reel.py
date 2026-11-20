@@ -20,7 +20,8 @@ from aep_cinema_engine import (
     apply_deep_glow,
     apply_cinema_grade,
     add_film_grain,
-    render_dual_layer_typography
+    render_dual_layer_typography,
+    render_cinema_single_caption
 )
 
 BASE_DIR = Path("projects/interstellar-kyun-main-jaagoon-edit")
@@ -87,15 +88,15 @@ SHOTS = [
     },
 ]
 
-# Dual-Layer Typography Schedule
-# (start_s, end_s, base_text, script_text, base_col, script_col, angle, base_size, script_size, y_pos)
+# Single-Layer Cinema Typography (Zero dual-caption clutter)
+# (start_s, end_s, text, text_color, font_size, y_pos)
 LYRICS = [
-    (0.2, 4.5, "BOONDEIN TERE", "Jaise moti saja...", (255, 176, 64, 255), (255, 255, 255, 255), -3, 62, 86, 1480),
-    (4.8, 10.5, "DHUNDHLE LAGE", "Saare jahan...", (0, 229, 255, 255), (255, 255, 255, 255), -3, 62, 88, 1480),
-    (10.8, 16.0, "MUJHKO MITA DE", "Mere rabba...", (255, 176, 64, 255), (255, 255, 255, 255), -4, 62, 88, 1480),
-    (16.2, 21.0, "KYUN MAIN JAAGOON", "Main jaagoon...", (0, 229, 255, 255), (255, 255, 255, 255), -4, 64, 92, 1480),
-    (21.2, 25.5, "AANSU MERE", "Behne lage...", (255, 176, 64, 255), (255, 255, 255, 255), -3, 62, 88, 1480),
-    (25.8, 28.3, "INTERSTELLAR", "Christopher Nolan", (255, 255, 255, 255), (255, 213, 79, 255), 0, 72, 84, 1480),
+    (0.2, 4.5, "Boondein tere maathe pe yun...", (255, 176, 64, 255), 56, 1480),
+    (4.8, 10.5, "Jaise koi moti saja...", (0, 229, 255, 255), 58, 1480),
+    (10.8, 16.0, "Dhundhle lage saare jahan...", (255, 176, 64, 255), 56, 1480),
+    (16.2, 21.0, "Kyun main jaagoon, main jaagoon...", (0, 229, 255, 255), 56, 1480),
+    (21.2, 25.5, "Mujhko mita de mere rabba...", (255, 176, 64, 255), 56, 1480),
+    (25.8, 28.3, "Interstellar • Christopher Nolan", (255, 255, 255, 255), 54, 1480),
 ]
 
 
@@ -163,7 +164,7 @@ def render():
         graded = apply_cinema_grade(flared, lift=12, contrast=1.12, warm_highlight=1.06, cool_shadow=1.05)
         grained = add_film_grain(graded, intensity=3.2, seed=frame_idx)
 
-        # Dual-Layer Typography
+        # Single-Layer Cinema Typography (Zero dual-caption clutter)
         active_lyric = None
         for lyr in LYRICS:
             if lyr[0] <= t < lyr[1]:
@@ -172,17 +173,13 @@ def render():
 
         if active_lyric:
             canvas_pil = Image.fromarray(cv2.cvtColor(grained, cv2.COLOR_BGR2RGB))
-            canvas_pil = render_dual_layer_typography(
+            canvas_pil = render_cinema_single_caption(
                 canvas_pil,
-                base_text=active_lyric[2],
-                script_text=active_lyric[3],
-                center_xy=(WIDTH // 2, active_lyric[9]),
-                base_font_size=active_lyric[7],
-                script_font_size=active_lyric[8],
-                base_color=active_lyric[4],
-                script_color=active_lyric[5],
-                script_offset=(0, -8),
-                script_angle=active_lyric[6],
+                text=active_lyric[2],
+                center_xy=(WIDTH // 2, active_lyric[5]),
+                font_size=active_lyric[4],
+                text_color=active_lyric[3],
+                tracking=2,
                 shadow_blur=12,
                 shadow_alpha=220
             )
