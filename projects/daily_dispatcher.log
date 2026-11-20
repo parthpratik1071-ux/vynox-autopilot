@@ -213,3 +213,12 @@
 [2026-11-19 21:49:54] ☁️ Synced queue and archive state to origin/main.
 [2026-11-20 08:07:40] ⚠️ No queued Reels found in projects/queue/! Queue is empty.
 [2026-11-20 12:53:05] ⏳ Current time (12:52 IST) is outside peak audience publishing windows (Slot 1: 19:15–20:45 IST | Slot 2: 21:30–23:15 IST). Aborting off-hours dispatch to protect organic reach.
+[2026-11-20 19:41:24] 🎯 Slot 1 (Evening 7:30 PM IST Window) active (19:41 IST). Proceeding to dispatch...
+[2026-11-20 19:41:24] 📦 Processing queue item: 14_interstellar_kyun_main_jaagoon.json
+[2026-11-20 19:41:24] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/interstellar-kyun-main-jaagoon-edit/output/Interstellar_Kyun_Main_Jaagoon_Reel.mp4
+[2026-11-20 19:42:05] ✅ Reel posted successfully: https://www.instagram.com/reel/Df91yWdzRD5/
+[2026-11-20 19:42:05] 📸 Publishing companion Story Promo Card (story_card.jpg) to Instagram Stories...
+[2026-11-20 19:42:21] ✅ Story Promo Card live on Instagram Stories! (ID: 4034617736129761584)
+[2026-11-20 19:42:22] ℹ️ YouTube Shorts cross-posting skipped (YOUTUBE_AUTH_FAILED)
+[2026-11-20 19:42:22] 📁 Archived record to: 2026-11-20_14_interstellar_kyun_main_jaagoon.json
+[2026-11-20 19:42:22] 📊 Remaining queued items: 5
