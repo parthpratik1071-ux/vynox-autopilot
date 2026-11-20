@@ -40,10 +40,10 @@ print(f"🎬 Initializing 12s Batman Ultra-Loop Cut ({TOTAL_FRAMES} frames @ {FP
 # 1. PRE-RENDER ENGLISH TYPOGRAPHY RGBA OVERLAYS
 # -------------------------------------------------------------
 font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-font_large = ImageFont.truetype(font_path, 80)
-font_huge = ImageFont.truetype(font_path, 100)
-font_medium = ImageFont.truetype(font_path, 60)
-font_hook = ImageFont.truetype(font_path, 36)
+font_title = ImageFont.truetype(font_path, 64)
+font_huge = ImageFont.truetype(font_path, 110)
+font_large = ImageFont.truetype(font_path, 82)
+font_brand = ImageFont.truetype(font_path, 34)
 
 def render_text_overlay(text, font=font_large, y_pos=None, crimson_glow=True, custom_color=(255, 255, 255)):
     img = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
@@ -71,17 +71,16 @@ def render_text_overlay(text, font=font_large, y_pos=None, crimson_glow=True, cu
     draw.text((x, y), text, font=font, fill=(custom_color[0], custom_color[1], custom_color[2], 255))
     return np.array(img)
 
-# Pre-render overlays
-OVERLAY_HOOK = render_text_overlay("SEND THIS TO YOUR BROTHER 🦇", font=font_hook, y_pos=220, crimson_glow=False, custom_color=(255, 220, 230))
-OVERLAY_TEEN = render_text_overlay("HU MAIN TERE SAATH...", font_large, y_pos=920)
-OVERLAY_SAJAN = render_text_overlay("SAJAN SAJAN...", font_huge, y_pos=900)
-OVERLAY_PUKARE = render_text_overlay("TUJHKO PUKAARE AAJA...", font_medium, y_pos=920)
-OVERLAY_BRAND = render_text_overlay("@vynox_00000", font=font_hook, y_pos=1680, crimson_glow=False)
+# Pre-render overlays (centered typography)
+OVERLAY_TITLE = render_text_overlay("THE BATMAN", font=font_title, y_pos=920, crimson_glow=True)
+OVERLAY_SAJAN = render_text_overlay("SAJAN SAJAN...", font_huge, y_pos=900, crimson_glow=True)
+OVERLAY_PUKARE = render_text_overlay("TUJHKO PUKAARE AAJA...", font_large, y_pos=915, crimson_glow=True)
+OVERLAY_BRAND = render_text_overlay("@vynox_00000", font=font_brand, y_pos=1720, crimson_glow=False)
 
 TYPOGRAPHY_SCHEDULE = [
-    (0.0, 1.8, OVERLAY_TEEN),
-    (2.0, 6.5, OVERLAY_SAJAN),
-    (6.7, 11.6, OVERLAY_PUKARE),
+    (0.1, 1.8, OVERLAY_TITLE),
+    (2.0, 6.6, OVERLAY_SAJAN),
+    (6.8, 11.8, OVERLAY_PUKARE),
 ]
 
 # -------------------------------------------------------------
@@ -224,15 +223,9 @@ def main():
         if 4.4 <= t <= 4.5:
             best_cover_frame = graded_frame.copy()
 
-        # Permanent subtle top hook & brand watermark in safe zones
-        hook_alpha = min(1.0, t / 0.5)
-        if hook_alpha > 0:
-            h_bgr = OVERLAY_HOOK[:, :, :3]
-            h_mask = (OVERLAY_HOOK[:, :, 3:] / 255.0) * hook_alpha * 0.88
-            graded_frame = (graded_frame * (1.0 - h_mask) + h_bgr * h_mask).astype(np.uint8)
-
+        # Subtle brand watermark in bottom safe zone
         b_bgr = OVERLAY_BRAND[:, :, :3]
-        b_mask = (OVERLAY_BRAND[:, :, 3:] / 255.0) * 0.65
+        b_mask = (OVERLAY_BRAND[:, :, 3:] / 255.0) * 0.45
         graded_frame = (graded_frame * (1.0 - b_mask) + b_bgr * b_mask).astype(np.uint8)
 
         # Synchronized English Typography with Smooth Alpha Curves
