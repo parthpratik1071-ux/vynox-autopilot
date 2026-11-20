@@ -114,7 +114,7 @@ def _comment_author(comment) -> str:
     """Safely extracts the comment author's username or falls back to user_id."""
     user = getattr(comment, "user", None)
     username = getattr(user, "username", None) if user is not None else None
-    return str(username or getattr(comment, "user_id", "unknown"))
+    return str(username or getattr(getattr(comment, "user", None), "pk", None) or getattr(comment, "user_id", "unknown"))
 
 
 def _media_age_hours(media) -> float | None:
@@ -189,7 +189,9 @@ def extract_fan_requests(comments, own_user_id: str) -> list[dict]:
     """Extracts non-spam fan song/topic requests from fetched Reel comments."""
     requests = []
     for c in comments:
-        if str(getattr(c, "user_id", "")) == str(own_user_id):
+        c_user = getattr(c, "user", None)
+        c_uid = str(getattr(c_user, "pk", None) or getattr(c, "user_id", ""))
+        if c_uid == str(own_user_id):
             continue
         text = (getattr(c, "text", "") or "").strip()
         if len(text) < 5:
@@ -424,7 +426,9 @@ class ReelsBooster:
             for c in comments:
                 if likes_done >= max_likes:
                     break
-                if str(c.user_id) == my_user_id or getattr(c, "has_liked_comment", False):
+                _c_user = getattr(c, "user", None)
+                _c_uid = str(getattr(_c_user, "pk", None) or getattr(c, "user_id", ""))
+                if _c_uid == my_user_id or getattr(c, "has_liked_comment", False):
                     continue
                 author = _comment_author(c)
                 if dry_run:

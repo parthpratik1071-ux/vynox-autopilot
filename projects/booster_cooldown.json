@@ -1,6 +1,5 @@
 {
-  "active": true,
-  "activated_at": "2026-11-15T11:39:26.758878+05:30",
-  "cooldown_until": "2026-11-17T11:39:26.758861+05:30",
-  "reason": "media_comment: challenge_required"
+  "active": false,
+  "cleared_at": "2026-11-20T08:48:31.479538+05:30",
+  "reason": "Cooldown expired, manually cleared"
 }
