@@ -47,9 +47,9 @@ MOOD_HOOKS = {
     "crimson_manga": (
         {"sahiba", "saree", "payal", "manga", "bindi", "crimson", "gajra"},
         [
-            "That black-and-crimson energy hits differently... which frame stopped you? 🩸🖤",
+            "That black-and-crimson energy hits differently... which frame stopped you? ✨🖤",
             "Who has this exact look in your head right now? Drop a 🥀 below",
-            "Saree drape + silver payal details — rate this manga frame 1–10 🩸✨",
+            "Saree drape + silver payal details — rate this manga frame 1–10 🌸✨",
         ],
     ),
     "science_history": (

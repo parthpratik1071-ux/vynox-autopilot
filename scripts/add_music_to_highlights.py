@@ -37,7 +37,7 @@ TARGETS = [
         "title": "MANGA",
         "video": STORIES_DIR / "music_story_manga.mp4",
         "cover": BRAND_DIR / "highlight_manga.jpg",
-        "caption": "✦ Sahiba • Jasleen Royal (Crimson Manga) 🩸",
+        "caption": "✦ Sahiba • Jasleen Royal (Crimson Manga) ✨",
     },
     {
         "title": "PLAYLIST",

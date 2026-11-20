@@ -280,7 +280,7 @@ class TestReelsBooster(unittest.TestCase):
                 ),
             ]
 
-            with mock.patch.object(reels_booster, "generate_smart_hook", return_value=("Rate this frame 1-10 🩸", "template:crimson_manga")), mock.patch.object(
+            with mock.patch.object(reels_booster, "generate_smart_hook", return_value=("Rate this frame 1-10 🌸", "template:crimson_manga")), mock.patch.object(
                 reels_booster.time, "sleep", return_value=None
             ):
                 ok = b.boost_latest_reel(cl, dry_run=False, max_likes=2, ignore_sleep=True)
