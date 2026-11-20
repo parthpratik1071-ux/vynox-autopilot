@@ -2,12 +2,12 @@
   "template:general": {
     "niche": "general",
     "runs": 1,
-    "avg_engagement_pct": 1.45,
-    "best_views": 138,
+    "avg_engagement_pct": 2.16,
+    "best_views": 139,
     "best_hook": "Which frame hit the hardest? Drop it below! 🖤✨",
     "media_scores": {
-      "4033956254187286752": 1.45
+      "4033956254187286752": 2.16
     },
-    "updated_at": "2026-11-20T08:49:14.586387+05:30"
+    "updated_at": "2026-11-20T19:14:20.909232+05:30"
   }
 }
