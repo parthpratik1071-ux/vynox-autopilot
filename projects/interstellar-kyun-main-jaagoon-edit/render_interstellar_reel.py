@@ -39,17 +39,13 @@ TOTAL_FRAMES = int(DURATION * FPS)  # 855 frames
 print(f"🎬 Initializing 100% Realistic Live-Action Interstellar Edit ({TOTAL_FRAMES} frames @ {FPS} fps)...")
 
 # -------------------------------------------------------------
-# 1. PRE-RENDER HINDI TYPOGRAPHY RGBA OVERLAYS
+# 1. PRE-RENDER ENGLISH TYPOGRAPHY RGBA OVERLAYS
 # -------------------------------------------------------------
-font_path = "/usr/share/fonts/truetype/noto/NotoSansDevanagari-Bold.ttf"
-font_large = ImageFont.truetype(font_path, 115)
-font_medium = ImageFont.truetype(font_path, 95)
-font_brand = ImageFont.truetype(font_path, 55)
-
-try:
-    font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 75)
-except Exception:
-    font_title = font_medium
+font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+font_large = ImageFont.truetype(font_path, 62)
+font_medium = ImageFont.truetype(font_path, 54)
+font_brand = ImageFont.truetype(font_path, 38)
+font_title = ImageFont.truetype(font_path, 76)
 
 def render_text_overlay(text, font=font_large, y_pos=None, cosmic_glow=True, custom_color=(255, 255, 255)):
     img = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
@@ -79,12 +75,12 @@ def render_text_overlay(text, font=font_large, y_pos=None, cosmic_glow=True, cus
     draw.text((x, y), text, font=font, fill=(custom_color[0], custom_color[1], custom_color[2], 255))
     return np.array(img)
 
-# Pre-render text overlays matching exact Shafqat Amanat Ali vocal delivery
-OVERLAY_BOONDE         = render_text_overlay("बूंदें तेरे माथे पे यूं...", font_large, y_pos=910)
-OVERLAY_MOTI           = render_text_overlay("जैसे कोई मोती सजा...", font_large, y_pos=900)
-OVERLAY_DHUNDHLE       = render_text_overlay("धुंधले लगे सारे जहाँ...", font_medium, y_pos=910)
-OVERLAY_AANSU          = render_text_overlay("आँसू मेरे बहने लगे...", font_large, y_pos=900)
-OVERLAY_MITA_DE        = render_text_overlay("मुझको मिटा दे मेरे रब्बा...", font_medium, y_pos=910)
+# Pre-render text overlays matching exact Shafqat Amanat Ali vocal delivery in English / Romanized
+OVERLAY_BOONDE         = render_text_overlay("BOONDEIN TERE MAATHE PE YUN...", font_medium, y_pos=910)
+OVERLAY_MOTI           = render_text_overlay("JAISE KOI MOTI SAJA...", font_large, y_pos=900)
+OVERLAY_DHUNDHLE       = render_text_overlay("DHUNDHLE LAGE SAARE JAHAN...", font_medium, y_pos=910)
+OVERLAY_AANSU          = render_text_overlay("AANSU MERE BEHNE LAGE...", font_large, y_pos=900)
+OVERLAY_MITA_DE        = render_text_overlay("MUJHKO MITA DE MERE RABBA...", font_medium, y_pos=910)
 OVERLAY_TITLE          = render_text_overlay("INTERSTELLAR", font_title, y_pos=880, cosmic_glow=True)
 OVERLAY_BRAND          = render_text_overlay("@vynox_00000", font_brand, y_pos=1680, cosmic_glow=False)
 

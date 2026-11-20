@@ -57,17 +57,17 @@ PlayResY: {HEIGHT}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: BrandHeader,Noto Sans,34,&H00FFFFFF,&H000000FF,&H90000000,&H60000000,-1,0,0,0,100,100,2,0,1,2.0,1.0,8,60,60,180,1
-Style: LyricGold,Noto Sans Devanagari,64,&H00FFFFFF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,3.8,2.2,2,80,80,540,1
-Style: LyricAccent,Noto Sans Devanagari,66,&H003CE0FF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,4.0,2.5,2,80,80,540,1
-Style: ClimaxTitle,Noto Sans Devanagari,50,&H00E8F4FF,&H000000FF,&H90000000,&H70000000,-1,0,0,0,100,100,2,0,1,2.5,1.5,2,60,60,540,1
+Style: BrandHeader,DejaVu Sans,34,&H00FFFFFF,&H000000FF,&H90000000,&H60000000,-1,0,0,0,100,100,2,0,1,2.0,1.0,8,60,60,180,1
+Style: LyricGold,DejaVu Sans,62,&H00FFFFFF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,3.8,2.2,2,80,80,540,1
+Style: LyricAccent,DejaVu Sans,64,&H003CE0FF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,4.0,2.5,2,80,80,540,1
+Style: ClimaxTitle,DejaVu Sans,48,&H00E8F4FF,&H000000FF,&H90000000,&H70000000,-1,0,0,0,100,100,2,0,1,2.5,1.5,2,60,60,540,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Dialogue: 0,0:00:00.20,0:00:04.20,BrandHeader,,0,0,180,,{{\\fad(250,400)}}ATIF ASLAM & SHREYA GHOSHAL  |  {{\\c&H003CE0FF&}}JEENE LAGA HOON
-Dialogue: 1,0:00:00.00,0:00:04.50,LyricGold,,0,0,540,,{{\\fad(150,200)}}जीने लगा हूँ, {{\\c&H003CE0FF&}}पहले से ज़्यादा{{\\c&H00FFFFFF&}}...
-Dialogue: 1,0:00:04.50,0:00:10.50,LyricAccent,,0,0,540,,{{\\fad(200,200)}}पहले से ज़्यादा, {{\\c&H003CE0FF&}}तुम पे मरने लगा हूँ{{\\c&H00FFFFFF&}}...
-Dialogue: 2,0:00:21.00,0:00:27.56,ClimaxTitle,,0,0,540,,{{\\fad(200,600)}}जीने लगा हूँ  |  आतिफ असलम & श्रेया घोषाल
+Dialogue: 1,0:00:00.00,0:00:04.50,LyricGold,,0,0,540,,{{\\fad(150,200)}}JEENE LAGA HOON, {{\\c&H003CE0FF&}}PEHLE SE ZYADA{{\\c&H00FFFFFF&}}...
+Dialogue: 1,0:00:04.50,0:00:10.50,LyricAccent,,0,0,540,,{{\\fad(200,200)}}PEHLE SE ZYADA, {{\\c&H003CE0FF&}}TUM PE MARNE LAGA HOON{{\\c&H00FFFFFF&}}...
+Dialogue: 2,0:00:21.00,0:00:27.56,ClimaxTitle,,0,0,540,,{{\\fad(200,600)}}JEENE LAGA HOON  |  ATIF ASLAM & SHREYA GHOSHAL
 """
     with open(SUBTITLE_ASS, "w", encoding="utf-8") as f:
         f.write(ass_template)
