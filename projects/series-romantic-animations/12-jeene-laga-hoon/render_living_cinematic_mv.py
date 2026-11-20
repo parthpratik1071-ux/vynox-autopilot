@@ -57,7 +57,7 @@ PlayResY: {HEIGHT}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: BrandHeader,Noto Sans Devanagari,34,&H00FFFFFF,&H000000FF,&H90000000,&H60000000,-1,0,0,0,100,100,2,0,1,2.0,1.0,8,60,60,180,1
+Style: BrandHeader,Noto Sans,34,&H00FFFFFF,&H000000FF,&H90000000,&H60000000,-1,0,0,0,100,100,2,0,1,2.0,1.0,8,60,60,180,1
 Style: LyricGold,Noto Sans Devanagari,64,&H00FFFFFF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,3.8,2.2,2,80,80,540,1
 Style: LyricAccent,Noto Sans Devanagari,66,&H003CE0FF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,4.0,2.5,2,80,80,540,1
 Style: ClimaxTitle,Noto Sans Devanagari,50,&H00E8F4FF,&H000000FF,&H90000000,&H70000000,-1,0,0,0,100,100,2,0,1,2.5,1.5,2,60,60,540,1
@@ -66,10 +66,8 @@ Style: ClimaxTitle,Noto Sans Devanagari,50,&H00E8F4FF,&H000000FF,&H90000000,&H70
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Dialogue: 0,0:00:00.20,0:00:04.20,BrandHeader,,0,0,180,,{{\\fad(250,400)}}ATIF ASLAM & SHREYA GHOSHAL  |  {{\\c&H003CE0FF&}}JEENE LAGA HOON
 Dialogue: 1,0:00:00.00,0:00:04.50,LyricGold,,0,0,540,,{{\\fad(150,200)}}जीने लगा हूँ, {{\\c&H003CE0FF&}}पहले से ज़्यादा{{\\c&H00FFFFFF&}}...
-Dialogue: 1,0:00:04.50,0:00:09.20,LyricAccent,,0,0,540,,{{\\fad(200,200)}}पहले से ज़्यादा, {{\\c&H00FFB040&}}तुम पे मरने लगा हूँ{{\\c&H003CE0FF&}}... ✨
-Dialogue: 1,0:00:09.20,0:00:14.20,LyricGold,,0,0,540,,{{\\fad(200,200)}}रहता हूँ हर पल अब मैं {{\\c&H003CE0FF&}}बेचैन सा{{\\c&H00FFFFFF&}}... 🥀
-Dialogue: 1,0:00:14.20,0:00:20.80,LyricAccent,,0,0,540,,{{\\fad(200,200)}}होने लगा है कुछ तो {{\\c&H00FFB040&}}असर सा{{\\c&H003CE0FF&}}... 🌧️
-Dialogue: 2,0:00:21.00,0:00:27.20,ClimaxTitle,,0,0,540,,{{\\fad(200,600)}}जीने लगा हूँ  |  आतिफ असलम & श्रेया घोषाल
+Dialogue: 1,0:00:04.50,0:00:10.50,LyricAccent,,0,0,540,,{{\\fad(200,200)}}पहले से ज़्यादा, {{\\c&H003CE0FF&}}तुम पे मरने लगा हूँ{{\\c&H00FFFFFF&}}...
+Dialogue: 2,0:00:21.00,0:00:27.56,ClimaxTitle,,0,0,540,,{{\\fad(200,600)}}जीने लगा हूँ  |  आतिफ असलम & श्रेया घोषाल
 """
     with open(SUBTITLE_ASS, "w", encoding="utf-8") as f:
         f.write(ass_template)

@@ -53,7 +53,7 @@ PlayResY: {HEIGHT}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: BrandHeader,Noto Sans Devanagari,34,&H00FFFFFF,&H000000FF,&H90000000,&H60000000,-1,0,0,0,100,100,2,0,1,2.0,1.0,8,60,60,180,1
+Style: BrandHeader,Noto Sans,34,&H00FFFFFF,&H000000FF,&H90000000,&H60000000,-1,0,0,0,100,100,2,0,1,2.0,1.0,8,60,60,180,1
 Style: LyricGold,Noto Sans Devanagari,64,&H00FFFFFF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,3.8,2.2,2,80,80,540,1
 Style: LyricAccent,Noto Sans Devanagari,66,&H003CE0FF,&H000000FF,&H90050810,&H80000000,-1,0,0,0,100,100,1,0,1,4.0,2.5,2,80,80,540,1
 Style: ClimaxTitle,Noto Sans Devanagari,50,&H00E8F4FF,&H000000FF,&H90000000,&H70000000,-1,0,0,0,100,100,2,0,1,2.5,1.5,2,60,60,540,1
@@ -61,13 +61,11 @@ Style: ClimaxTitle,Noto Sans Devanagari,50,&H00E8F4FF,&H000000FF,&H90000000,&H70
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Dialogue: 0,0:00:00.50,0:00:04.20,BrandHeader,,0,0,180,,{{\\fad(300,500)}}UDIT NARAYAN & KAVITA K  |  {{\\c&H003CE0FF&}}ACHCHI LAGTI HO
-Dialogue: 1,0:00:00.60,0:00:04.20,LyricGold,,0,0,540,,{{\\fad(250,200)}}मुझे तुम {{\\c&H003CE0FF&}}चुपके चुपके{{\\c&H00FFFFFF&}} जब ऐसे देखती हो...
-Dialogue: 1,0:00:04.20,0:00:07.20,LyricAccent,,0,0,540,,{{\\fad(150,200)}}अच्छी लगती हो... ✨
-Dialogue: 1,0:00:07.40,0:00:12.20,LyricGold,,0,0,540,,{{\\fad(200,200)}}कभी {{\\c&H003CE0FF&}}ज़ुल्फ़ों से{{\\c&H00FFFFFF&}}, कभी {{\\c&H00FFB040&}}आँचल से{{\\c&H00FFFFFF&}} जब खेलती हो...
-Dialogue: 1,0:00:12.20,0:00:14.60,LyricAccent,,0,0,540,,{{\\fad(150,200)}}अच्छी लगती हो... 🌸
-Dialogue: 1,0:00:14.80,0:00:19.40,LyricGold,,0,0,540,,{{\\fad(200,200)}}मुझे देख के जब तुम यूँ {{\\c&H003CE0FF&}}ठंडी आहें{{\\c&H00FFFFFF&}} भरते हो...
-Dialogue: 1,0:00:19.40,0:00:22.50,LyricAccent,,0,0,540,,{{\\fad(150,200)}}अच्छी लगती हो... 🥀
-Dialogue: 2,0:00:22.80,0:00:27.20,ClimaxTitle,,0,0,540,,{{\\fad(200,600)}}अच्छी लगती हो  |  उदित नारायण & कविता कृष्णमूर्ति
+Dialogue: 1,0:00:00.00,0:00:04.20,LyricGold,,0,0,540,,{{\\fad(250,200)}}मुझे तुम {{\\c&H003CE0FF&}}चुपके चुपके{{\\c&H00FFFFFF&}} जब ऐसे देखती हो...
+Dialogue: 1,0:00:04.20,0:00:08.50,LyricAccent,,0,0,540,,{{\\fad(150,200)}}अच्छी लगती हो...
+Dialogue: 1,0:00:12.00,0:00:17.50,LyricGold,,0,0,540,,{{\\fad(200,200)}}कभी {{\\c&H003CE0FF&}}ज़ुल्फ़ों से{{\\c&H00FFFFFF&}}, कभी {{\\c&H00FFB040&}}आँचल से{{\\c&H00FFFFFF&}} जब खेलती हो...
+Dialogue: 1,0:00:17.50,0:00:22.00,LyricAccent,,0,0,540,,{{\\fad(150,200)}}अच्छी लगती हो...
+Dialogue: 2,0:00:22.00,0:00:27.56,ClimaxTitle,,0,0,540,,{{\\fad(200,600)}}अच्छी लगती हो  |  उदित नारायण & कविता कृष्णमूर्ति
 """
     with open(SUBTITLE_ASS, "w", encoding="utf-8") as f:
         f.write(ass_template)

@@ -79,21 +79,21 @@ def render_text_overlay(text, font=font_large, y_pos=None, cosmic_glow=True, cus
     draw.text((x, y), text, font=font, fill=(custom_color[0], custom_color[1], custom_color[2], 255))
     return np.array(img)
 
-# Pre-render text overlays
-OVERLAY_KYUN_JAAGOON   = render_text_overlay("क्यूँ मैं जागूँ...", font_large, y_pos=910)
-OVERLAY_SOTA_HAI_JAHAN = render_text_overlay("जैसे सोता है जहाँ...", font_large, y_pos=900)
-OVERLAY_TALAB          = render_text_overlay("क्यूँ है मुझको यह तलब...", font_medium, y_pos=910)
-OVERLAY_BEBASI         = render_text_overlay("ऐसी क्या है बेबसी...", font_large, y_pos=900)
-OVERLAY_MOD_PAR        = render_text_overlay("वक़्त के इस मोड़ पर...", font_medium, y_pos=910)
+# Pre-render text overlays matching exact Shafqat Amanat Ali vocal delivery
+OVERLAY_BOONDE         = render_text_overlay("बूंदें तेरे माथे पे यूं...", font_large, y_pos=910)
+OVERLAY_MOTI           = render_text_overlay("जैसे कोई मोती सजा...", font_large, y_pos=900)
+OVERLAY_DHUNDHLE       = render_text_overlay("धुंधले लगे सारे जहाँ...", font_medium, y_pos=910)
+OVERLAY_AANSU          = render_text_overlay("आँसू मेरे बहने लगे...", font_large, y_pos=900)
+OVERLAY_MITA_DE        = render_text_overlay("मुझको मिटा दे मेरे रब्बा...", font_medium, y_pos=910)
 OVERLAY_TITLE          = render_text_overlay("INTERSTELLAR", font_title, y_pos=880, cosmic_glow=True)
 OVERLAY_BRAND          = render_text_overlay("@vynox_00000", font_brand, y_pos=1680, cosmic_glow=False)
 
 TYPOGRAPHY_SCHEDULE = [
-    (0.2, 3.6, OVERLAY_KYUN_JAAGOON),
-    (4.0, 9.0, OVERLAY_SOTA_HAI_JAHAN),
-    (9.4, 15.0, OVERLAY_TALAB),
-    (15.4, 20.4, OVERLAY_BEBASI),
-    (20.8, 25.5, OVERLAY_MOD_PAR),
+    (0.2, 4.5, OVERLAY_BOONDE),
+    (4.8, 10.5, OVERLAY_MOTI),
+    (10.8, 16.0, OVERLAY_DHUNDHLE),
+    (16.2, 21.0, OVERLAY_AANSU),
+    (21.2, 25.5, OVERLAY_MITA_DE),
     (25.8, 28.3, OVERLAY_TITLE),
 ]
 

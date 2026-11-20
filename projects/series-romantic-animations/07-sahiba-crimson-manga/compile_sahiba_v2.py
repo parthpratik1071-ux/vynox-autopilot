@@ -42,7 +42,7 @@ def sample_border_hex(img_path: Path) -> str:
 
 
 def build_ass_subtitles() -> Path:
-    """Writes crisp, large Romanized English ASS subtitles (strictly zero emojis/boxes)."""
+    """Writes crisp, authentic Noto Sans Devanagari ASS subtitles synchronized to exact vocal cues."""
     ass_lines = [
         "[Script Info]",
         "Title: Sahiba - Crimson Graphite Manga Reel",
@@ -58,30 +58,28 @@ def build_ass_subtitles() -> Path:
             "ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
             "Alignment, MarginL, MarginR, MarginV, Encoding"
         ),
-        "Style: BrandHeader,Noto Sans Devanagari,34,&H00E8F4FF,&H00000000,&H00080406,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1",
-        "Style: CornerLeft,Noto Sans Devanagari,68,&H00FFFFFF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,7,80,80,530,1",
-        "Style: CornerRight,Noto Sans Devanagari,66,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,3,80,80,540,1",
-        "Style: CinemaGold,Noto Sans Devanagari,66,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,8,50,50,560,1",
-        "Style: MainLyric,Noto Sans Devanagari,66,&H00FFFFFF,&H000000FF,&H00060204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,2,60,60,530,1",
-        "Style: DropTitle,Noto Sans Devanagari,50,&H00E8F4FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,3.5,0,1,2.0,2.0,2,40,40,530,1",
+        "Style: BrandHeader,Noto Sans,34,&H00E8F4FF,&H00000000,&H00080406,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1",
+        "Style: MainLyric,Noto Sans Devanagari,68,&H00FFFFFF,&H000000FF,&H00060204,&H80000000,-1,0,0,0,100,100,1.5,0,1,3.2,2.2,2,60,60,530,1",
+        "Style: AccentLyric,Noto Sans Devanagari,70,&H003CE0FF,&H000000FF,&H00060204,&H80000000,-1,0,0,0,100,100,1.5,0,1,3.4,2.2,2,60,60,530,1",
+        "Style: DropTitle,Noto Sans Devanagari,54,&H00E8F4FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,3.0,0,1,2.5,2.0,2,40,40,530,1",
         "",
         "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-        # Clean Header (Intro: 0.5s to 5.2s)
-        f"Dialogue: 0,{sec_to_ass(0.5)},{sec_to_ass(5.2)},BrandHeader,,0,0,0,,{{\\fade(350,450)}}ADITYA RIKHARI  |  SAHIBA",
+        # Clean Header (Intro: 0.2s to 5.0s)
+        f"Dialogue: 0,{sec_to_ass(0.2)},{sec_to_ass(5.0)},BrandHeader,,0,0,0,,{{\\fade(300,400)}}ADITYA RIKHARI  |  SAHIBA",
         # Beat 1 (Scene 1: Bindi Gaze Card) 0.0 - 6.8s
-        f"Dialogue: 1,{sec_to_ass(0.2)},{sec_to_ass(2.4)},CornerLeft,,0,0,0,,{{\\fade(150,200)}}Saahiba...",
-        f"Dialogue: 1,{sec_to_ass(2.4)},{sec_to_ass(4.6)},CornerRight,,0,0,0,,{{\\fade(150,200)}}{{\\c&H00FFFFFF&}}aaye ghar {{\\c&H003CE0FF&}}kaahe na...",
-        f"Dialogue: 1,{sec_to_ass(4.6)},{sec_to_ass(6.8)},MainLyric,,0,0,0,,{{\\fade(150,150)}}aise toh {{\\c&H005858FF&}}sataaye na...",
+        f"Dialogue: 1,{sec_to_ass(0.0)},{sec_to_ass(2.4)},MainLyric,,0,0,0,,{{\\fade(150,200)}}साहिबा...",
+        f"Dialogue: 1,{sec_to_ass(2.4)},{sec_to_ass(4.8)},AccentLyric,,0,0,0,,{{\\fade(150,200)}}{{\\c&H00FFFFFF&}}आए घर {{\\c&H003CE0FF&}}काहे ना{{\\c&H00FFFFFF&}}...",
+        f"Dialogue: 1,{sec_to_ass(4.8)},{sec_to_ass(6.8)},AccentLyric,,0,0,0,,{{\\fade(150,150)}}ऐसे तो {{\\c&H003CE0FF&}}सताए ना{{\\c&H00FFFFFF&}}...",
         # Beat 2 (Scene 2: Pitch-Black Anamorphic Cinema Cut) 6.8 - 10.5s
-        f"Dialogue: 2,{sec_to_ass(6.8)},{sec_to_ass(10.5)},CinemaGold,,0,0,0,,{{\\fade(120,180)}}Dekhoon tujhko...\\N{{\\c&H00FFFFFF&}}chain aata hai",
+        f"Dialogue: 2,{sec_to_ass(6.8)},{sec_to_ass(10.5)},AccentLyric,,0,0,0,,{{\\fade(120,180)}}देखूँ तुझको... {{\\c&H003CE0FF&}}चैन आता है{{\\c&H00FFFFFF&}}",
         # Beat 3 (Scene 3: Payal Full Crimson) 10.5 - 16.5s
-        f"Dialogue: 1,{sec_to_ass(10.5)},{sec_to_ass(12.5)},CornerLeft,,0,0,0,,{{\\fade(120,180)}}Saahiba...",
-        f"Dialogue: 1,{sec_to_ass(12.5)},{sec_to_ass(14.8)},CornerRight,,0,0,0,,{{\\fade(120,180)}}neendein-veendein {{\\c&H003CE0FF&}}aayein na{{\\c&H00FFFFFF&}}...",
-        f"Dialogue: 1,{sec_to_ass(14.8)},{sec_to_ass(17.2)},MainLyric,,0,0,0,,{{\\fade(120,150)}}raatein kaati {{\\c&H003CE0FF&}}jaayein na{{\\c&H00FFFFFF&}}...",
+        f"Dialogue: 1,{sec_to_ass(10.5)},{sec_to_ass(12.8)},MainLyric,,0,0,0,,{{\\fade(120,180)}}साहिबा...",
+        f"Dialogue: 1,{sec_to_ass(12.8)},{sec_to_ass(14.8)},AccentLyric,,0,0,0,,{{\\fade(120,180)}}नींदें-वींदें {{\\c&H003CE0FF&}}आएँ ना{{\\c&H00FFFFFF&}}...",
+        f"Dialogue: 1,{sec_to_ass(14.8)},{sec_to_ass(16.5)},AccentLyric,,0,0,0,,{{\\fade(120,150)}}रातें काटी {{\\c&H003CE0FF&}}जाएँ ना{{\\c&H00FFFFFF&}}...",
         # Beat 4 (Scene 4: Gajra Embrace + 20.0s Beat Drop Climax) 16.5 - 22.5s
-        f"Dialogue: 1,{sec_to_ass(17.2)},{sec_to_ass(20.8)},MainLyric,,0,0,0,,{{\\fade(150,150)}}tera hi khayal\\N{{\\c&H003CE0FF&}}din-rain aata hai{{\\c&H00FFFFFF&}}...",
-        f"Dialogue: 2,{sec_to_ass(20.8)},{sec_to_ass(22.4)},DropTitle,,0,0,0,,{{\\fade(150,450)}}SAHIBA  |  ADITYA RIKHARI",
+        f"Dialogue: 1,{sec_to_ass(16.5)},{sec_to_ass(20.4)},AccentLyric,,0,0,0,,{{\\fade(150,150)}}तेरा ही ख्याल {{\\c&H003CE0FF&}}दिन-रैन आता है{{\\c&H00FFFFFF&}}...",
+        f"Dialogue: 2,{sec_to_ass(20.4)},{sec_to_ass(22.5)},DropTitle,,0,0,0,,{{\\fade(150,450)}}साहिबा  |  आदित्य रिखारी",
     ]
     ass_path = OUT_DIR / "sahiba_subtitles.ass"
     ass_path.write_text("\n".join(ass_lines), encoding="utf-8")
