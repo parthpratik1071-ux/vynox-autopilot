@@ -7,12 +7,12 @@ PlayResY: 1920
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: BrandHeader,Lato,32,&H00E8F4FF,&H00000000,&H00080406,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1
-Style: CornerLeft,Lato,66,&H00FFFFFF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,7,80,80,530,1
-Style: CornerRight,Lato,62,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,3,80,80,540,1
-Style: CinemaGold,Lato,64,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,8,50,50,560,1
-Style: MainLyric,Lato,60,&H00FFFFFF,&H000000FF,&H00060204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,2,60,60,530,1
-Style: DropTitle,Lato,48,&H00E8F4FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,3.5,0,1,2.0,2.0,2,40,40,530,1
+Style: BrandHeader,Noto Sans Devanagari,34,&H00E8F4FF,&H00000000,&H00080406,&H70000000,-1,0,0,0,100,100,3.0,0,1,1.8,1.5,8,40,40,210,1
+Style: CornerLeft,Noto Sans Devanagari,68,&H00FFFFFF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,7,80,80,530,1
+Style: CornerRight,Noto Sans Devanagari,66,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,3,80,80,540,1
+Style: CinemaGold,Noto Sans Devanagari,66,&H003CE0FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,8,50,50,560,1
+Style: MainLyric,Noto Sans Devanagari,66,&H00FFFFFF,&H000000FF,&H00060204,&H80000000,-1,0,0,0,100,100,2.0,0,1,2.2,2.0,2,60,60,530,1
+Style: DropTitle,Noto Sans Devanagari,50,&H00E8F4FF,&H00000000,&H00080204,&H80000000,-1,0,0,0,100,100,3.5,0,1,2.0,2.0,2,40,40,530,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
