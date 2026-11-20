@@ -551,7 +551,9 @@ class TestDMAutoReplyAndCompilation(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             tmp_seen = Path(tmp) / "seen_comments.json"
+            tmp_contacted = Path(tmp) / "contacted_users.json"
             with mock.patch("dm_auto_reply.PROCESSED_COMMENTS_FILE", tmp_seen), \
+                 mock.patch("dm_auto_reply.CONTACTED_USERS_FILE", tmp_contacted), \
                  mock.patch("dm_auto_reply.time.sleep", return_value=None):
                 actions = dm_auto_reply.sweep_funnel_comments(cl=cl, dry_run=False, max_actions=2)
 
