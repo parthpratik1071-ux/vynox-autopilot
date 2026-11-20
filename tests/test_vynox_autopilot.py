@@ -568,6 +568,39 @@ class TestDMAutoReplyAndCompilation(unittest.TestCase):
         self.assertEqual(youtube_compilation_builder.format_timestamp(75), "01:15")
         self.assertEqual(youtube_compilation_builder.format_timestamp(3665), "01:01:05")
 
+    def test_friend_and_family_shield(self):
+        import dm_auto_reply
+        # Test blacklist of friends & family
+        self.assertTrue(dm_auto_reply.is_friend_or_family("paras_kumar_thakur"))
+        self.assertTrue(dm_auto_reply.is_friend_or_family("palak"))
+        self.assertTrue(dm_auto_reply.is_friend_or_family("sarthak_brother"))
+        self.assertTrue(dm_auto_reply.is_friend_or_family("tiwari_ji"))
+        # Test following list VIP protection
+        following = {"cool_creator_friend", "brother_99"}
+        self.assertTrue(dm_auto_reply.is_friend_or_family("cool_creator_friend", following_set=following))
+        # Random fan is NOT friend -> allowed for funnel
+        self.assertFalse(dm_auto_reply.is_friend_or_family("random_fan_1234", following_set=following))
+
+    def test_sleep_window_guard(self):
+        import dm_auto_reply
+        # 3:30 AM IST -> should be sleeping
+        dt_night = datetime(2026, 11, 20, 3, 30)
+        self.assertTrue(dm_auto_reply.is_sleep_window(dt_night))
+        # 11:30 AM IST -> awake & active
+        dt_day = datetime(2026, 11, 20, 11, 30)
+        self.assertFalse(dm_auto_reply.is_sleep_window(dt_day))
+
+    def test_trip_ban_shield_circuit_breaker(self):
+        import dm_auto_reply
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_cooldown = Path(tmp) / "booster_cooldown.json"
+            with mock.patch("dm_auto_reply.COOLDOWN_FILE", tmp_cooldown):
+                dm_auto_reply.trip_ban_shield("challenge_required: mock test")
+                self.assertTrue(tmp_cooldown.exists())
+                data = json.loads(tmp_cooldown.read_text())
+                self.assertTrue(data["active"])
+                self.assertIn("challenge_required", data["reason"])
+
 
 if __name__ == "__main__":
     unittest.main()
