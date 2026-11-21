@@ -1,8 +1,8 @@
 {
   "status": "PAUSED_AUTH_REQUIRED",
-  "code": "SESSION_EXPIRED",
-  "detail": "Saved session cookie is expired (LoginRequired) and no fallback credentials provided.",
-  "timestamp": "2026-11-20T20:50:24.885668",
+  "code": "SESSION_RESTRICTED",
+  "detail": "Instagram restriction/challenge (AccountSuspended): challenge_required (Queue preserved: 4 reels waiting)",
+  "timestamp": "2026-11-21T08:09:19.397441",
   "remediation": [
     "Option A: Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` on trusted local machine.",
     "Option B: Export fresh session with `python3 scripts/insta_local_post.py --export-session` and update GitHub Secret INSTA_SESSION_JSON.",
