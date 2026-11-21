@@ -235,3 +235,6 @@
 [2026-11-21 16:55:49]    Reason: Instagram restriction/challenge (AccountSuspended): challenge_required
 [2026-11-21 16:55:49] 🛡️ PRESERVING QUEUE: All 4 queued Reels remain staged untouched (Next: 16_acchi_lagti_ho_romantic.json).
 [2026-11-21 16:55:57] ☁️ Synced queue and archive state to origin/main.
+[2026-11-21 19:30:12] ⏸️ AUTHENTICATION HEALTH CHECK FAILED: SESSION_RESTRICTED
+[2026-11-21 19:30:12]    Reason: Instagram restriction/challenge (AccountSuspended): challenge_required
+[2026-11-21 19:30:12] 🛡️ PRESERVING QUEUE: All 4 queued Reels remain staged untouched (Next: 16_acchi_lagti_ho_romantic.json).
