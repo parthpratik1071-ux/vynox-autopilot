@@ -1,5 +1,6 @@
 {
-  "active": false,
-  "cleared_at": "2026-11-20T08:48:31.479538+05:30",
-  "reason": "Cooldown expired, manually cleared"
+  "active": true,
+  "activated_at": "2026-11-21T18:39:01.779961+05:30",
+  "cooldown_until": "2026-11-23T18:39:01.779951+05:30",
+  "reason": "client_init: ❌ Instagram session is invalid or missing (SESSION_RESTRICTED): Instagram restriction/challenge (AccountSuspended): challenge_required\n👉 Refresh local session with `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only`, set INSTA_GRAPH_ACCESS_TOKEN + INSTA_IG_USER_ID, or update I"
 }
