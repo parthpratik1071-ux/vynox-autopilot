@@ -227,3 +227,6 @@
 [2026-11-20 21:45:17] 📦 Processing queue item: 15_sahiba_aditya_rikhari.json
 [2026-11-20 21:45:17] 🎬 Uploading video: /home/pratik/stickman-video-director/projects/series-romantic-animations/07-sahiba-crimson-manga/output/film_sahiba_aep.mp4
 [2026-11-20 21:45:17] 🛑 ZERO-REPEAT GUARD: Caption headline already published on 2026-11-14_04b_crimson_manga_sahiba.json. Skipping upload to prevent duplicate post.
+[2026-11-21 08:09:19] ⏸️ AUTHENTICATION HEALTH CHECK FAILED: SESSION_RESTRICTED
+[2026-11-21 08:09:19]    Reason: Instagram restriction/challenge (AccountSuspended): challenge_required
+[2026-11-21 08:09:19] 🛡️ PRESERVING QUEUE: All 4 queued Reels remain staged untouched (Next: 16_acchi_lagti_ho_romantic.json).
