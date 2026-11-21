@@ -1,8 +1,8 @@
 {
-  "status": "PAUSED_AUTH_REQUIRED",
-  "code": "SESSION_RESTRICTED",
-  "detail": "Instagram restriction/challenge (AccountSuspended): challenge_required (Queue preserved: 4 reels waiting)",
-  "timestamp": "2026-11-21T19:30:12.480446",
+  "status": "HEALTHY",
+  "code": "SESSION_VALID",
+  "detail": "Published DgAiltnTd3y successfully",
+  "timestamp": "2026-11-21T20:52:43.937178",
   "remediation": [
     "Option A: Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` on trusted local machine.",
     "Option B: Export fresh session with `python3 scripts/insta_local_post.py --export-session` and update GitHub Secret INSTA_SESSION_JSON.",

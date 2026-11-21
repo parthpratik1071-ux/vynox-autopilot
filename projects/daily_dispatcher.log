@@ -239,3 +239,11 @@
 [2026-11-21 19:30:12]    Reason: Instagram restriction/challenge (AccountSuspended): challenge_required
 [2026-11-21 19:30:12] 🛡️ PRESERVING QUEUE: All 4 queued Reels remain staged untouched (Next: 16_acchi_lagti_ho_romantic.json).
 [2026-11-21 19:30:19] ☁️ Synced queue and archive state to origin/main.
+[2026-11-21 20:51:28] 📦 Processing queue item: 16_acchi_lagti_ho_romantic.json
+[2026-11-21 20:51:28] 🎬 Uploading video: /home/runner/work/vynox-autopilot/vynox-autopilot/projects/series-romantic-animations/11-acchi-lagti-ho/output/film_acchi_lagti_ho_aep.mp4
+[2026-11-21 20:52:26] ✅ Reel posted successfully: https://www.instagram.com/reel/DgAiltnTd3y/
+[2026-11-21 20:52:26] 📸 Publishing companion Story Promo Card (story_card.jpg) to Instagram Stories...
+[2026-11-21 20:52:43] ✅ Story Promo Card live on Instagram Stories! (ID: 4035377932783359117)
+[2026-11-21 20:52:43] ℹ️ YouTube Shorts cross-posting skipped (YOUTUBE_AUTH_FAILED)
+[2026-11-21 20:52:43] 📁 Archived record to: 2026-11-21_16_acchi_lagti_ho_romantic.json
+[2026-11-21 20:52:43] 📊 Remaining queued items: 3
