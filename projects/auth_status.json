@@ -1,8 +1,8 @@
 {
   "status": "HEALTHY",
   "code": "SESSION_VALID",
-  "detail": "Published DgDJtlkTXG_ successfully",
-  "timestamp": "2026-11-22T21:13:03.684546",
+  "detail": "Published DgFixOrzRW0 successfully",
+  "timestamp": "2026-11-23T19:30:02.370698",
   "remediation": [
     "Option A: Run `python3 scripts/vynox_update_bio_and_dispatch.py --bio-only` on trusted local machine.",
     "Option B: Export fresh session with `python3 scripts/insta_local_post.py --export-session` and update GitHub Secret INSTA_SESSION_JSON.",
