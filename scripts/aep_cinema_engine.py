@@ -15,6 +15,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # Font defaults
+FONT_POPPINS_BOLD = os.path.abspath("assets/fonts/Poppins-Bold.ttf")
+FONT_POPPINS_SEMIBOLD = os.path.abspath("assets/fonts/Poppins-SemiBold.ttf")
 FONT_GREAT_VIBES = os.path.abspath("assets/fonts/GreatVibes-Regular.ttf")
 FONT_CAVEAT = os.path.abspath("skills/directing-stickman-videos/assets/fonts/Caveat.ttf")
 FONT_DEJAVU_BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
@@ -325,31 +327,52 @@ def render_dual_layer_typography(
     return res.convert("RGB")
 
 
+def clean_lyric_text(text):
+    """Strips non-renderable emoji characters that cause missing-glyph tofu boxes in standard fonts."""
+    import re
+    if not text:
+        return ""
+    # Strip emojis and non-standard symbols that fail in standard TTFs
+    cleaned = re.sub(r'[\U00010000-\U0010ffff]', '', text)
+    cleaned = re.sub(r'[^\x00-\x7F\u0900-\u097F\u2022\u2018\u2019\u201C\u201D\u2026\.\,\!\?\-\'\"]', '', cleaned)
+    return cleaned.strip()
+
+
 def render_cinema_single_caption(
     pil_img,
     text="",
-    center_xy=(540, 1480),
-    font_path=FONT_DEJAVU_BOLD,
-    font_size=58,
+    center_xy=(540, 1390),
+    font_path=FONT_POPPINS_SEMIBOLD,
+    font_size=46,
     text_color=(255, 255, 255, 255),
-    tracking=2,
-    shadow_blur=12,
-    shadow_offset=(2, 4),
-    shadow_alpha=200
+    tracking=1,
+    shadow_blur=8,
+    shadow_offset=(0, 4),
+    shadow_alpha=230,
+    max_width=840
 ):
     """
-    Renders clean, single-layer cinema caption for 100% readability:
-    - Exactly ONE caption line on screen at a time (no double/dual clutter).
-    - Soft directional Gaussian drop shadow with no harsh subtitle boxes.
-    - Cached overlay for fast 60+ fps performance.
+    Renders clean, single-layer cinema caption for 100% legibility and zero clutter:
+    - Exactly ONE caption block on screen (no double/dual cursive overlay).
+    - Positioned at y=1390 (Instagram Reels safe zone: above bottom account metadata and below faces/chests).
+    - Intelligent auto-wrapping and dynamic scaling so text never clips screen margins.
+    - Soft directional Gaussian shadow + razor-sharp subtle stroke for contrast across all backgrounds.
+    - Sanitizes emoji glyphs to prevent missing box (tofu) artifacts.
+    - Cached compositing for high throughput.
     """
-    if not text:
+    raw_text = clean_lyric_text(text)
+    if not raw_text:
         return pil_img
 
     width, height = pil_img.size
+    cx, cy = center_xy
+
+    # Safe font loader
+    active_font_path = font_path if os.path.exists(font_path) else FONT_DEJAVU_BOLD
+
     cache_key = (
-        "single", width, height, text, center_xy, font_path, font_size,
-        text_color, tracking, shadow_blur, shadow_offset, shadow_alpha
+        "single_clean_v2", width, height, raw_text, center_xy, active_font_path, font_size,
+        text_color, tracking, shadow_blur, shadow_offset, shadow_alpha, max_width
     )
 
     if cache_key in _TYPO_CACHE:
@@ -361,32 +384,63 @@ def render_cinema_single_caption(
     overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     shadow_layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
 
-    font = get_font(font_path, font_size)
-    draw_overlay = ImageDraw.Draw(overlay)
+    # Auto split long lyrics into 2 balanced lines
+    lines = []
+    if ',' in raw_text and len(raw_text) > 28:
+        parts = raw_text.split(',', 1)
+        lines = [parts[0].strip() + ',', parts[1].strip()]
+    elif len(raw_text) > 38:
+        words = raw_text.split()
+        mid = len(words) // 2
+        lines = [' '.join(words[:mid]), ' '.join(words[mid:])]
+    else:
+        lines = [raw_text]
+
+    # Dynamically scale font down if any line exceeds max_width
+    cur_font_size = font_size
+    font = get_font(active_font_path, cur_font_size)
+    draw_test = ImageDraw.Draw(overlay)
+
+    while any(draw_test.textbbox((0, 0), l, font=font)[2] > max_width for l in lines) and cur_font_size > 26:
+        cur_font_size -= 2
+        font = get_font(active_font_path, cur_font_size)
+
+    line_bboxes = [draw_test.textbbox((0, 0), l, font=font) for l in lines]
+    line_heights = [b[3] - b[1] for b in line_bboxes]
+    line_widths = [b[2] - b[0] for b in line_bboxes]
+
+    line_spacing = int(cur_font_size * 0.32)
+    total_h = sum(line_heights) + line_spacing * (len(lines) - 1)
+
+    cur_y = cy - total_h // 2
     draw_shadow = ImageDraw.Draw(shadow_layer)
+    draw_overlay = ImageDraw.Draw(overlay)
 
-    chars = list(text)
-    char_widths = [draw_overlay.textbbox((0, 0), ch, font=font)[2] for ch in chars]
-    total_w = sum(char_widths) + (len(chars) - 1) * tracking
-    text_h = draw_overlay.textbbox((0, 0), text, font=font)[3]
+    for idx, line in enumerate(lines):
+        lw = line_widths[idx]
+        lh = line_heights[idx]
+        lx = cx - lw // 2
 
-    cx, cy = center_xy
-    start_x = cx - total_w / 2.0
-    start_y = cy - text_h / 2.0
+        # 1. Outer ambient Gaussian drop shadow
+        draw_shadow.text(
+            (lx + shadow_offset[0], cur_y + shadow_offset[1]),
+            line,
+            font=font,
+            fill=(0, 0, 0, shadow_alpha),
+            stroke_width=4,
+            stroke_fill=(0, 0, 0, int(shadow_alpha * 0.85))
+        )
 
-    # Draw Shadow
-    curr_x = start_x + shadow_offset[0]
-    curr_y = start_y + shadow_offset[1]
-    for ch, cw in zip(chars, char_widths):
-        draw_shadow.text((curr_x, curr_y), ch, font=font, fill=(0, 0, 0, shadow_alpha))
-        curr_x += cw + tracking
-
-    # Draw Text
-    curr_x = start_x
-    curr_y = start_y
-    for ch, cw in zip(chars, char_widths):
-        draw_overlay.text((curr_x, curr_y), ch, font=font, fill=text_color)
-        curr_x += cw + tracking
+        # 2. Crisp main text with delicate dark stroke outline for infinite contrast
+        draw_overlay.text(
+            (lx, cur_y),
+            line,
+            font=font,
+            fill=text_color,
+            stroke_width=1,
+            stroke_fill=(0, 0, 0, 160)
+        )
+        cur_y += lh + line_spacing
 
     if shadow_blur > 0:
         shadow_layer = shadow_layer.filter(ImageFilter.GaussianBlur(shadow_blur))
