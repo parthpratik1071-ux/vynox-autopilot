@@ -323,22 +323,25 @@ def dispatch_next(force=False):
 
     # Optional cross-post to YouTube Shorts if credentials are configured
     try:
-        yt_ok, yt_code, yt_info = youtube_uploader.check_auth_health()
-        if yt_ok:
-            log(f"📺 Cross-posting to YouTube Shorts ({yt_info})...")
-            yt_res = youtube_uploader.upload_short(
-                video_path=video_path,
-                title=data.get("title", ""),
-                song_title=data.get("song_title", ""),
-                artist=data.get("artist", ""),
-                description=caption,
-                privacy_status="public",
-            )
-            data["youtube_short_id"] = yt_res.get("id")
-            data["youtube_short_url"] = f"https://youtube.com/shorts/{yt_res.get('id')}"
-            log(f"✅ YouTube Short published: {data['youtube_short_url']}")
+        if data.get("youtube_short_url"):
+            log(f"ℹ️ YouTube Short already published: {data['youtube_short_url']}")
         else:
-            log(f"ℹ️ YouTube Shorts cross-posting skipped ({yt_code})")
+            yt_ok, yt_code, yt_info = youtube_uploader.check_auth_health()
+            if yt_ok:
+                log(f"📺 Cross-posting to YouTube Shorts ({yt_info})...")
+                yt_res = youtube_uploader.upload_short(
+                    video_path=video_path,
+                    title=data.get("title", ""),
+                    song_title=data.get("song_title", ""),
+                    artist=data.get("artist", ""),
+                    description=caption,
+                    privacy_status="public",
+                )
+                data["youtube_short_id"] = yt_res.get("id")
+                data["youtube_short_url"] = f"https://youtube.com/shorts/{yt_res.get('id')}"
+                log(f"✅ YouTube Short published: {data['youtube_short_url']}")
+            else:
+                log(f"ℹ️ YouTube Shorts cross-posting skipped ({yt_code})")
     except Exception as yt_err:
         log(f"⚠️ YouTube cross-posting warning: {yt_err}")
 
