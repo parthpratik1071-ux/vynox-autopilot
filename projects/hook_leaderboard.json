@@ -13,15 +13,16 @@
   },
   "winner:romantic_lofi": {
     "niche": "romantic_lofi",
-    "runs": 2,
-    "avg_engagement_pct": 2.19,
+    "runs": 3,
+    "avg_engagement_pct": 1.46,
     "best_views": 499,
     "best_hook": "Which frame hit the hardest? Drop it below! 🖤✨",
     "media_scores": {
       "4035440778167712198": 2.37,
-      "4036112406186652095": 2.0
+      "4036112406186652095": 2.0,
+      "4037552235025909340": 0.0
     },
-    "updated_at": "2026-11-23T02:24:15.464411+05:30"
+    "updated_at": "2026-11-24T20:56:18.765523+05:30"
   },
   "winner:general": {
     "niche": "general",
