@@ -1,14 +1,15 @@
 {
   "template:general": {
     "niche": "general",
-    "runs": 1,
-    "avg_engagement_pct": 2.16,
-    "best_views": 139,
-    "best_hook": "Which frame hit the hardest? Drop it below! 🖤✨",
+    "runs": 2,
+    "avg_engagement_pct": 2.67,
+    "best_views": 189,
+    "best_hook": "Tag someone who needs to see this edit tonight 🥀💫",
     "media_scores": {
-      "4033956254187286752": 2.16
+      "4033956254187286752": 2.16,
+      "4036785557610501556": 3.17
     },
-    "updated_at": "2026-11-20T19:14:20.909232+05:30"
+    "updated_at": "2026-11-24T08:37:19.773723+05:30"
   },
   "winner:romantic_lofi": {
     "niche": "romantic_lofi",
