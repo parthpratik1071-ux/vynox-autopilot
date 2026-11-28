@@ -54,10 +54,10 @@ SHOTS = [
 ]
 
 LYRICS = [
-    (0.5, 5.2, "Kya karein hum kasoor jo hua...", (255, 255, 255, 255), 48, 1390),
-    (5.5, 10.8, "Kyun lage ke tu hai yahan...", (255, 255, 255, 255), 48, 1390),
-    (11.0, 16.2, "Kyun teri yaadein aati hain?...", (255, 255, 255, 255), 48, 1390),
-    (16.5, 21.8, "Aur muskura jaati hain... ✨", (255, 255, 255, 255), 50, 1390)
+    (0.5, 5.2, "Teri zulfon ki yeh nami...", (255, 255, 255, 255), 48, 1390),
+    (5.5, 10.8, "Teri aankhon ka yeh nashaa...", (255, 255, 255, 255), 48, 1390),
+    (11.0, 16.2, "Yahaan kho bhi jaaun toh main...", (255, 255, 255, 255), 48, 1390),
+    (16.5, 21.8, "Kya kasoor hai mera?... ✨", (255, 255, 255, 255), 50, 1390)
 ]
 
 
