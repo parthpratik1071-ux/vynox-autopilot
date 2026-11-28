@@ -325,18 +325,16 @@ def dispatch_next(force=False):
 
     # Companion Instagram Story Promo Card Dispatch (First 60-Minute Velocity Booster)
     try:
-        story_card_path = None
-        # Check if project already has a pre-rendered story_card.jpg
-        if cover_path and (cover_path.parent / "story_card.jpg").exists():
-            story_card_path = cover_path.parent / "story_card.jpg"
-        elif cover_path and cover_path.exists():
-            import reels_booster
-            log(f"🎨 Rendering dynamic Story Promo Card for '{data.get('title', '')}'...")
-            story_card_path = reels_booster.generate_story_card(
-                cover_path=cover_path,
-                title=data.get("title", ""),
-                handle="@vynox_00000"
-            )
+        import reels_booster
+        log(f"🎨 Rendering high-aesthetic glassmorphic Story Promo Card for '{data.get('title', '')}'...")
+        first_lyric = caption.split('\n')[0].strip() if caption else ""
+        story_card_path = reels_booster.generate_story_card(
+            cover_path=cover_path,
+            title=data.get("song_title") or data.get("title", ""),
+            artist=data.get("artist", ""),
+            lyric=first_lyric,
+            handle="@vynox_00000"
+        )
 
         if story_card_path and story_card_path.exists():
             log(f"📸 Publishing companion Story Promo Card ({story_card_path.name}) to Instagram Stories...")

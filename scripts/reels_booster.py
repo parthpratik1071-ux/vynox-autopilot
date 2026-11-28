@@ -468,62 +468,112 @@ def _pick_font(size: int, bold: bool = False):
     return ImageFont.load_default()
 
 
-def generate_story_card(cover_path: Path, title: str, out_path: Path | None = None, handle: str = "@vynox_00000") -> Path:
-    """Renders a 1080x1920 glassmorphic Story promo card from a Reel cover image."""
-    from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
+def generate_story_card(cover_path: Path, title: str, out_path: Path | None = None, handle: str = "@vynox_00000", artist: str = "", lyric: str = "") -> Path:
+    """Renders a 1080x1920 high-aesthetic glassmorphic Story promo card from a Reel cover image."""
+    from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
     cover = Image.open(cover_path).convert("RGB")
     W, H = 1080, 1920
 
-    # Blurred ambient cover backdrop + dark moody vignette
+    # 1. Ambient Blurred Backdrop
     scale = max(W / cover.width, H / cover.height)
     bg = cover.resize((int(cover.width * scale), int(cover.height * scale)), Image.Resampling.LANCZOS)
     left, top = (bg.width - W) // 2, (bg.height - H) // 2
-    bg = bg.crop((left, top, left + W, top + H)).filter(ImageFilter.GaussianBlur(radius=42))
-    bg = ImageEnhance.Brightness(bg).enhance(0.32).convert("RGBA")
+    bg = bg.crop((left, top, left + W, top + H))
+    bg = bg.filter(ImageFilter.GaussianBlur(radius=50))
+    bg = ImageEnhance.Brightness(bg).enhance(0.40)
+    bg = ImageEnhance.Color(bg).enhance(1.20).convert("RGBA")
 
-    # Center rounded poster frame
-    card_w, card_h = 840, 1180
-    card_x, card_y = (W - card_w) // 2, 290
+    # Gradient overlay for contrast
+    gradient = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    g_draw = ImageDraw.Draw(gradient)
+    for y in range(H):
+        if y < 350:
+            a = int(140 * (1.0 - y / 350))
+            g_draw.line([(0, y), (W, y)], fill=(0, 0, 0, a))
+        elif y > 1300:
+            a = int(180 * ((y - 1300) / (H - 1300)))
+            g_draw.line([(0, y), (W, y)], fill=(0, 0, 0, a))
+    bg = Image.alpha_composite(bg, gradient)
+
+    # 2. Floating Poster Card (820 x 1060)
+    card_w, card_h = 820, 1060
+    card_x = (W - card_w) // 2
+    card_y = 230
+
     c_scale = max(card_w / cover.width, card_h / cover.height)
     fg = cover.resize((int(cover.width * c_scale), int(cover.height * c_scale)), Image.Resampling.LANCZOS)
     fl, ft = (fg.width - card_w) // 2, (fg.height - card_h) // 2
     fg = fg.crop((fl, ft, fl + card_w, ft + card_h)).convert("RGBA")
 
+    radius = 36
     mask = Image.new("L", (card_w, card_h), 0)
-    ImageDraw.Draw(mask).rounded_rectangle((0, 0, card_w, card_h), radius=48, fill=255)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, card_w, card_h), radius=radius, fill=255)
+
     shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(shadow).rounded_rectangle(
-        (card_x - 8, card_y + 18, card_x + card_w + 8, card_y + card_h + 26), radius=52, fill=(0, 0, 0, 165)
+        (card_x - 12, card_y + 14, card_x + card_w + 12, card_y + card_h + 30),
+        radius=radius + 4,
+        fill=(0, 0, 0, 180)
     )
-    shadow = shadow.filter(ImageFilter.GaussianBlur(radius=26))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(radius=24))
     bg = Image.alpha_composite(bg, shadow)
     bg.paste(fg, (card_x, card_y), mask)
 
     draw = ImageDraw.Draw(bg)
-    draw.rounded_rectangle((card_x, card_y, card_x + card_w, card_y + card_h), radius=48, outline=(255, 255, 255, 70), width=3)
+    draw.rounded_rectangle((card_x, card_y, card_x + card_w, card_y + card_h), radius=radius, outline=(255, 255, 255, 75), width=2)
 
-    # Top glowing badge
-    badge_w, badge_h = 340, 62
-    bx, by = (W - badge_w) // 2, 165
-    draw.rounded_rectangle((bx, by, bx + badge_w, by + badge_h), radius=31, fill=(195, 24, 52, 235), outline=(255, 190, 200, 180), width=2)
-    f_badge = _pick_font(30, bold=True)
-    draw.text((W // 2, by + badge_h // 2), "NEW REEL LIVE", fill=(255, 255, 255, 255), font=f_badge, anchor="mm")
+    # 3. Top Frosted Glass Badge
+    badge_w, badge_h = 380, 58
+    bx, by = (W - badge_w) // 2, 120
+    badge_overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    b_draw = ImageDraw.Draw(badge_overlay)
+    b_draw.rounded_rectangle((bx, by, bx + badge_w, by + badge_h), radius=29, fill=(255, 255, 255, 35), outline=(255, 255, 255, 90), width=1)
+    bg = Image.alpha_composite(bg, badge_overlay)
 
-    # Bottom typography & CTA pill
-    clean_title = re.sub(r"[^\x20-\x7E]+", " ", title or "New Visual Story").strip() or "New Visual Story"
-    lines = textwrap.wrap(clean_title, width=26)[:2]
+    draw = ImageDraw.Draw(bg)
+    f_badge = _pick_font(24, bold=True)
     f_title = _pick_font(54, bold=True)
-    ty = 1545
-    for line in lines:
-        draw.text((W // 2, ty), line, fill=(248, 248, 252, 255), font=f_title, anchor="mm")
-        ty += 68
+    f_artist = _pick_font(28, bold=True)
+    f_lyric = _pick_font(34, bold=False)
+    f_cta = _pick_font(26, bold=True)
 
-    f_sub = _pick_font(34, bold=False)
-    draw.text((W // 2, 1745), f"WATCH FULL EDIT  |  {handle.upper()}", fill=(225, 210, 220, 235), font=f_sub, anchor="mm")
+    draw.text((W // 2, by + badge_h // 2), "✦  NEW REEL OUT NOW  ✦", fill=(255, 255, 255, 245), font=f_badge, anchor="mm")
+
+    # 4. Music Equalizer Bars on Card
+    eq_x = card_x + card_w - 95
+    eq_y = card_y + card_h - 45
+    eq_bg = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(eq_bg).rounded_rectangle((eq_x - 15, eq_y - 20, eq_x + 75, eq_y + 15), radius=16, fill=(0, 0, 0, 150))
+    bg = Image.alpha_composite(bg, eq_bg)
+    draw = ImageDraw.Draw(bg)
+    for idx, bh in enumerate([18, 28, 14, 24, 30]):
+        bx_pos = eq_x + idx * 12
+        draw.line([(bx_pos, eq_y + 8), (bx_pos, eq_y + 8 - bh)], fill=(255, 255, 255, 220), width=3)
+
+    # 5. Track Metadata Section Below Card
+    clean_title = re.sub(r"[^\x20-\x7E]+", " ", title.split(" - ")[0] if " - " in title else title).strip()
+    meta_y = 1340
+    draw.text((W // 2, meta_y), clean_title, fill=(255, 255, 255, 255), font=f_title, anchor="mm")
+    sub_artist = artist if artist else "ORIGINAL AUDIO"
+    draw.text((W // 2, meta_y + 60), f"BY {sub_artist.upper()}  •  ORIGINAL AUDIO", fill=(210, 225, 245, 220), font=f_artist, anchor="mm")
+    if lyric:
+        draw.text((W // 2, meta_y + 125), f"“{lyric}”", fill=(255, 235, 215, 235), font=f_lyric, anchor="mm")
+
+    # 6. Sleek CTA Pill
+    cta_w, cta_h = 440, 72
+    cx, cy = (W - cta_w) // 2, 1680
+    cta_overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    c_draw = ImageDraw.Draw(cta_overlay)
+    c_draw.rounded_rectangle((cx, cy, cx + cta_w, cy + cta_h), radius=36, fill=(255, 255, 255, 230), outline=(255, 255, 255, 255), width=2)
+    bg = Image.alpha_composite(bg, cta_overlay)
+
+    draw = ImageDraw.Draw(bg)
+    draw.text((W // 2, cy + cta_h // 2), "▶  WATCH FULL REEL", fill=(15, 15, 20, 255), font=f_cta, anchor="mm")
+    draw.text((W // 2, 1785), handle.upper(), fill=(190, 200, 215, 180), font=f_artist, anchor="mm")
 
     dest = Path(out_path) if out_path else (cover_path.parent / "story_card.jpg")
-    bg.convert("RGB").save(str(dest), format="JPEG", quality=94)
+    bg.convert("RGB").save(str(dest), format="JPEG", quality=95)
     return dest
 
 
