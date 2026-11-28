@@ -152,37 +152,65 @@ def dispatch_next(force=False):
             except Exception:
                 pass
 
-        # Calculate time in minutes from midnight (IST)
+        # Calculate time in minutes from midnight (IST) with Seasonal Circadian Windows
         mins_now = now.hour * 60 + now.minute
-        slot1_start = 19 * 60 + 15   # 19:15 IST (7:15 PM)
-        slot1_end = 20 * 60 + 45     # 20:45 IST (8:45 PM)
-        slot2_start = 21 * 60 + 30   # 21:30 IST (9:30 PM)
-        slot2_end = 23 * 60 + 15     # 23:15 IST (11:15 PM)
+        month = now.month
+        day = now.day
+
+        # Winter Schedule (mid-Nov through Feb): Early dusk, early bedtime cozy scrolling
+        if (month == 11 and day >= 15) or month in (12, 1, 2):
+            season = "WINTER"
+            slot1_start = 18 * 60 + 30   # 18:30 IST (6:30 PM)
+            slot1_end = 20 * 60 + 15     # 20:15 IST (8:15 PM)
+            slot2_start = 20 * 60 + 45   # 20:45 IST (8:45 PM)
+            slot2_end = 22 * 60 + 45     # 22:45 IST (10:45 PM)
+            slot1_name = "Winter Evening Wind-Down"
+            slot2_name = "Winter Late-Night Bedtime Peak"
+        # Summer Schedule (April through July): Late sunset, late outdoor commute, late peak
+        elif month in (4, 5, 6, 7):
+            season = "SUMMER"
+            slot1_start = 19 * 60 + 45   # 19:45 IST (7:45 PM)
+            slot1_end = 21 * 60 + 15     # 21:15 IST (9:15 PM)
+            slot2_start = 22 * 60 + 0    # 22:00 IST (10:00 PM)
+            slot2_end = 24 * 60 + 15     # 00:15 IST (+1 Day)
+            slot1_name = "Summer Evening Wind-Down"
+            slot2_name = "Summer Late-Night Peak"
+        # Transition Baseline (Spring & Autumn / Monsoon)
+        else:
+            season = "TRANSITION"
+            slot1_start = 19 * 60 + 15   # 19:15 IST (7:15 PM)
+            slot1_end = 20 * 60 + 45     # 20:45 IST (8:45 PM)
+            slot2_start = 21 * 60 + 30   # 21:30 IST (9:30 PM)
+            slot2_end = 23 * 60 + 15     # 23:15 IST (11:15 PM)
+            slot1_name = "Standard Evening Wind-Down"
+            slot2_name = "Standard Late-Night Peak"
 
         if slot1_start <= mins_now <= slot1_end:
-            # Slot 1: Evening Wind-Down
+            # Slot 1
             slot1_posted = any(
-                (parse_dt(p.get("published_at")) and 19 <= parse_dt(p.get("published_at")).hour < 21)
+                (parse_dt(p.get("published_at")) and (slot1_start - 30) <= (parse_dt(p.get("published_at")).hour * 60 + parse_dt(p.get("published_at")).minute) <= (slot1_end + 30))
                 for p in today_posts
             )
             if slot1_posted:
-                log(f"✅ Evening Slot 1 Reel already published today ({today_str}). Next slot is Late-Night Peak at 9:45 PM IST.")
+                log(f"✅ {slot1_name} Reel already published today ({today_str}). Next slot is {slot2_name}.")
                 return True
-            log(f"🎯 Slot 1 (Evening 7:30 PM IST Window) active ({now.strftime('%H:%M')} IST). Proceeding to dispatch...")
+            log(f"🎯 Slot 1 ({slot1_name}) active ({now.strftime('%H:%M')} IST). Proceeding to dispatch...")
         elif slot2_start <= mins_now <= slot2_end:
-            # Slot 2: Late-Night Viral Peak
+            # Slot 2
             slot2_posted = any(
-                (parse_dt(p.get("published_at")) and parse_dt(p.get("published_at")).hour >= 21)
+                (parse_dt(p.get("published_at")) and (slot2_start - 30) <= (parse_dt(p.get("published_at")).hour * 60 + parse_dt(p.get("published_at")).minute) <= (slot2_end + 30))
                 for p in today_posts
             )
             if slot2_posted:
-                log(f"✅ Late-Night Slot 2 Reel already published today ({today_str}). Daily quota fulfilled!")
+                log(f"✅ {slot2_name} Reel already published today ({today_str}). Daily quota fulfilled!")
                 return True
-            log(f"🎯 Slot 2 (Late-Night 9:45 PM IST Peak Window) active ({now.strftime('%H:%M')} IST). Proceeding to dispatch...")
+            log(f"🎯 Slot 2 ({slot2_name}) active ({now.strftime('%H:%M')} IST). Proceeding to dispatch...")
         else:
+            s1_str = f"{slot1_start//60:02d}:{slot1_start%60:02d}–{slot1_end//60:02d}:{slot1_end%60:02d}"
+            s2_str = f"{slot2_start//60:02d}:{slot2_start%60:02d}–{slot2_end//60:02d}:{slot2_end%60:02d}"
             log(
-                f"⏳ Current time ({now.strftime('%H:%M')} IST) is outside peak audience publishing windows "
-                f"(Slot 1: 19:15–20:45 IST | Slot 2: 21:30–23:15 IST). Aborting off-hours dispatch to protect organic reach."
+                f"⏳ Current time ({now.strftime('%H:%M')} IST, Season: {season}) is outside peak audience publishing windows "
+                f"(Slot 1: {s1_str} IST | Slot 2: {s2_str} IST). Aborting off-hours dispatch to protect organic reach."
             )
             return False
 
